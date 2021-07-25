@@ -1,15 +1,9 @@
 ﻿using Contracts.LoggerService;
-//using Microsoft.Extensions.Logging;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LoggerService
 {
-    class LoggerManager: ILoggerManager
+    class LoggerManager : ILoggerManager
     {
         private static ILogger _logger = LogManager.GetCurrentClassLogger();
 
