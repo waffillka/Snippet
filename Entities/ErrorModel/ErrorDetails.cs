@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.ErrorModel
 {
-    class ErrorDetails
+    public class ErrorDetails
     {
         public int StatusCode { get; set; }
         public string Message { get; set; }
