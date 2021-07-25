@@ -9,6 +9,7 @@ namespace SnippetProject.Controllers
     [Route("languages")]
     public class LanguageController: ControllerBase
     {
+        [HttpGet("{page}&{substring=\"\"}&{filterSettings?=null}&{sortSettings?=null}")]
         public Language[] GetLanguages(int page, string substring = "", FilterSettings? filterSettings = null,
             SortSettings? sortSettings = null)
         {
