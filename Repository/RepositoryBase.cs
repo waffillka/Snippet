@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         protected RepositoryContext _repositoryContext;
 
@@ -30,15 +30,20 @@ namespace Repository
         }
 
         public IQueryable<T> FindAll(bool trackChanges) =>
-            !trackChanges ? _repositoryContext.Set<T>().AsNoTracking() : _repositoryContext.Set<T>();
+            !trackChanges ? _repositoryContext.Set<T>()
+                .AsNoTracking()
+            : _repositoryContext.Set<T>();
 
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges) =>
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges, int pageNumber = 1, int pageSize = 10) =>
             !trackChanges ? _repositoryContext.Set<T>()
                 .Where(expression)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .AsNoTracking()
             : _repositoryContext.Set<T>()
-                .Where(expression);
-               
+                .Where(expression)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize);
 
         public void Update(T entity) => _repositoryContext.Set<T>().Update(entity);
     }
