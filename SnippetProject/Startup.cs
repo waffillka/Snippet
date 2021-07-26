@@ -25,6 +25,8 @@ namespace SnippetProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureLoggerService();
+            services.ConfigureSqlContext(Configuration);
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

@@ -25,13 +25,18 @@ namespace Entities.Models
         [Required(ErrorMessage = "LanguageId is a required field.")]
         [ForeignKey(nameof(Language))]
         public Guid LanguageId { get; set; }
+
+        [NotMapped]
         public Language Language { get; set; }
 
         [Required(ErrorMessage = "UserId is a required field.")]
         [ForeignKey(nameof(User))]
         public Guid UserId { get; set; }
+
+        [NotMapped]
         public User User { get; set; }
 
         public ICollection<Tag> Tags { get; set; }
+        public ICollection<User> LikedUser { get; set; }
     }
 }
