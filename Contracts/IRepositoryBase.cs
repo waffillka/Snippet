@@ -9,8 +9,8 @@ namespace Contracts
 {
     public interface IRepositoryBase<T>
     {
-        IQueryable<T> FindAll(bool trackChanges, int pageNumber = 1, int pageSize = 10);
-        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges);
+        IQueryable<T> FindAll(bool trackChanges);
+        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges, int pageNumber = 1, int pageSize = 10);
         void Create(T entity);
         void Update(T entity);
         void Delete(T entity);

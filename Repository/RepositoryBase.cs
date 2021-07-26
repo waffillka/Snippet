@@ -30,9 +30,7 @@ namespace Repository
         }
 
         public IQueryable<T> FindAll(bool trackChanges) =>
-            !trackChanges ? _repositoryContext.Set<T>()
-                .AsNoTracking()
-            : _repositoryContext.Set<T>();
+            !trackChanges ? _repositoryContext.Set<T>().AsNoTracking() : _repositoryContext.Set<T>();
 
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges, int pageNumber = 1, int pageSize = 10) =>
             !trackChanges ? _repositoryContext.Set<T>()
