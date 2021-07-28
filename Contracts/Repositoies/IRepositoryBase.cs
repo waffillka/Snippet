@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Contracts
 {
-    public interface IRepositoryBase<T>
+    public interface IRepositoryBase<T> : IDisposable
     {
         IQueryable<T> FindAll(bool trackChanges);
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges, int pageNumber = 1, int pageSize = 10);

@@ -29,6 +29,26 @@ namespace Repository
             _repositoryContext.Set<T>().Remove(entity);
         }
 
+        protected bool _disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this._disposed)
+            {
+                if (disposing)
+                {
+                    _repositoryContext.Dispose();
+                }
+            }
+            this._disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         public IQueryable<T> FindAll(bool trackChanges) =>
             !trackChanges ? _repositoryContext.Set<T>().AsNoTracking() : _repositoryContext.Set<T>();
 
