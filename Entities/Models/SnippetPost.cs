@@ -7,7 +7,7 @@ namespace Entities.Models
 {
     public class SnippetPost
     {
-        public Guid Id { get; set; }
+        public ulong Id { get; set; }
 
         [Required(ErrorMessage = "Title is a required field.")]
         [MaxLength(140, ErrorMessage = "Maximum length for the Title is 140 characters.")]
@@ -24,14 +24,14 @@ namespace Entities.Models
 
         [Required(ErrorMessage = "LanguageId is a required field.")]
         [ForeignKey(nameof(Language))]
-        public Guid LanguageId { get; set; }
+        public ulong LanguageId { get; set; }
 
         [NotMapped]
         public Language Language { get; set; }
 
         [Required(ErrorMessage = "UserId is a required field.")]
         [ForeignKey(nameof(User))]
-        public Guid UserId { get; set; }
+        public ulong UserId { get; set; }
 
         [NotMapped]
         public User User { get; set; }

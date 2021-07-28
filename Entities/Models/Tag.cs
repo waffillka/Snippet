@@ -6,7 +6,7 @@ namespace Entities.Models
 {
     public class Tag
     {
-        public Guid Id { get; set; }
+        public ulong Id { get; set; }
 
         [Required(ErrorMessage = "Tag name is a required field.")]
         public string Name { get; set; }
