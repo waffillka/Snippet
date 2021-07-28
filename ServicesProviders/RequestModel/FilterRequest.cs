@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ServicesProviders.FilterRequest
+namespace ServicesProviders.RequestModel
 {
     public class FilterRequest
     {
