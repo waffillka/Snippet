@@ -11,8 +11,8 @@ namespace ServicesProviders.RequestModel
         public List<ulong>? TagsExclude { get; set; }
         public List<ulong>? Langs { get; set; }
         public List<ulong>? LangsExclude { get; set; }
-        public DateTime Date { get; set; }
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public DateTime? Date { get; set; }
+        public DateTime? From { get; set; }
+        public DateTime? To { get; set; }
     }
 }
