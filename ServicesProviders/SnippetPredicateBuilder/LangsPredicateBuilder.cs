@@ -4,10 +4,10 @@ using ServicesProviders.RequestModel;
 
 namespace ServicesProviders.SnippetPredicateBuilder
 {
-    internal class LangsPredicateBuiler : IPredicateBuilder
+    internal class LangsPredicateBuilder : IPredicateBuilder
     {
         private readonly IPredicateBuilder _wrappedBuilder;
-        public LangsPredicateBuiler(IPredicateBuilder wrappedBuilder)
+        public LangsPredicateBuilder(IPredicateBuilder wrappedBuilder)
         {
             _wrappedBuilder = wrappedBuilder;
         }
