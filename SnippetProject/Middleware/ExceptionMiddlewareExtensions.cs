@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 
-namespace SnippetProject.Extensions
+namespace SnippetProject.Middleware
 {
     public static class ExceptionMiddlewareExtensions
     {

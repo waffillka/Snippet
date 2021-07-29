@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Entities.Models
+namespace Snippet.Data.Entities
 {
-    public class SnippetPost
+    public class SnippetEntity
     {
         public ulong Id { get; set; }
 
@@ -27,16 +27,16 @@ namespace Entities.Models
         public ulong LanguageId { get; set; }
 
         [NotMapped]
-        public Language Language { get; set; }
+        public LanguageEntity Language { get; set; }
 
         [Required(ErrorMessage = "UserId is a required field.")]
         [ForeignKey(nameof(User))]
         public ulong UserId { get; set; }
 
         [NotMapped]
-        public User User { get; set; }
+        public UserEntity User { get; set; }
 
-        public ICollection<Tag> Tags { get; set; }
-        public ICollection<User> LikedUser { get; set; }
+        public ICollection<TagEntity> Tags { get; set; }
+        public ICollection<UserEntity> LikedUser { get; set; }
     }
 }

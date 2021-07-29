@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Entities.Models
+namespace Snippet.Data.Entities
 {
-    public class Tag
+    public class TagEntity
     {
         public ulong Id { get; set; }
 
         [Required(ErrorMessage = "Tag name is a required field.")]
         public string Name { get; set; }
 
-        public ICollection<SnippetPost> SnippetPosts { get; set; }
+        public ICollection<SnippetEntity> SnippetPosts { get; set; }
     }
 }

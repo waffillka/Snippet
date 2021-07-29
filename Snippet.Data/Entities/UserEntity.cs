@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Entities.Models
+namespace Snippet.Data.Entities
 {
-    public class User
+    public class UserEntity
     {
         public ulong Id { get; set; }
 
@@ -14,6 +13,6 @@ namespace Entities.Models
         [Required(ErrorMessage = "Password is a required field.")]
         public string Password { get; set; }
 
-        public ICollection<SnippetPost> LakedSnippetPost { get; set; }
+        public ICollection<SnippetEntity> LakedSnippetPost { get; set; }
     }
 }
