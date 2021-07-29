@@ -5,13 +5,11 @@ VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnippetProject", "SnippetProject\SnippetProject.csproj", "{12864EDE-6FE1-466A-9952-CB7BE2CA3C96}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{25DEC98B-E9D5-41F8-8BFB-BA40310A61D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snippet.Common", "Snippet.Common\Snippet.Common.csproj", "{CD14D688-00B5-4A09-ADAC-561B46E7295A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerService", "LoggerService\LoggerService.csproj", "{BDB308CC-529E-4C55-A395-5E6C1A8D94B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snippet.Services", "Snippet.Services\Snippet.Services.csproj", "{61A932BB-50E1-4D07-A6C0-CB120EE9AF27}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{28FFFC01-ADD3-4ED8-B69F-5BBB495FAED4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{B80020D4-F6A6-4399-B976-69B3203E8FD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snippet.Data", "Snippet.Data\Snippet.Data.csproj", "{5890C873-91B9-415B-822A-04D6D695165B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesProviders", "ServicesProviders\ServicesProviders.csproj", "{EC137BC0-88D5-480E-9742-6D1F713B2E40}"
 EndProject
