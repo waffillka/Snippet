@@ -16,11 +16,12 @@ namespace Snippet.Data.Configuration
             return services;
         }
 
-        public static IServiceCollection RegisterRepositories(this IServiceCollection serviceCollection)
+        public static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
-            serviceCollection.AddScoped<ISnippetRepository, SnippetRepository>();
+            services.AddScoped<ISnippetRepository, SnippetRepository>();
+            services.AddScoped<ITagRepository, TagRepository>();
 
-            return serviceCollection;
+            return services;
         }
     }
 }
