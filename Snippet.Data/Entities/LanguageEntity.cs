@@ -5,7 +5,6 @@ namespace Snippet.Data.Entities
 {
     public class LanguageEntity
     {
-
         public ulong Id { get; set; }
 
         [Required(ErrorMessage = "Language name is a required field.")]

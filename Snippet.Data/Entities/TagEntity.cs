@@ -6,7 +6,7 @@ namespace Snippet.Data.Entities
     public class TagEntity
     {
         public ulong Id { get; set; }
-
+        
         [Required(ErrorMessage = "Tag name is a required field.")]
         public string Name { get; set; }
 
