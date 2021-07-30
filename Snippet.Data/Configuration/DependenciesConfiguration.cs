@@ -20,6 +20,7 @@ namespace Snippet.Data.Configuration
         {
             services.AddScoped<ISnippetRepository, SnippetRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<ILanguageRepository, LanguageRepository>();
 
             return services;
         }
