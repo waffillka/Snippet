@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Snippet.Data.DbContext;
 using Snippet.Data.Interfaces.Repositories;
+using Snippet.Data.Interfaces.UnitOfWork;
+using Snippet.Data.UnitOfWork;
 using Snippet.Data.Repositories;
 
 namespace Snippet.Data.Configuration
@@ -21,6 +23,7 @@ namespace Snippet.Data.Configuration
             services.AddScoped<ISnippetRepository, SnippetRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
             return services;
         }
