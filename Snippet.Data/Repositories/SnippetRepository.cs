@@ -24,7 +24,6 @@ namespace Snippet.Data.Repositories
         public async Task<SnippetEntity> CreateAsync(SnippetEntity entity, CancellationToken ct = default)
         {
             var entityEntry = await _dbContext.SnippetPosts.AddAsync(entity, ct).ConfigureAwait(false);
-            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
             return entityEntry.Entity;
         }
 
@@ -34,7 +33,6 @@ namespace Snippet.Data.Repositories
             if (entity != null)
             {
                 var entityEntry = _dbContext.SnippetPosts.Remove(entity);
-                await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
                 return entityEntry != null;
             }
 
@@ -99,7 +97,6 @@ namespace Snippet.Data.Repositories
         public async Task<SnippetEntity> UpdateAsync(SnippetEntity entity, CancellationToken ct = default)
         {
             var entityEntry = _dbContext.SnippetPosts.Update(entity);
-            await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
             return entityEntry.Entity;
         }
 
