@@ -8,10 +8,10 @@ namespace Snippet.Data.Entities
         public ulong Id { get; set; }
 
         [Required(ErrorMessage = "Username is a required field.")]
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is a required field.")]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         public ICollection<SnippetEntity> LakedSnippetPost { get; set; }
     }
