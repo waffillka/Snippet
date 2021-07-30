@@ -48,7 +48,7 @@ namespace Snippet.Data.Repositories
                 .FirstOrDefaultAsync(user => user.Id == id, ct)!;
         }
 
-        public async Task<IReadOnlyCollection<SnippetEntity>> GetPageAsync(string orderBy, OrderDirection order,  int page = 1, int pageSize = 10, CancellationToken ct = default)
+        public async Task<IReadOnlyCollection<SnippetEntity>> GetPageAsync(string orderBy, OrderDirection order, int page = 1, int pageSize = 10, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(orderBy))
             {
@@ -115,9 +115,10 @@ namespace Snippet.Data.Repositories
 
         public Task<int> CountLike(ulong id)
         {
-            var like = _dbContext.SnippetPosts.Where(post => post.Id == id).Include(p => p.LikedUser).Select(p => p.LikedUser.Count);
-            var likee = _dbContext.SnippetPosts.Include(p => p.LikedUser).FirstOrDefault(post => post.Id == id);
             throw new NotImplementedException();
+            var like = _dbContext.SnippetPosts.Where(post => post.Id == id).Include(p => p.LikedUser.Count).Select(p => new { Count = p.LikedUser.Count });
+
+            //return like.ToListAsync().Result.Count;
         }
     }
 }
