@@ -112,8 +112,12 @@ namespace Snippet.Data.Repositories
                 .ToListAsync(ct)
                 .ConfigureAwait(false);
         }
+
+        public Task<int> CountLike(ulong id)
+        {
+            var like = _dbContext.SnippetPosts.Where(post => post.Id == id).Include(p => p.LikedUser).Select(p => p.LikedUser.Count);
+            var likee = _dbContext.SnippetPosts.Include(p => p.LikedUser).FirstOrDefault(post => post.Id == id);
+            throw new NotImplementedException();
+        }
     }
 }
-
-/*.Skip((parameters.PageNumber - 1) * parameters.PageSize)
-                .Take(parameters.PageSize)*/

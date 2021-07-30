@@ -14,5 +14,6 @@ namespace Snippet.Data.Interfaces.Repositories
         Task<SnippetEntity> UpdateAsync(SnippetEntity entity, CancellationToken ct = default);
         Task<bool> DeleteAsync(ulong id, CancellationToken ct = default);
         Task<IReadOnlyCollection<SnippetEntity>> GetAllAsync(int page = 1, int pageSize = 10, CancellationToken ct = default);
+        Task<int> CountLike(ulong id);
     }
 }
