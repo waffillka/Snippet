@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using NLog;
-using Snippet.Data.Configuration;
+using Snippet.Services.Configuration;
 using SnippetProject.Extensions;
 using SnippetProject.Middleware;
 using System.IO;
@@ -27,7 +27,7 @@ namespace SnippetProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureLoggerService();
-            services.ConfigureSqlContext(Configuration.GetConnectionString("sqlConnection"));
+            services.RegisterProviders(Configuration.GetConnectionString("sqlConnection"));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
