@@ -41,11 +41,11 @@ namespace Snippet.Data.Repositories
             return false;
         }
 
-        public Task<SnippetEntity> GetByIdAsync(ulong id, CancellationToken ct = default)
+        public Task<SnippetEntity?> GetByIdAsync(ulong id, CancellationToken ct = default)
         {
             return _dbContext.SnippetPosts
                 .AsNoTracking()
-                .FirstOrDefaultAsync(user => user.Id == id, ct);
+                .FirstOrDefaultAsync(user => user.Id == id, ct)!;
         }
 
         public async Task<IReadOnlyCollection<SnippetEntity>> GetPageAsync(string orderBy, OrderDirection order,  int page = 1, int pageSize = 10, CancellationToken ct = default)

@@ -26,7 +26,7 @@ namespace SnippetProject.Middleware
                         {
                             StatusCode = context.Response.StatusCode,
                             Message = "Internal Server Error."
-                        }.ToString());
+                        }.ToString()).ConfigureAwait(false);
                     }
                 });
             });

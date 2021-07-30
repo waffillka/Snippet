@@ -8,7 +8,6 @@ namespace Snippet.Data.DbContext
         public SnippetDbContext(DbContextOptions options)
             : base(options)
         {
-
         }
 
         public DbSet<SnippetEntity> SnippetPosts { get; set; }
