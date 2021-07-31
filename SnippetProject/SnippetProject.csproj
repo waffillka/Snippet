@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Snippet.Common\Snippet.Common.csproj" />
     <ProjectReference Include="..\Snippet.Data\Snippet.Data.csproj" />
+    <ProjectReference Include="..\Snippet.Services\Snippet.Services.csproj" />
   </ItemGroup>
 
 </Project>
