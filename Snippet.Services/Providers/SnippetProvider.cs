@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Snippet.Services.Providers
 {
-    class SnippetProvider : ISnippetProvider
+    public class SnippetProvider : ISnippetProvider
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
