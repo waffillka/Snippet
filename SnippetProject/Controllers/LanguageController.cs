@@ -40,7 +40,7 @@ namespace SnippetProject.Controllers
         }
 
         [HttpPut("update")]
-        public Language UpdateLanguage([FromQuery] Language lang, CancellationToken ct)
+        public Language UpdateLanguage(Language lang, CancellationToken ct)
         {
             lang.Name += "[updated]";
             return lang;

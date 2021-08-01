@@ -41,7 +41,7 @@ namespace SnippetProject.Controllers
         }
 
         [HttpPut("update")]
-        public Tag UpdateTag([FromQuery] Tag tag, CancellationToken ct)
+        public Tag UpdateTag(Tag tag, CancellationToken ct)
         {
             if (tag == null)
                 throw new ArgumentNullException(nameof(tag));

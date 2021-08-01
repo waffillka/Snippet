@@ -29,7 +29,6 @@ namespace SnippetProject.Controllers
         [HttpGet("snippet-short/many")]
         public ShortSnippetPost[] GetShortPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct)
         {
-            //TODO: Validate params. Page size must be >0
             parameters ??= new SnippetPostParams();
             
             var result = new ShortSnippetPost[parameters.PageSize].Select(x =>
@@ -55,7 +54,7 @@ namespace SnippetProject.Controllers
         }
 
         [HttpPost("snippet/create")]
-        public SnippetPost CreateSnippetPost([FromQuery] SnippetPost post, CancellationToken ct)
+        public SnippetPost CreateSnippetPost(SnippetPost post, CancellationToken ct)
         {
             if (post == null)
                 throw new ArgumentNullException(nameof(post));
@@ -65,7 +64,7 @@ namespace SnippetProject.Controllers
         }
 
         [HttpPut("snippet/update")]
-        public SnippetPost UpdateSnippetPost([FromQuery] SnippetPost post, CancellationToken ct)
+        public SnippetPost UpdateSnippetPost(SnippetPost post, CancellationToken ct)
         {
             if (post == null)
                 throw new ArgumentNullException(nameof(post));
