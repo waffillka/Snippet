@@ -28,6 +28,7 @@ namespace SnippetProject
         {
             services.ConfigureLoggerService();
             services.RegisterProviders(Configuration.GetConnectionString("sqlConnection"));
+            services.RegisterMappingConfig();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

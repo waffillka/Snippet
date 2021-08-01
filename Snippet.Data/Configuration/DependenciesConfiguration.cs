@@ -12,7 +12,7 @@ namespace Snippet.Data.Configuration
         public static IServiceCollection ConfigureSqlContext(this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<SnippetDbContext>(opts =>
-                opts.UseSqlServer(connectionString, b => b.MigrationsAssembly("Snippet.Data")));
+                opts.UseSqlServer(connectionString, b => b.MigrationsAssembly("SnippetProject")));
 
             return services;
         }
@@ -22,6 +22,7 @@ namespace Snippet.Data.Configuration
             services.AddScoped<ISnippetRepository, SnippetRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
             return services;
