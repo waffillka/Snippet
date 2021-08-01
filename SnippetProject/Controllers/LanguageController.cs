@@ -12,15 +12,22 @@ namespace SnippetProject.Controllers
     public class LanguageController : ControllerBase
     {
         [HttpGet("many")]
-        public Language[] GetAll(ParamsBase? parameters, CancellationToken ct)
+        public Language[] GetAll([FromQuery] ParamsBase? parameters, CancellationToken ct)
         {
             parameters ??= new ParamsBase();
 
-            return new Language[parameters.PageSize];
+            var result = new Language[parameters.PageSize].Select((x, index) =>
+            {
+                x.Id = (ulong) index;
+                x.Name = "Haskell";
+                return x;
+            });
+
+            return result.ToArray();
         }
 
         [HttpGet("most-popular")]
-        public Language[] MostPopular(ParamsBase? parameters, CancellationToken ct)
+        public Language[] MostPopular([FromQuery] ParamsBase? parameters, CancellationToken ct)
         {
             parameters ??= new ParamsBase();
 
@@ -35,7 +42,7 @@ namespace SnippetProject.Controllers
         }
 
         [HttpPut("update")]
-        public Language UpdateLanguage(Language lang, CancellationToken ct)
+        public Language UpdateLanguage([FromQuery] Language lang, CancellationToken ct)
         {
             lang.Name += "[updated]";
             return lang;

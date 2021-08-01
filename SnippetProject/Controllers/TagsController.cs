@@ -12,15 +12,22 @@ namespace SnippetProject.Controllers
     public class TagsController : ControllerBase
     {
         [HttpGet("many")]
-        public Tag[] GetAll(ParamsBase? parameters, CancellationToken ct)
+        public Tag[] GetAll([FromQuery] ParamsBase? parameters, CancellationToken ct)
         {
             parameters ??= new ParamsBase();
 
-            return new Tag[parameters.PageSize];
+            var result = new Tag[parameters.PageSize].Select((x, index) =>
+            {
+                x.Id = (ulong) index;
+                x.Name = "popular tag";
+                return x;
+            });
+
+            return result.ToArray();
         }
 
         [HttpGet("most-popular")]
-        public Tag[] MostPopular(ParamsBase? parameters, CancellationToken ct)
+        public Tag[] MostPopular([FromQuery] ParamsBase? parameters, CancellationToken ct)
         {
             parameters ??= new ParamsBase();
 
@@ -35,7 +42,7 @@ namespace SnippetProject.Controllers
         }
 
         [HttpPut("update")]
-        public Tag UpdateTag(Tag tag, CancellationToken ct)
+        public Tag UpdateTag([FromQuery] Tag tag, CancellationToken ct)
         {
             tag.Name += "[updated]";
             return tag;

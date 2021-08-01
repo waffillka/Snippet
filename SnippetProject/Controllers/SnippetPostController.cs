@@ -27,7 +27,7 @@ namespace SnippetProject.Controllers
         }
 
         [HttpGet("snippet-short/many")]
-        public ShortSnippetPost[] GetShortPosts(SnippetPostParams? parameters, CancellationToken ct)
+        public ShortSnippetPost[] GetShortPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct)
         {
             //TODO: Validate params. Page size must be >0
             parameters ??= new SnippetPostParams();
@@ -37,7 +37,7 @@ namespace SnippetProject.Controllers
         }
 
         [HttpGet("snippet/many")]
-        public SnippetPost[] GetPosts(SnippetPostParams? parameters, CancellationToken ct)
+        public SnippetPost[] GetPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct)
         {
             parameters ??= new SnippetPostParams();
             var result = new SnippetPost[parameters.PageSize].Select(x => x.ConfigureDefault());
@@ -46,7 +46,7 @@ namespace SnippetProject.Controllers
         }
 
         [HttpPost("snippet/create")]
-        public SnippetPost CreateSnippetPost(SnippetPost post, CancellationToken ct)
+        public SnippetPost CreateSnippetPost([FromQuery] SnippetPost post, CancellationToken ct)
         {
             post.Title += "[created]";
             post.Date = DateTime.Now;
@@ -54,7 +54,7 @@ namespace SnippetProject.Controllers
         }
 
         [HttpPut("snippet/update")]
-        public SnippetPost UpdateSnippetPost(SnippetPost post, CancellationToken ct)
+        public SnippetPost UpdateSnippetPost([FromQuery] SnippetPost post, CancellationToken ct)
         {
             post.Title += "[updated]";
             post.Date = DateTime.Now;
