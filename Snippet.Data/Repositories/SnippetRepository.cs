@@ -110,12 +110,10 @@ namespace Snippet.Data.Repositories
                 .ConfigureAwait(false);
         }
 
-        public Task<int> CountLike(ulong id)
+        public Task<int> CountLike(ulong id) /// don't know 
         {
-            throw new NotImplementedException();
-            var like = _dbContext.SnippetPosts.Where(post => post.Id == id).Include(p => p.LikedUser.Count).Select(p => new { Count = p.LikedUser.Count });
-
-            //return like.ToListAsync().Result.Count;
+            var like = _dbContext.SnippetPosts.Where(post => post.Id == id).Include(p => p.LikedUser).Select(p => p.LikedUser).Count();
+            return Task.FromResult(like);
         }
     }
 }

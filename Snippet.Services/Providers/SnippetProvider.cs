@@ -63,7 +63,13 @@ namespace Snippet.Services.Providers
         {
             var entities = await _unitOfWork.Snippets.GetPageAsync(orderBy, order, page, pageSize, ct).ConfigureAwait(false);
 
-            return _mapper.Map<IReadOnlyCollection<ShortSnippetPost>>(entities);
+            var shortSnippets = _mapper.Map<IReadOnlyCollection<ShortSnippetPost>>(entities);
+            foreach(var item in shortSnippets)
+            {
+                item.Like = await _unitOfWork.Snippets.CountLike(item.Id).ConfigureAwait(false);
+            }
+
+            return shortSnippets;
         }
 
         public async Task<SnippetPost> UpdateAsync(SnippetPost model, CancellationToken ct = default)
