@@ -11,19 +11,19 @@ namespace Snippet.Data.UnitOfWork
     {
         private readonly SnippetDbContext _dbContext;
 
-        public UnitOfWork(SnippetDbContext dbContext, ISnippetRepository snippetRepository, ILanguageRepository languageRepository, ITagRepository tagRepository)
+        public UnitOfWork(SnippetDbContext dbContext, ISnippetRepository snippetRepository, ILanguageRepository languageRepository, ITagRepository tagRepository, IUserRepository userRepository)
         {
             _dbContext = dbContext;
             Snippets = snippetRepository;
             Language = languageRepository;
             Tags = tagRepository;
+            Users = userRepository;
         }
 
         public ISnippetRepository Snippets { get; }
-
         public ILanguageRepository Language { get; }
-
         public ITagRepository Tags { get; }
+        public IUserRepository Users { get; }
 
         public Task SaveChangesAsync(CancellationToken ct = default)
         {

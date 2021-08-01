@@ -9,6 +9,7 @@ namespace Snippet.Data.Interfaces.UnitOfWork
         ISnippetRepository Snippets { get; }
         ILanguageRepository Language { get; }
         ITagRepository Tags { get; }
+        IUserRepository Users { get; }
         Task SaveChangesAsync(CancellationToken ct = default);
     }
 }
