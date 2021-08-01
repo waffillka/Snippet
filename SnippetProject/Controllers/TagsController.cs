@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System;
 using System.Linq;
 using System.Threading;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +19,7 @@ namespace SnippetProject.Controllers
 
             var result = new Tag[parameters.PageSize].Select((x, index) =>
             {
-                x.Id = (ulong) index;
-                x.Name = "popular tag";
+                x = new Tag {Id = (ulong) index, Name = "popular tag"};
                 return x;
             });
 
@@ -33,8 +33,7 @@ namespace SnippetProject.Controllers
 
             var result = new Tag[parameters.PageSize].Select((x, index) =>
             {
-                x.Id = (ulong) index;
-                x.Name = "popular tag";
+                x = new Tag {Id = (ulong) index, Name = "popular tag"};
                 return x;
             });
 
@@ -44,6 +43,8 @@ namespace SnippetProject.Controllers
         [HttpPut("update")]
         public Tag UpdateTag([FromQuery] Tag tag, CancellationToken ct)
         {
+            if (tag == null)
+                throw new ArgumentNullException(nameof(tag));
             tag.Name += "[updated]";
             return tag;
         }

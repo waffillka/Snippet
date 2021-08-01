@@ -31,7 +31,12 @@ namespace SnippetProject.Controllers
         {
             //TODO: Validate params. Page size must be >0
             parameters ??= new SnippetPostParams();
-            var result = new ShortSnippetPost[parameters.PageSize].Select(x => x.ConfigureDefault());
+            
+            var result = new ShortSnippetPost[parameters.PageSize].Select(x =>
+            {
+                x = new ShortSnippetPost().ConfigureDefault();
+                return x;
+            });
 
             return result.ToArray();
         }
@@ -40,7 +45,11 @@ namespace SnippetProject.Controllers
         public SnippetPost[] GetPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct)
         {
             parameters ??= new SnippetPostParams();
-            var result = new SnippetPost[parameters.PageSize].Select(x => x.ConfigureDefault());
+            var result = new SnippetPost[parameters.PageSize].Select(x =>
+            {
+                x = new SnippetPost().ConfigureDefault();
+                return x;
+            });
 
             return result.ToArray();
         }
@@ -48,6 +57,8 @@ namespace SnippetProject.Controllers
         [HttpPost("snippet/create")]
         public SnippetPost CreateSnippetPost([FromQuery] SnippetPost post, CancellationToken ct)
         {
+            if (post == null)
+                throw new ArgumentNullException(nameof(post));
             post.Title += "[created]";
             post.Date = DateTime.Now;
             return post;
@@ -56,19 +67,21 @@ namespace SnippetProject.Controllers
         [HttpPut("snippet/update")]
         public SnippetPost UpdateSnippetPost([FromQuery] SnippetPost post, CancellationToken ct)
         {
+            if (post == null)
+                throw new ArgumentNullException(nameof(post));
             post.Title += "[updated]";
             post.Date = DateTime.Now;
 
             return post;
         }
 
-        [HttpDelete("snippet/delete")]
+        [HttpDelete("snippet/delete/{postId}")]
         public bool DeleteSnippetPost(ulong postId, CancellationToken ct)
         {
             return true;
         }
 
-        [HttpGet("snippet/liked-by")]
+        [HttpGet("snippet/liked-by/{postId}")]
         public bool PostLikedBy(ulong postId, ulong userId)
         {
             return true;

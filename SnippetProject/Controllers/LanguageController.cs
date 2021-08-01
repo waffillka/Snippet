@@ -18,8 +18,7 @@ namespace SnippetProject.Controllers
 
             var result = new Language[parameters.PageSize].Select((x, index) =>
             {
-                x.Id = (ulong) index;
-                x.Name = "Haskell";
+                x = new Language {Id = (ulong) index, Name = "Haskell"};
                 return x;
             });
 
@@ -33,8 +32,7 @@ namespace SnippetProject.Controllers
 
             var result = new Language[parameters.PageSize].Select((x, index) =>
             {
-                x.Id = (ulong) index;
-                x.Name = "Haskell";
+                x = new Language {Id = (ulong) index, Name = "Haskell"};
                 return x;
             });
 
