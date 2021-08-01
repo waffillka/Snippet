@@ -64,7 +64,7 @@ namespace Snippet.Services.Providers
             var entities = await _unitOfWork.Snippets.GetPageAsync(orderBy, order, page, pageSize, ct).ConfigureAwait(false);
 
             var shortSnippets = _mapper.Map<IReadOnlyCollection<ShortSnippetPost>>(entities);
-            foreach(var item in shortSnippets)
+            foreach (var item in shortSnippets)
             {
                 item.Like = await _unitOfWork.Snippets.CountLike(item.Id).ConfigureAwait(false);
             }
