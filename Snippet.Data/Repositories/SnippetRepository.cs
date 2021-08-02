@@ -46,7 +46,7 @@ namespace Snippet.Data.Repositories
                 .FirstOrDefaultAsync(user => user.Id == id, ct)!;
         }
 
-        public async Task<IReadOnlyCollection<SnippetEntity>> GetPageAsync(string orderBy, OrderDirection order, int page = 1, int pageSize = 10, CancellationToken ct = default)
+        public async Task<IReadOnlyCollection<SnippetEntity>> GetPageAsync(string orderBy, OrderDirection order, int page, int pageSize, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(orderBy))
             {

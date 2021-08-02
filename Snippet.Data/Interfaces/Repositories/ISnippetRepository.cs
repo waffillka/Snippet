@@ -8,7 +8,7 @@ namespace Snippet.Data.Interfaces.Repositories
 {
     public interface ISnippetRepository
     {
-        Task<IReadOnlyCollection<SnippetEntity>> GetPageAsync(string orderBy, OrderDirection order, int page = 0, int pageSize = 10, CancellationToken ct = default); //SortDirection
+        Task<IReadOnlyCollection<SnippetEntity>> GetPageAsync(string orderBy, OrderDirection order, int page, int pageSize, CancellationToken ct = default); //SortDirection
         Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default);
         Task<SnippetEntity> CreateAsync(SnippetEntity entity, CancellationToken ct = default);
         Task<SnippetEntity> UpdateAsync(SnippetEntity entity, CancellationToken ct = default);
