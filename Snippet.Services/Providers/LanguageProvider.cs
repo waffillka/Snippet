@@ -27,7 +27,7 @@ namespace Snippet.Services.Providers
             return _mapper.Map<Language>(responseTag);
         }
 
-        public async Task<bool> DeleteAsync(ulong id, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
             var result = await _unitOfWork.Language.DeleteAsync(id, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
@@ -35,7 +35,7 @@ namespace Snippet.Services.Providers
             return result;
         }
 
-        public async Task<Language?> GetByIdAsync(ulong id, CancellationToken ct = default)
+        public async Task<Language?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             var entity = await _unitOfWork.Language.GetByIdAsync(id, ct).ConfigureAwait(false);
             return _mapper.Map<Language?>(entity);

@@ -27,7 +27,7 @@ namespace Snippet.Services.Providers
             return _mapper.Map<Tag>(responseTag);
         }
 
-        public async Task<bool> DeleteAsync(ulong id, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
             var result = await _unitOfWork.Tags.DeleteAsync(id, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
@@ -35,7 +35,7 @@ namespace Snippet.Services.Providers
             return result;
         }
 
-        public async Task<Tag?> GetByIdAsync(ulong id, CancellationToken ct = default)
+        public async Task<Tag?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             var entity = await _unitOfWork.Tags.GetByIdAsync(id, ct).ConfigureAwait(false);
             return _mapper.Map<Tag?>(entity);

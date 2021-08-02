@@ -3,10 +3,7 @@ using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.UnitOfWork;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Snippet.Services.Response;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,12 +23,15 @@ namespace Snippet.Services.Providers
         public async Task<User> CreateAsync(User model, CancellationToken ct = default)
         {
             var entity = _mapper.Map<UserEntity>(model);
-            var responseTag = await _unitOfWork.Users.CreateAsync(entity, ct).ConfigureAwait(false);
+
+            var responseUser = await _unitOfWork.Users.CreateAsync(entity, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
-            return _mapper.Map<User>(responseTag);
+
+            var responseModel = _mapper.Map<User>(responseUser);
+            return responseModel;
         }
 
-        public async Task<bool> DeleteAsync(ulong id, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
             var result = await _unitOfWork.Users.DeleteAsync(id, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
@@ -39,20 +39,20 @@ namespace Snippet.Services.Providers
             return result;
         }
 
-        public async Task<User?> GetByIdAsync(ulong id, CancellationToken ct = default)
+        public async Task<UserResponse?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             var entity = await _unitOfWork.Users.GetByIdAsync(id, ct).ConfigureAwait(false);
-            return _mapper.Map<User?>(entity);
+            return _mapper.Map<UserResponse?>(entity);
         }
 
-        public async Task<User> UpdateAsync(User model, CancellationToken ct = default)
+        public async Task<UserResponse> UpdateAsync(User model, CancellationToken ct = default)
         {
             var entity = _mapper.Map<UserEntity>(model);
 
             var responseEntity = await _unitOfWork.Users.UpdateAsync(entity, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
-            return _mapper.Map<User>(responseEntity);
+            return _mapper.Map<UserResponse>(responseEntity);
         }
     }
 }

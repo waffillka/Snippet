@@ -22,7 +22,7 @@ namespace Snippet.Services.Providers
             _unitOfWork = unitOfWork;
         }
 
-        public Task<int> CountLike(ulong id)
+        public Task<int> CountLike(long id)
         {
             throw new NotImplementedException();
         }
@@ -38,7 +38,7 @@ namespace Snippet.Services.Providers
 
         }
 
-        public async Task<bool> DeleteAsync(ulong id, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
             var result = await _unitOfWork.Snippets.DeleteAsync(id, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
@@ -53,7 +53,7 @@ namespace Snippet.Services.Providers
             return _mapper.Map<IReadOnlyCollection<ShortSnippetPost>>(entities);
         }
 
-        public async Task<SnippetPost?> GetByIdAsync(ulong id, CancellationToken ct = default)
+        public async Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             var entity = await _unitOfWork.Snippets.GetByIdAsync(id, ct).ConfigureAwait(false);
             return _mapper.Map<SnippetPost?>(entity);
