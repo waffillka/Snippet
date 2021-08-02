@@ -41,7 +41,7 @@ namespace Snippet.Data.Repositories
 
         public Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default)
         {
-            return _dbContext.SnippetPosts
+            return _dbContext.SnippetPosts.Include(x => x.Language).Include(x => x.User).Include(x => x.Tags)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(user => user.Id == id, ct)!;
         }
@@ -81,6 +81,9 @@ namespace Snippet.Data.Repositories
             if (order == OrderDirection.Asc)
             {
                 return await _dbContext.SnippetPosts.OrderBy(orderByExp)
+                    .Include(x => x.Language)
+                    .Include(x => x.User)
+                    .Include(x => x.Tags)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync(ct)
@@ -88,6 +91,9 @@ namespace Snippet.Data.Repositories
             }
 
             return await _dbContext.SnippetPosts.OrderByDescending(orderByExp)
+                .Include(x => x.Language)
+                .Include(x => x.User)
+                .Include(x => x.Tags)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(ct)
@@ -102,7 +108,9 @@ namespace Snippet.Data.Repositories
 
         public async Task<IReadOnlyCollection<SnippetEntity>> GetAllAsync(int page = 1, int pageSize = 10, CancellationToken ct = default)
         {
-            return await _dbContext.SnippetPosts
+            return await _dbContext.SnippetPosts.Include(x => x.Language)
+                .Include(x => x.User)
+                .Include(x => x.Tags)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .AsNoTracking()
@@ -110,10 +118,19 @@ namespace Snippet.Data.Repositories
                 .ConfigureAwait(false);
         }
 
-        public Task<int> CountLike(long id) /// don't know 
+        public async Task<int> CountLike(long id) /// don't know 
         {
-            var like = _dbContext.SnippetPosts.Where(post => post.Id == id).Include(p => p.LikedUser).Select(p => p.LikedUser).Count();
-            return Task.FromResult(like);
+            var like = await _dbContext.SnippetPosts.Where(post => post.Id == id)
+                .Include(p => p.LikedUser)
+                .Select(p => new { Likes = p.LikedUser.Count }).ToListAsync().ConfigureAwait(false);
+            if(like.Count == 0)
+            {
+                return -1;
+            }
+            else
+            {
+                return like[0].Likes;
+            }
         }
     }
 }
