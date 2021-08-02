@@ -8,7 +8,7 @@ namespace Snippet.Services.Interfaces.Providers
 {
     public interface ISnippetProvider
     {
-        Task<IReadOnlyCollection<ShortSnippetPost>> GetPageAsync(string orderBy, OrderDirection order, int page = 0, int pageSize = 10, CancellationToken ct = default); //SortDirection
+        Task<IReadOnlyCollection<ShortSnippetPost>> GetPageAsync(string orderBy, OrderDirection order = OrderDirection.Asc, int page = 1, int pageSize = 10, CancellationToken ct = default); //SortDirection
         Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default);
         Task<SnippetPost> CreateAsync(SnippetPost model, CancellationToken ct = default);
         Task<SnippetPost> UpdateAsync(SnippetPost model, CancellationToken ct = default);

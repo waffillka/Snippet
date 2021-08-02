@@ -17,7 +17,7 @@ namespace Snippet.Services.Services
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> DeleteAsync(ulong id, CancellationToken ct = default)
+        public Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
             throw new System.NotImplementedException();
         }

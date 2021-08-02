@@ -59,7 +59,7 @@ namespace Snippet.Services.Providers
             return _mapper.Map<SnippetPost?>(entity);
         }
 
-        public async Task<IReadOnlyCollection<ShortSnippetPost>> GetPageAsync(string orderBy, OrderDirection order, int page = 0, int pageSize = 10, CancellationToken ct = default)
+        public async Task<IReadOnlyCollection<ShortSnippetPost>> GetPageAsync(string orderBy, OrderDirection order, int page = 1, int pageSize = 10, CancellationToken ct = default)
         {
             var entities = await _unitOfWork.Snippets.GetPageAsync(orderBy, order, page, pageSize, ct).ConfigureAwait(false);
 
