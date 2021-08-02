@@ -10,6 +10,13 @@ namespace Snippet.Data.DbContext
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SnippetEntity>()
+                .HasOne(c => c.User)
+                .WithMany(o => o.OwnSnippet);
+        }
+
         public DbSet<SnippetEntity> SnippetPosts { get; set; }
         public DbSet<TagEntity> Tags { get; set; }
         public DbSet<LanguageEntity> Languages { get; set; }
