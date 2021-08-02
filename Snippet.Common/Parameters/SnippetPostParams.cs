@@ -5,11 +5,11 @@ namespace Snippet.Common.Parameters
 {
     public class SnippetPostParams : ParamsBase
     {
-        public ICollection<ulong>? Authors { get; set; }
-        public ICollection<ulong>? AuthorsExclude { get; set; }
+        public ICollection<long>? Authors { get; set; }
+        public ICollection<long>? AuthorsExclude { get; set; }
 
-        public ICollection<ulong>? Tags { get; set; }
-        public ICollection<ulong>? TagsExclude { get; set; }
+        public ICollection<long>? Tags { get; set; }
+        public ICollection<long>? TagsExclude { get; set; }
 
         public DateTime CreationDate { get; set; }
         public DateTime From { get; set; }
