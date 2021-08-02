@@ -24,18 +24,18 @@ namespace Snippet.Data.Entities
 
         [Required(ErrorMessage = "LanguageId is a required field.")]
         [ForeignKey(nameof(Language))]
-        public ulong LanguageId { get; set; }
+        public long LanguageId { get; set; }
 
         [NotMapped]
         public LanguageEntity Language { get; set; }
 
         [Required(ErrorMessage = "UserId is a required field.")]
         [ForeignKey(nameof(User))]
-        public ulong UserId { get; set; }
+        public long UserId { get; set; }
         [NotMapped]
         public UserEntity? User { get; set; }
 
-        public ICollection<TagEntity> Tags { get; set; }
-        public ICollection<UserEntity> LikedUser { get; set; }
+        public ICollection<TagEntity>? Tags { get; set; }
+        public ICollection<UserEntity>? LikedUser { get; set; }
     }
 }
