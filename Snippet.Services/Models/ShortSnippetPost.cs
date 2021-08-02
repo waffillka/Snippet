@@ -5,7 +5,7 @@ namespace Snippet.Services.Models
 {
     public class ShortSnippetPost
     {
-        public ulong Id { get; set; }
+        public long Id { get; set; }
 
         public string Title { get; set; } = string.Empty;
 

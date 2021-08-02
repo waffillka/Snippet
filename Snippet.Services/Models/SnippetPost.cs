@@ -6,7 +6,7 @@ namespace Snippet.Services.Models
 {
     public class SnippetPost
     {
-        public ulong Id { get; set; }
+        public long Id { get; set; }
 
         [Required(ErrorMessage = "Title is a required field.")]
         public string Title { get; set; }
