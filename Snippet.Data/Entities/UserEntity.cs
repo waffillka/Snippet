@@ -5,7 +5,7 @@ namespace Snippet.Data.Entities
 {
     public class UserEntity
     {
-        public ulong Id { get; set; }
+        public long Id { get; set; }
 
         [Required(ErrorMessage = "Username is a required field.")]
         public string Username { get; set; } = string.Empty;

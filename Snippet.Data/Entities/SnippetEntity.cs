@@ -7,7 +7,7 @@ namespace Snippet.Data.Entities
 {
     public class SnippetEntity
     {
-        public ulong Id { get; set; }
+        public long Id { get; set; }
 
         [Required(ErrorMessage = "Title is a required field.")]
         [MaxLength(140, ErrorMessage = "Maximum length for the Title is 140 characters.")]
@@ -20,7 +20,7 @@ namespace Snippet.Data.Entities
         [Required(ErrorMessage = "Snippet is a required field.")]
         [MaxLength(2000, ErrorMessage = "Maximum length for the Snippet is 2000 characters.")]
         public string Snippet { get; set; } = string.Empty;
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "LanguageId is a required field.")]
         [ForeignKey(nameof(Language))]
@@ -32,7 +32,6 @@ namespace Snippet.Data.Entities
         [Required(ErrorMessage = "UserId is a required field.")]
         [ForeignKey(nameof(User))]
         public ulong UserId { get; set; }
-
         [NotMapped]
         public UserEntity? User { get; set; }
 
