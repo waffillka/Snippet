@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Snippet.Data.DbContext;
 
 namespace SnippetProject.Migrations
 {
     [DbContext(typeof(SnippetDbContext))]
-    [Migration("20210726115558_DatabaseCreation")]
-    partial class DatabaseCreation
+    partial class SnippetDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,11 +19,20 @@ namespace SnippetProject.Migrations
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Entities.Models.Language", b =>
+            modelBuilder.Entity("Snippet.Data.Entities.LanguageEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Latinname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -36,11 +43,12 @@ namespace SnippetProject.Migrations
                     b.ToTable("Languages");
                 });
 
-            modelBuilder.Entity("Entities.Models.SnippetPost", b =>
+            modelBuilder.Entity("Snippet.Data.Entities.SnippetEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -50,8 +58,11 @@ namespace SnippetProject.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long?>("LanguageEntityId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("LanguageId")
+                        .HasColumnType("decimal(20,0)");
 
                     b.Property<string>("Snippet")
                         .IsRequired()
@@ -63,21 +74,22 @@ namespace SnippetProject.Migrations
                         .HasMaxLength(140)
                         .HasColumnType("nvarchar(140)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<decimal>("UserId")
+                        .HasColumnType("decimal(20,0)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageId");
+                    b.HasIndex("LanguageEntityId");
 
                     b.ToTable("SnippetPosts");
                 });
 
-            modelBuilder.Entity("Entities.Models.Tag", b =>
+            modelBuilder.Entity("Snippet.Data.Entities.TagEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -88,11 +100,12 @@ namespace SnippetProject.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("Entities.Models.User", b =>
+            modelBuilder.Entity("Snippet.Data.Entities.UserEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -107,76 +120,74 @@ namespace SnippetProject.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SnippetPostTag", b =>
+            modelBuilder.Entity("SnippetEntityTagEntity", b =>
                 {
-                    b.Property<Guid>("SnippetPostsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long>("SnippetPostsId")
+                        .HasColumnType("bigint");
 
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long>("TagsId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("SnippetPostsId", "TagsId");
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("SnippetPostTag");
+                    b.ToTable("SnippetEntityTagEntity");
                 });
 
-            modelBuilder.Entity("SnippetPostUser", b =>
+            modelBuilder.Entity("SnippetEntityUserEntity", b =>
                 {
-                    b.Property<Guid>("LakedSnippetPostId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long>("LakedSnippetPostId")
+                        .HasColumnType("bigint");
 
-                    b.Property<Guid>("LikedUserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long>("LikedUserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("LakedSnippetPostId", "LikedUserId");
 
                     b.HasIndex("LikedUserId");
 
-                    b.ToTable("SnippetPostUser");
+                    b.ToTable("SnippetEntityUserEntity");
                 });
 
-            modelBuilder.Entity("Entities.Models.SnippetPost", b =>
+            modelBuilder.Entity("Snippet.Data.Entities.SnippetEntity", b =>
                 {
-                    b.HasOne("Entities.Models.Language", null)
+                    b.HasOne("Snippet.Data.Entities.LanguageEntity", null)
                         .WithMany("SnippetPosts")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LanguageEntityId");
                 });
 
-            modelBuilder.Entity("SnippetPostTag", b =>
+            modelBuilder.Entity("SnippetEntityTagEntity", b =>
                 {
-                    b.HasOne("Entities.Models.SnippetPost", null)
+                    b.HasOne("Snippet.Data.Entities.SnippetEntity", null)
                         .WithMany()
                         .HasForeignKey("SnippetPostsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Models.Tag", null)
+                    b.HasOne("Snippet.Data.Entities.TagEntity", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SnippetPostUser", b =>
+            modelBuilder.Entity("SnippetEntityUserEntity", b =>
                 {
-                    b.HasOne("Entities.Models.SnippetPost", null)
+                    b.HasOne("Snippet.Data.Entities.SnippetEntity", null)
                         .WithMany()
                         .HasForeignKey("LakedSnippetPostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Models.User", null)
+                    b.HasOne("Snippet.Data.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("LikedUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Entities.Models.Language", b =>
+            modelBuilder.Entity("Snippet.Data.Entities.LanguageEntity", b =>
                 {
                     b.Navigation("SnippetPosts");
                 });
