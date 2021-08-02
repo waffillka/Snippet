@@ -26,7 +26,7 @@ namespace SnippetProject.Middleware
                         {
                             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-                            logger.LogError(exception.Message);
+                            logger.LogError($"Something went wrong: {exception.Message}");
 
                             await context.Response.WriteAsync(exception.Message).ConfigureAwait(false);
 
