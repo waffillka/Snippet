@@ -21,7 +21,7 @@ namespace Snippet.Data.Repositories
             return entityEntry.Entity;
         }
 
-        public async Task<bool> DeleteAsync(ulong id, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
             var entity = await GetByIdAsync(id, ct).ConfigureAwait(false);
             if (entity != null)
@@ -33,7 +33,7 @@ namespace Snippet.Data.Repositories
             return false;
         }
 
-        public Task<LanguageEntity?> GetByIdAsync(ulong id, CancellationToken ct = default)
+        public Task<LanguageEntity?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             return _dbContext.Languages
                  .AsNoTracking()

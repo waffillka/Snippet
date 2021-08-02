@@ -2,7 +2,6 @@
 using Snippet.Data.DbContext;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.Repositories;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +21,7 @@ namespace Snippet.Data.Repositories
             return entityEntry.Entity;
         }
 
-        public async Task<bool> DeleteAsync(ulong id, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
             var entity = await GetByIdAsync(id, ct).ConfigureAwait(false);
             if (entity != null)
@@ -34,14 +33,14 @@ namespace Snippet.Data.Repositories
             return false;
         }
 
-        public Task<UserEntity?> GetByIdAsync(ulong id, CancellationToken ct = default)
+        public Task<UserEntity> GetByIdAsync(long id, CancellationToken ct = default)
         {
             return _dbContext.Users
                  .AsNoTracking()
-                 .FirstOrDefaultAsync(user => user.Id == id, ct)!;
+                 .FirstOrDefaultAsync(user => user.Id == id, ct);
         }
 
-        public async  Task<UserEntity> UpdateAsync(UserEntity entity, CancellationToken ct = default)
+        public async Task<UserEntity> UpdateAsync(UserEntity entity, CancellationToken ct = default)
         {
             var entityEntry = _dbContext.Users.Update(entity);
             return entityEntry.Entity;

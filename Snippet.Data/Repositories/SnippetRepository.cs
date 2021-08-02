@@ -27,7 +27,7 @@ namespace Snippet.Data.Repositories
             return entityEntry.Entity;
         }
 
-        public async Task<bool> DeleteAsync(ulong id, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
             var entity = await GetByIdAsync(id, ct).ConfigureAwait(false);
             if (entity != null)
@@ -39,7 +39,7 @@ namespace Snippet.Data.Repositories
             return false;
         }
 
-        public Task<SnippetEntity?> GetByIdAsync(ulong id, CancellationToken ct = default)
+        public Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             return _dbContext.SnippetPosts
                 .AsNoTracking()
@@ -110,7 +110,7 @@ namespace Snippet.Data.Repositories
                 .ConfigureAwait(false);
         }
 
-        public Task<int> CountLike(ulong id) /// don't know 
+        public Task<int> CountLike(long id) /// don't know 
         {
             var like = _dbContext.SnippetPosts.Where(post => post.Id == id).Include(p => p.LikedUser).Select(p => p.LikedUser).Count();
             return Task.FromResult(like);
