@@ -15,6 +15,12 @@ namespace Snippet.Data.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<TagEntity?> GetByNameAsync(string name, CancellationToken ct = default)
+        {
+            return await _dbContext.Tags.AsNoTracking().FirstOrDefaultAsync(tag => tag.Name == name, ct)
+                .ConfigureAwait(false);
+        }
+
         public async Task<TagEntity> CreateAsync(TagEntity entity, CancellationToken ct = default)
         {
             var entityEntry = await _dbContext.Tags.AddAsync(entity, ct).ConfigureAwait(false);

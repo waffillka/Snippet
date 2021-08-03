@@ -19,6 +19,12 @@ namespace Snippet.Services.Providers
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<Tag?> GetByNameAsync(string name, CancellationToken ct = default)
+        {
+            var tag = await _unitOfWork.Tags.GetByNameAsync(name, ct).ConfigureAwait(false);
+            return _mapper.Map<Tag>(tag);
+        }
+
         public async Task<Tag> CreateAsync(Tag model, CancellationToken ct = default)
         {
             var entity = _mapper.Map<TagEntity>(model);

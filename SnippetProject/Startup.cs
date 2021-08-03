@@ -12,6 +12,7 @@ using Snippet.Services.Configuration;
 using SnippetProject.Extensions;
 using SnippetProject.Middleware;
 using System.IO;
+using Snippet.Services.Parser;
 
 namespace SnippetProject
 {
@@ -30,13 +31,14 @@ namespace SnippetProject
         {
             services.ConfigureLoggerService();
             services.RegisterProviders(Configuration.GetConnectionString("sqlConnection"));
+            services.AddScoped<TagParser>();
             services.RegisterMappingConfig();
             services.ConfigureCors();
 
             services.AddControllers(config =>
             {
-                config.RespectBrowserAcceptHeader = true;
-                config.ReturnHttpNotAcceptable = true;
+                // config.RespectBrowserAcceptHeader = true;
+                // config.ReturnHttpNotAcceptable = true;
             }).AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
            .AddXmlDataContractSerializerFormatters();
 
