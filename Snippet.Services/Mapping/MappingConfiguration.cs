@@ -18,7 +18,7 @@ namespace Snippet.Services.Mapping
             CreateMap<UserEntity, User>().ReverseMap();
             CreateMap<UserResponse, User>().ReverseMap();
             CreateMap<UserEntity, UserResponse>().ReverseMap();
-            
+
 
             CreateMap<SnippetEntity, ShortSnippetPost>().ForMember(
                 c => c.Description,

@@ -123,7 +123,7 @@ namespace Snippet.Data.Repositories
             var like = await _dbContext.SnippetPosts.Where(post => post.Id == id)
                 .Include(p => p.LikedUser)
                 .Select(p => new { Likes = p.LikedUser.Count }).ToListAsync().ConfigureAwait(false);
-            if(like.Count == 0)
+            if (like.Count == 0)
             {
                 return -1;
             }
