@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.UnitOfWork;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
 using System.Threading;
 using System.Threading.Tasks;
+using Snippet.Common.Parameters;
 
 namespace Snippet.Services.Providers
 {
@@ -17,6 +19,13 @@ namespace Snippet.Services.Providers
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<IEnumerable<Tag>> GetAllAsync(ParamsBase? parameters = default,
+            CancellationToken ct = default)
+        {
+            var result = await _unitOfWork.Tags.GetAllAsync(parameters, ct);
+            return _mapper.Map<IEnumerable<Tag>>(result);
         }
 
         public async Task<Tag?> GetByNameAsync(string name, CancellationToken ct = default)

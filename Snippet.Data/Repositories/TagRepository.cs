@@ -1,9 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Snippet.Data.DbContext;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.Repositories;
 using System.Threading;
 using System.Threading.Tasks;
+using Snippet.Common.Enums;
+using Snippet.Common.Parameters;
 
 namespace Snippet.Data.Repositories
 {
@@ -19,6 +23,37 @@ namespace Snippet.Data.Repositories
         {
             return await _dbContext.Tags.AsNoTracking().FirstOrDefaultAsync(tag => tag.Name == name, ct)
                 .ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<TagEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default)
+        {
+            var result = _dbContext.Tags.AsNoTracking();
+            parameters ??= new ParamsBase();
+            if (!string.IsNullOrEmpty(parameters.OrderBy))
+            {
+                switch (parameters.OrderBy)
+                {
+                    case "Id":
+                        result = parameters.OrderDirection == OrderDirection.Asc
+                            ? result.OrderBy(x => x.Id)
+                            : result.OrderByDescending(x => x.Id);
+                        break;
+                    case "Name":
+                        result = parameters.OrderDirection == OrderDirection.Asc
+                            ? result.OrderBy(x => x.Name)
+                            : result.OrderByDescending(x => x.Name);
+                        break;
+                    case "Likes":
+                        result = parameters.OrderDirection == OrderDirection.Asc
+                            ? result.OrderBy(x => x.SnippetPosts.Count)
+                            : result.OrderByDescending(x => x.SnippetPosts.Count);
+                        break;
+                }
+            }
+
+            result = result.Skip(parameters.Page * parameters.PageSize).Take(parameters.PageSize);
+
+            return await result.ToListAsync(cancellationToken: ct).ConfigureAwait(false);
         }
 
         public async Task<TagEntity> CreateAsync(TagEntity entity, CancellationToken ct = default)

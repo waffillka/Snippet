@@ -1,12 +1,16 @@
-﻿using Snippet.Services.Models;
+﻿using System.Collections.Generic;
+using Snippet.Services.Models;
 using System.Threading;
 using System.Threading.Tasks;
+using Snippet.Common.Parameters;
 
 namespace Snippet.Services.Interfaces.Providers
 {
     public interface ITagProvider
     {
         Task<Tag?> GetByIdAsync(long id, CancellationToken ct = default);
+
+        Task<IEnumerable<Tag>> GetAllAsync(ParamsBase? parameters, CancellationToken ct = default);
 
         Task<Tag?> GetByNameAsync(string name, CancellationToken ct = default);
         Task<Tag> CreateAsync(Tag model, CancellationToken ct = default);
