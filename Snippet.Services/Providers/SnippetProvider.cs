@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
-using Snippet.Common.Enums;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.UnitOfWork;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Snippet.Common.Parameters;
 
 namespace Snippet.Services.Providers
 {
@@ -22,9 +21,9 @@ namespace Snippet.Services.Providers
             _unitOfWork = unitOfWork;
         }
 
-        public Task<int> CountLike(long id)
+        public Task<int> CountLike(long id, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            return _unitOfWork.Snippets.CountLike(id, ct);
         }
 
         public async Task<SnippetPost> CreateAsync(SnippetPost model, CancellationToken ct = default)
@@ -46,30 +45,24 @@ namespace Snippet.Services.Providers
             return result;
         }
 
-        public async Task<IReadOnlyCollection<ShortSnippetPost>> GetAllAsync(int page = 1, int pageSize = 10, CancellationToken ct = default)
+        public async Task<IReadOnlyCollection<ShortSnippetPost>> GetAllShortAsync(SnippetPostParams? parameters = default, CancellationToken ct = default)
         {
-            var entities = await _unitOfWork.Snippets.GetAllAsync(page, pageSize, ct).ConfigureAwait(false);
+            var entities = await _unitOfWork.Snippets.GetAllAsync(parameters, ct).ConfigureAwait(false);
 
-            return _mapper.Map<IReadOnlyCollection<ShortSnippetPost>>(entities);
+            var result =_mapper.Map<IReadOnlyCollection<ShortSnippetPost>>(entities);
+            
+            foreach (var item in result)
+            {
+                item.Like = await CountLike(item.Id, ct);
+            }
+
+            return result;
         }
 
         public async Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             var entity = await _unitOfWork.Snippets.GetByIdAsync(id, ct).ConfigureAwait(false);
             return _mapper.Map<SnippetPost?>(entity);
-        }
-
-        public async Task<IReadOnlyCollection<ShortSnippetPost>> GetPageAsync(string orderBy, OrderDirection order, int page = 1, int pageSize = 10, CancellationToken ct = default)
-        {
-            var entities = await _unitOfWork.Snippets.GetPageAsync(orderBy, order, page, pageSize, ct).ConfigureAwait(false);
-
-            var shortSnippets = _mapper.Map<IReadOnlyCollection<ShortSnippetPost>>(entities);
-            foreach (var item in shortSnippets)
-            {
-                item.Like = await _unitOfWork.Snippets.CountLike(item.Id).ConfigureAwait(false);
-            }
-
-            return shortSnippets;
         }
 
         public async Task<SnippetPost> UpdateAsync(SnippetPost model, CancellationToken ct = default)

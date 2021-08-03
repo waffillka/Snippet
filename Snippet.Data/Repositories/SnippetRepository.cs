@@ -3,13 +3,11 @@ using Snippet.Common.Enums;
 using Snippet.Data.DbContext;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.Repositories;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Snippet.Common.Parameters;
 
 namespace Snippet.Data.Repositories
 {
@@ -45,92 +43,84 @@ namespace Snippet.Data.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(user => user.Id == id, ct)!;
         }
-
-        public async Task<IReadOnlyCollection<SnippetEntity>> GetPageAsync(string orderBy, OrderDirection order, int page, int pageSize, CancellationToken ct = default)
-        {
-            if (string.IsNullOrWhiteSpace(orderBy))
-            {
-                return await GetAllAsync(page, pageSize, ct).ConfigureAwait(false);
-            }
-
-            Expression<Func<SnippetEntity, object>> orderByExp;
-
-            orderBy = orderBy.ToUpper(CultureInfo.CurrentCulture);
-
-            if (orderBy == nameof(SnippetEntity.Title).ToUpper(CultureInfo.CurrentCulture))
-            {
-                orderByExp = entity => entity.Title;
-            }
-            else if (orderBy == nameof(SnippetEntity.Language).ToUpper(CultureInfo.CurrentCulture))
-            {
-                orderByExp = entity => entity.Language;
-            }
-            else if (orderBy == nameof(SnippetEntity.User).ToUpper(CultureInfo.CurrentCulture))
-            {
-                orderByExp = entity => entity.User;
-            }
-            else if (orderBy == nameof(SnippetEntity.Date).ToUpper(CultureInfo.CurrentCulture))
-            {
-                orderByExp = entity => entity.Date;
-            }
-            else
-            {
-                return await GetAllAsync(page, pageSize, ct).ConfigureAwait(false);
-            }
-
-            if (order == OrderDirection.Asc)
-            {
-                return await _dbContext.SnippetPosts.OrderBy(orderByExp)
-                    .Include(x => x.Language)
-                    .Include(x => x.User)
-                    .Include(x => x.Tags)
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToListAsync(ct)
-                    .ConfigureAwait(false);
-            }
-
-            return await _dbContext.SnippetPosts.OrderByDescending(orderByExp)
-                .Include(x => x.Language)
-                .Include(x => x.User)
-                .Include(x => x.Tags)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync(ct)
-                .ConfigureAwait(false);
-        }
-
+        
         public async Task<SnippetEntity> UpdateAsync(SnippetEntity entity, CancellationToken ct = default)
         {
             var entityEntry = _dbContext.SnippetPosts.Update(entity);
             return entityEntry.Entity;
         }
 
-        public async Task<IReadOnlyCollection<SnippetEntity>> GetAllAsync(int page = 1, int pageSize = 10, CancellationToken ct = default)
+        public async Task<IReadOnlyCollection<SnippetEntity>> GetAllAsync(SnippetPostParams? parameters = default, CancellationToken ct = default)
         {
-            return await _dbContext.SnippetPosts.Include(x => x.Language)
+            var result = _dbContext.SnippetPosts.Include(x => x.Language)
                 .Include(x => x.User)
                 .Include(x => x.Tags)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .AsNoTracking()
-                .ToListAsync(ct)
-                .ConfigureAwait(false);
+                .AsNoTracking();
+
+            parameters ??= new SnippetPostParams();
+            
+            if(parameters.Authors != null)
+            {
+                result = result.Where(snippet => parameters.Authors.Contains(snippet.Id));
+            }
+            
+            if (parameters.AuthorsExclude != null)
+            {
+                result = result.Where(snippet => !parameters.AuthorsExclude.Contains(snippet.Id));
+            }
+
+            if (parameters.Tags != null)
+            {
+                result = result.Where(snippet => snippet.Tags!.Select(x=> x.Id).Intersect(parameters.Tags).Any());
+            }
+
+            if (parameters.TagsExclude != null)
+            {                                           //damn...
+                result = result.Where(snippet => !snippet.Tags!.Select(x=> x.Id).Intersect(parameters.TagsExclude).Any());
+            }
+
+            if (parameters.CreationDate != default)
+            {
+                result = result.Where(snippet => snippet.Date == parameters.CreationDate);
+            }
+            else if (parameters.From != default && parameters.To != default)
+            {
+                result = result.Where(snippet => snippet.Date >= parameters.From && snippet.Date <= parameters.To);
+            }
+
+            if (!string.IsNullOrEmpty(parameters.MatchString))
+            {
+                result = result.Where(snippet => snippet.Title.Contains(parameters.MatchString)
+                                            || snippet.Description.Contains(parameters.MatchString)
+                                            || snippet.Snippet.Contains(parameters.MatchString));
+            }
+
+            switch (parameters.OrderBy)
+            {
+                case "Id":
+                    result = parameters.OrderDirection == OrderDirection.Asc
+                        ? result.OrderBy(x => x.Id)
+                        : result.OrderByDescending(x => x.Id);
+                    break;
+                case "Date":
+                    result = parameters.OrderDirection == OrderDirection.Asc
+                        ? result.OrderBy(x => x.Date)
+                        : result.OrderByDescending(x => x.Date);
+                    break;
+                case "Likes":
+                    result = parameters.OrderDirection == OrderDirection.Asc
+                        ? result.OrderBy(x => x.LikedUser!.Count)
+                        : result.OrderByDescending(x => x.LikedUser!.Count);
+                    break;
+            }
+            
+            return await result.Skip((parameters.Page-1)*parameters.PageSize).Take(parameters.PageSize).ToListAsync(ct).ConfigureAwait(false);
         }
 
-        public async Task<int> CountLike(long id) /// don't know 
+        public async Task<int> CountLike(long id, CancellationToken ct = default) 
         {
-            var like = await _dbContext.SnippetPosts.Where(post => post.Id == id)
-                .Include(p => p.LikedUser)
-                .Select(p => new { Likes = p.LikedUser.Count }).ToListAsync().ConfigureAwait(false);
-            if (like.Count == 0)
-            {
-                return -1;
-            }
-            else
-            {
-                return like[0].Likes;
-            }
+            var user = await GetByIdAsync(id, ct).ConfigureAwait(false);
+            return user?.LikedUser?.Count ?? 0;
         }
     }
 }
