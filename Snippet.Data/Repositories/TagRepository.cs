@@ -51,7 +51,7 @@ namespace Snippet.Data.Repositories
                 }
             }
 
-            result = result.Skip(parameters.Page * parameters.PageSize).Take(parameters.PageSize);
+            result = result.Skip((parameters.Page -1)* parameters.PageSize).Take(parameters.PageSize);
 
             return await result.ToListAsync(cancellationToken: ct).ConfigureAwait(false);
         }
