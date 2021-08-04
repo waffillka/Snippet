@@ -6,7 +6,6 @@ using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.Repositories;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Common.Enums;
 using Snippet.Common.Parameters;
 
 namespace Snippet.Data.Repositories
@@ -29,7 +28,9 @@ namespace Snippet.Data.Repositories
 
         public async Task<IEnumerable<TagEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default)
         {
-            var result = _dbContext.Tags.Include(x=>x.SnippetPosts).AsNoTracking();
+            var result = _dbContext.Tags
+                .Include(x=>x.SnippetPosts)
+                .AsNoTracking();
             
             parameters ??= new ParamsBase();
             

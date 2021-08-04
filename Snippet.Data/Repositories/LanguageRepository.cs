@@ -27,7 +27,9 @@ namespace Snippet.Data.Repositories
 
         public async Task<IEnumerable<LanguageEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default)
         {
-            var result = _dbContext.Languages.AsNoTracking();
+            var result = _dbContext.Languages
+                .Include(x=>x.SnippetPosts)
+                .AsNoTracking();
 
             parameters ??= new ParamsBase();
             
@@ -44,7 +46,8 @@ namespace Snippet.Data.Repositories
                 }
             }
             
-            result = result.Skip((parameters.Page-1) * parameters.PageSize).Take(parameters.PageSize);
+            result = result.Skip((parameters.Page-1) * parameters.PageSize)
+                .Take(parameters.PageSize);
 
             return await result.ToListAsync(ct).ConfigureAwait(false);
         }

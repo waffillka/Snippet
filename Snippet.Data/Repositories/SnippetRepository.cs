@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Snippet.Common.Enums;
 using Snippet.Data.DbContext;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.Repositories;
@@ -59,6 +58,7 @@ namespace Snippet.Data.Repositories
                 .Include(x => x.Language)
                 .Include(x => x.User)
                 .Include(x => x.Tags)
+                .Include(x=>x.LikedUser)
                 .AsNoTracking();
 
             parameters ??= new SnippetPostParams();
