@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Snippet.Data.Configuration;
 using Snippet.Services.Interfaces.Providers;
+using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Mapping;
 using Snippet.Services.Providers;
+using Snippet.Services.Services;
 
 namespace Snippet.Services.Configuration
 {
@@ -29,6 +31,13 @@ namespace Snippet.Services.Configuration
             services.AddScoped<IUserProvider, UserProvider>();
 
             return services;
+        }
+
+        public static IServiceCollection RegisterServices(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<ISnippetSevice, SnippetSevice>();
+
+            return serviceCollection;
         }
     }
 }
