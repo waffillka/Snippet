@@ -19,7 +19,7 @@ namespace SnippetProject.Controllers
 
             var result = new Tag[parameters.PageSize].Select((x, index) =>
             {
-                x = new Tag {Id = (ulong) index, Name = "popular tag"};
+                x = new Tag {Id = index, Name = "popular tag"};
                 return x;
             });
 
@@ -33,7 +33,7 @@ namespace SnippetProject.Controllers
 
             var result = new Tag[parameters.PageSize].Select((x, index) =>
             {
-                x = new Tag {Id = (ulong) index, Name = "popular tag"};
+                x = new Tag {Id = index, Name = "popular tag"};
                 return x;
             });
 

@@ -5,7 +5,7 @@ namespace SnippetProject.Extensions.SnippetPostHelper
 {
     public static class SnippetPostExtensions
     {
-        public static SnippetPost ConfigureDefault(this SnippetPost post, ulong id = default)
+        public static SnippetPost ConfigureDefault(this SnippetPost post, long id = default)
         {
             post.Id = id;
             post.Title = "default title";
@@ -15,7 +15,7 @@ namespace SnippetProject.Extensions.SnippetPostHelper
             return post;
         }
 
-        public static ShortSnippetPost ConfigureDefault(this ShortSnippetPost post, ulong id = default)
+        public static ShortSnippetPost ConfigureDefault(this ShortSnippetPost post, long id = default)
         {
             post.Id = id;
             post.Title = "default title";
