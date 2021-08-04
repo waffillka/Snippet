@@ -40,7 +40,7 @@ namespace Snippet.Data.Repositories
                  .FirstOrDefaultAsync(user => user.Id == id, ct);
         }
 
-        public async Task<UserEntity> UpdateAsync(UserEntity entity, CancellationToken ct = default)
+        public UserEntity UpdateAsync(UserEntity entity)
         {
             var entityEntry = _dbContext.Users.Update(entity);
             return entityEntry.Entity;

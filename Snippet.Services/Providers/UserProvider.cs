@@ -49,7 +49,7 @@ namespace Snippet.Services.Providers
         {
             var entity = _mapper.Map<UserEntity>(model);
 
-            var responseEntity = await _unitOfWork.Users.UpdateAsync(entity, ct).ConfigureAwait(false);
+            var responseEntity = _unitOfWork.Users.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
             return _mapper.Map<UserResponse>(responseEntity);
