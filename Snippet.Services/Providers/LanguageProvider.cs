@@ -45,7 +45,7 @@ namespace Snippet.Services.Providers
         {
             var entity = _mapper.Map<LanguageEntity>(model);
 
-            var responseEntity = await _unitOfWork.Language.UpdateAsync(entity, ct).ConfigureAwait(false);
+            var responseEntity = _unitOfWork.Language.Update(entity);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
             return _mapper.Map<Language>(responseEntity);

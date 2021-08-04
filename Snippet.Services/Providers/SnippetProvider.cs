@@ -89,7 +89,7 @@ namespace Snippet.Services.Providers
         {
             var entity = _mapper.Map<SnippetEntity>(model);
 
-            var responseEntity = await _unitOfWork.Snippets.UpdateAsync(entity, ct).ConfigureAwait(false);
+            var responseEntity = _unitOfWork.Snippets.Update(entity, ct);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
             return _mapper.Map<SnippetPost>(responseEntity);

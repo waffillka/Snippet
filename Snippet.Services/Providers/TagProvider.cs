@@ -24,7 +24,9 @@ namespace Snippet.Services.Providers
         public async Task<IEnumerable<Tag>> GetAllAsync(ParamsBase? parameters = default,
             CancellationToken ct = default)
         {
-            var result = await _unitOfWork.Tags.GetAllAsync(parameters, ct);
+            var result = await _unitOfWork.Tags
+                .GetAllAsync(parameters, ct)
+                .ConfigureAwait(false);
             return _mapper.Map<IEnumerable<Tag>>(result);
         }
 
@@ -60,7 +62,7 @@ namespace Snippet.Services.Providers
         {
             var entity = _mapper.Map<TagEntity>(model);
 
-            var responseEntity = await _unitOfWork.Tags.UpdateAsync(entity, ct).ConfigureAwait(false);
+            var responseEntity = _unitOfWork.Tags.Update(entity);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
             return _mapper.Map<Tag>(responseEntity);

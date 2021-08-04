@@ -12,7 +12,7 @@ namespace Snippet.Data.Interfaces.Repositories
         Task<LanguageEntity?> GetByNameAsync(string name, CancellationToken ct = default);
         Task<IEnumerable<LanguageEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default);
         Task<LanguageEntity> CreateAsync(LanguageEntity entity, CancellationToken ct = default);
-        Task<LanguageEntity> UpdateAsync(LanguageEntity entity, CancellationToken ct = default);
+        LanguageEntity Update(LanguageEntity entity);
         Task<bool> DeleteAsync(long id, CancellationToken ct = default);
     }
 }
