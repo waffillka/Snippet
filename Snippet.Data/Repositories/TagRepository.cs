@@ -21,32 +21,27 @@ namespace Snippet.Data.Repositories
 
         public async Task<TagEntity?> GetByNameAsync(string name, CancellationToken ct = default)
         {
-            return await _dbContext.Tags.AsNoTracking().FirstOrDefaultAsync(tag => tag.Name == name, ct)
+            return await _dbContext.Tags
+                .AsNoTracking()
+                .FirstOrDefaultAsync(tag => tag.Name == name, ct)
                 .ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<TagEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default)
         {
-            var result = _dbContext.Tags.AsNoTracking();
+            var result = _dbContext.Tags.Include(x=>x.SnippetPosts).AsNoTracking();
+            
             parameters ??= new ParamsBase();
-            if (!string.IsNullOrEmpty(parameters.OrderBy))
+            
+            if (!string.IsNullOrEmpty(parameters.SortBy))
             {
-                switch (parameters.OrderBy)
+                switch (parameters.SortBy.ToLower())
                 {
-                    case "Id":
-                        result = parameters.OrderDirection == OrderDirection.Asc
-                            ? result.OrderBy(x => x.Id)
-                            : result.OrderByDescending(x => x.Id);
+                    case "popular":
+                        result = result.OrderBy(x => x.SnippetPosts.Count);
                         break;
-                    case "Name":
-                        result = parameters.OrderDirection == OrderDirection.Asc
-                            ? result.OrderBy(x => x.Name)
-                            : result.OrderByDescending(x => x.Name);
-                        break;
-                    case "Likes":
-                        result = parameters.OrderDirection == OrderDirection.Asc
-                            ? result.OrderBy(x => x.SnippetPosts.Count)
-                            : result.OrderByDescending(x => x.SnippetPosts.Count);
+                    case "unpopular":
+                        result = result.OrderByDescending(x => x.SnippetPosts.Count);
                         break;
                 }
             }
@@ -81,7 +76,7 @@ namespace Snippet.Data.Repositories
                  .FirstOrDefaultAsync(user => user.Id == id, ct)!;
         }
 
-        public async Task<TagEntity> UpdateAsync(TagEntity entity, CancellationToken ct = default)
+        public TagEntity Update(TagEntity entity)
         {
             var entityEntry = _dbContext.Tags.Update(entity);
             return entityEntry.Entity;

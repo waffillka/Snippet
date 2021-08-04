@@ -6,7 +6,6 @@ using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.Repositories;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Common.Enums;
 using Snippet.Common.Parameters;
 
 namespace Snippet.Data.Repositories
@@ -32,31 +31,22 @@ namespace Snippet.Data.Repositories
 
             parameters ??= new ParamsBase();
             
-            if (!string.IsNullOrEmpty(parameters.OrderBy))
+            if (!string.IsNullOrEmpty(parameters.SortBy))
             {
-                switch (parameters.OrderBy)
+                switch (parameters.SortBy.ToLower())
                 {
-                    case "Id":
-                        result = parameters.OrderDirection == OrderDirection.Asc
-                            ? result.OrderBy(x => x.Id)
-                            : result.OrderByDescending(x => x.Id);
+                    case "popular":
+                        result = result.OrderBy(x => x.SnippetPosts.Count);                           
                         break;
-                    case "Name":
-                        result = parameters.OrderDirection == OrderDirection.Asc
-                            ? result.OrderBy(x => x.Name)
-                            : result.OrderByDescending(x => x.Name);
-                        break;
-                    case "Likes":
-                        result = parameters.OrderDirection == OrderDirection.Asc
-                            ? result.OrderBy(x => x.SnippetPosts.Count)
-                            : result.OrderByDescending(x => x.SnippetPosts.Count);
+                    case "unpopular":
+                        result = result.OrderByDescending(x => x.SnippetPosts.Count);
                         break;
                 }
             }
             
             result = result.Skip((parameters.Page-1) * parameters.PageSize).Take(parameters.PageSize);
 
-            return await result.ToListAsync(ct);
+            return await result.ToListAsync(ct).ConfigureAwait(false);
         }
 
         public async Task<LanguageEntity> CreateAsync(LanguageEntity entity, CancellationToken ct = default)
@@ -84,7 +74,7 @@ namespace Snippet.Data.Repositories
                  .FirstOrDefaultAsync(user => user.Id == id, ct)!;
         }
 
-        public async Task<LanguageEntity> UpdateAsync(LanguageEntity entity, CancellationToken ct = default)
+        public LanguageEntity Update(LanguageEntity entity)
         {
             var entityEntry = _dbContext.Languages.Update(entity);
             return entityEntry.Entity;

@@ -39,12 +39,15 @@ namespace Snippet.Data.Repositories
 
         public Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default)
         {
-            return _dbContext.SnippetPosts.Include(x => x.Language).Include(x => x.User).Include(x => x.Tags)
+            return _dbContext.SnippetPosts
+                .Include(x => x.Language)
+                .Include(x => x.User).Include(x => x.Tags)
+                .Include(x=> x.LikedUser)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(user => user.Id == id, ct)!;
         }
         
-        public async Task<SnippetEntity> UpdateAsync(SnippetEntity entity, CancellationToken ct = default)
+        public SnippetEntity Update(SnippetEntity entity, CancellationToken ct = default)
         {
             var entityEntry = _dbContext.SnippetPosts.Update(entity);
             return entityEntry.Entity;
@@ -52,7 +55,8 @@ namespace Snippet.Data.Repositories
 
         public async Task<IReadOnlyCollection<SnippetEntity>> GetAllAsync(SnippetPostParams? parameters = default, CancellationToken ct = default)
         {
-            var result = _dbContext.SnippetPosts.Include(x => x.Language)
+            var result = _dbContext.SnippetPosts
+                .Include(x => x.Language)
                 .Include(x => x.User)
                 .Include(x => x.Tags)
                 .AsNoTracking();
@@ -83,6 +87,7 @@ namespace Snippet.Data.Repositories
             {
                 result = result.Where(snippet => snippet.Date == parameters.CreationDate);
             }
+            
             else if (parameters.From != default && parameters.To != default)
             {
                 result = result.Where(snippet => snippet.Date >= parameters.From && snippet.Date <= parameters.To);
@@ -94,26 +99,25 @@ namespace Snippet.Data.Repositories
                                             || snippet.Description.Contains(parameters.MatchString)
                                             || snippet.Snippet.Contains(parameters.MatchString));
             }
-
-            switch (parameters.OrderBy)
-            {
-                case "Id":
-                    result = parameters.OrderDirection == OrderDirection.Asc
-                        ? result.OrderBy(x => x.Id)
-                        : result.OrderByDescending(x => x.Id);
-                    break;
-                case "Date":
-                    result = parameters.OrderDirection == OrderDirection.Asc
-                        ? result.OrderBy(x => x.Date)
-                        : result.OrderByDescending(x => x.Date);
-                    break;
-                case "Likes":
-                    result = parameters.OrderDirection == OrderDirection.Asc
-                        ? result.OrderBy(x => x.LikedUser!.Count)
-                        : result.OrderByDescending(x => x.LikedUser!.Count);
-                    break;
-            }
             
+            if (!string.IsNullOrEmpty(parameters.SortBy))
+            {
+                switch (parameters.SortBy.ToLower())
+                {
+                    case "new":
+                        result = result.OrderBy(x => x.Date);
+                        break;
+                    case "old":
+                        result = result.OrderByDescending(x => x.Date);
+                        break;
+                    case "popular":
+                        result = result.OrderBy(x => x.LikedUser!.Count);                           
+                        break;
+                    case "unpopular":
+                        result = result.OrderByDescending(x => x.LikedUser!.Count);
+                        break;
+                }
+            }
             return await result.Skip((parameters.Page-1)*parameters.PageSize).Take(parameters.PageSize).ToListAsync(ct).ConfigureAwait(false);
         }
 

@@ -6,7 +6,7 @@ namespace Snippet.Common.Parameters
     {
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 20;
-        public string OrderBy { get; set; } = string.Empty;
-        public OrderDirection OrderDirection { get; set; } = OrderDirection.Asc;
+
+        public string SortBy { get; set; } = string.Empty;
     }
 }
