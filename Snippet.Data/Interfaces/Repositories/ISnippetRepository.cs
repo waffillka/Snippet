@@ -1,8 +1,8 @@
-﻿using Snippet.Data.Entities;
+﻿using Snippet.Common.Parameters;
+using Snippet.Data.Entities;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Common.Parameters;
 
 namespace Snippet.Data.Interfaces.Repositories
 {

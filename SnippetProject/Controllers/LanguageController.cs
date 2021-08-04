@@ -1,9 +1,9 @@
 ﻿#nullable enable
-using System.Linq;
-using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using Snippet.Common.Parameters;
 using Snippet.Services.Models;
+using System.Linq;
+using System.Threading;
 
 namespace SnippetProject.Controllers
 {
@@ -18,7 +18,7 @@ namespace SnippetProject.Controllers
 
             var result = new Language[parameters.PageSize].Select((x, index) =>
             {
-                x = new Language {Id = index, Name = "Haskell"};
+                x = new Language { Id = index, Name = "Haskell" };
                 return x;
             });
 
@@ -32,7 +32,7 @@ namespace SnippetProject.Controllers
 
             var result = new Language[parameters.PageSize].Select((x, index) =>
             {
-                x = new Language {Id = index, Name = "Haskell"};
+                x = new Language { Id = index, Name = "Haskell" };
                 return x;
             });
 

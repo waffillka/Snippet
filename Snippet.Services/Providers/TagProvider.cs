@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
+using Snippet.Common.Parameters;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.UnitOfWork;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Common.Parameters;
 
 namespace Snippet.Services.Providers
 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Snippet.Common.Parameters;
 using Snippet.Data.DbContext;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.Repositories;
@@ -6,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Common.Parameters;
 
 namespace Snippet.Data.Repositories
 {
@@ -41,11 +41,11 @@ namespace Snippet.Data.Repositories
             return _dbContext.SnippetPosts
                 .Include(x => x.Language)
                 .Include(x => x.User).Include(x => x.Tags)
-                .Include(x=> x.LikedUser)
+                .Include(x => x.LikedUser)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(user => user.Id == id, ct)!;
         }
-        
+
         public SnippetEntity Update(SnippetEntity entity, CancellationToken ct = default)
         {
             var entityEntry = _dbContext.SnippetPosts.Update(entity);
@@ -58,16 +58,16 @@ namespace Snippet.Data.Repositories
                 .Include(x => x.Language)
                 .Include(x => x.User)
                 .Include(x => x.Tags)
-                .Include(x=>x.LikedUser)
+                .Include(x => x.LikedUser)
                 .AsNoTracking();
 
             parameters ??= new SnippetPostParams();
-            
-            if(parameters.Authors != null)
+
+            if (parameters.Authors != null)
             {
                 result = result.Where(snippet => parameters.Authors.Contains(snippet.Id));
             }
-            
+
             if (parameters.AuthorsExclude != null)
             {
                 result = result.Where(snippet => !parameters.AuthorsExclude.Contains(snippet.Id));
@@ -75,19 +75,19 @@ namespace Snippet.Data.Repositories
 
             if (parameters.Tags != null)
             {
-                result = result.Where(snippet => snippet.Tags!.Select(x=> x.Id).Intersect(parameters.Tags).Any());
+                result = result.Where(snippet => snippet.Tags!.Select(x => x.Id).Intersect(parameters.Tags).Any());
             }
 
             if (parameters.TagsExclude != null)
             {                                           //damn...
-                result = result.Where(snippet => !snippet.Tags!.Select(x=> x.Id).Intersect(parameters.TagsExclude).Any());
+                result = result.Where(snippet => !snippet.Tags!.Select(x => x.Id).Intersect(parameters.TagsExclude).Any());
             }
 
             if (parameters.CreationDate != default)
             {
                 result = result.Where(snippet => snippet.Date == parameters.CreationDate);
             }
-            
+
             else if (parameters.From != default && parameters.To != default)
             {
                 result = result.Where(snippet => snippet.Date >= parameters.From && snippet.Date <= parameters.To);
@@ -99,7 +99,7 @@ namespace Snippet.Data.Repositories
                                             || snippet.Description.Contains(parameters.MatchString)
                                             || snippet.Snippet.Contains(parameters.MatchString));
             }
-            
+
             if (!string.IsNullOrEmpty(parameters.SortBy))
             {
                 switch (parameters.SortBy.ToLower())
@@ -111,17 +111,17 @@ namespace Snippet.Data.Repositories
                         result = result.OrderByDescending(x => x.Date);
                         break;
                     case "popular":
-                        result = result.OrderBy(x => x.LikedUser!.Count);                           
+                        result = result.OrderBy(x => x.LikedUser!.Count);
                         break;
                     case "unpopular":
                         result = result.OrderByDescending(x => x.LikedUser!.Count);
                         break;
                 }
             }
-            return await result.Skip((parameters.Page-1)*parameters.PageSize).Take(parameters.PageSize).ToListAsync(ct).ConfigureAwait(false);
+            return await result.Skip((parameters.Page - 1) * parameters.PageSize).Take(parameters.PageSize).ToListAsync(ct).ConfigureAwait(false);
         }
 
-        public async Task<int> CountLike(long id, CancellationToken ct = default) 
+        public async Task<int> CountLike(long id, CancellationToken ct = default)
         {
             var like = await _dbContext.SnippetPosts
                 .Where(post => post.Id == id)

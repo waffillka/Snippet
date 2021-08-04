@@ -1,13 +1,11 @@
 ﻿#nullable enable
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Snippet.Common.Parameters;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
-using SnippetProject.Extensions.SnippetPostHelper;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SnippetProject.Controllers
 {
@@ -42,7 +40,7 @@ namespace SnippetProject.Controllers
 
             var result = await _snippetService.GetAllShortAsync(parameters, ct).ConfigureAwait(false);
             return Ok(result);
-            
+
         }
 
         [HttpGet("snippet/many")]

@@ -1,10 +1,10 @@
 ﻿#nullable enable
-using System;
-using System.Linq;
-using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using Snippet.Common.Parameters;
 using Snippet.Services.Models;
+using System;
+using System.Linq;
+using System.Threading;
 
 namespace SnippetProject.Controllers
 {
@@ -19,7 +19,7 @@ namespace SnippetProject.Controllers
 
             var result = new Tag[parameters.PageSize].Select((x, index) =>
             {
-                x = new Tag {Id = index, Name = "popular tag"};
+                x = new Tag { Id = index, Name = "popular tag" };
                 return x;
             });
 
@@ -33,7 +33,7 @@ namespace SnippetProject.Controllers
 
             var result = new Tag[parameters.PageSize].Select((x, index) =>
             {
-                x = new Tag {Id = index, Name = "popular tag"};
+                x = new Tag { Id = index, Name = "popular tag" };
                 return x;
             });
 

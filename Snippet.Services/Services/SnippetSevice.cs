@@ -42,7 +42,7 @@ namespace Snippet.Services.Services
         {
             var shortPosts = await _snippetProvider.GetAllShortAsync(parameters, ct).ConfigureAwait(false);
 
-            foreach(var item in shortPosts)
+            foreach (var item in shortPosts)
             {
                 item.Like = await _snippetProvider.CountLike(item.Id, ct).ConfigureAwait(false);
             }
