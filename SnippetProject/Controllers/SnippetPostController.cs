@@ -36,30 +36,22 @@ namespace SnippetProject.Controllers
         }
 
         [HttpGet("snippet-short/many")]
-        public ShortSnippetPost[] GetShortPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct = default)
+        public async Task<IActionResult> GetShortPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct = default)
         {
             parameters ??= new SnippetPostParams();
-            
-            var result = new ShortSnippetPost[parameters.PageSize].Select(x =>
-            {
-                x = new ShortSnippetPost().ConfigureDefault();
-                return x;
-            });
 
-            return result.ToArray();
+            var result = await _snippetService.GetAllShortAsync(parameters, ct).ConfigureAwait(false);
+            return Ok(result);
+            
         }
 
         [HttpGet("snippet/many")]
-        public SnippetPost[] GetPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct)
+        public async Task<IActionResult> GetPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct)
         {
             parameters ??= new SnippetPostParams();
-            var result = new SnippetPost[parameters.PageSize].Select(x =>
-            {
-                x = new SnippetPost().ConfigureDefault();
-                return x;
-            });
 
-            return result.ToArray();
+            var result = await _snippetService.GetAllAsync(parameters, ct).ConfigureAwait(false);
+            return Ok(result);
         }
 
         [HttpPost("snippet/create")]
