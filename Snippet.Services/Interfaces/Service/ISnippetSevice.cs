@@ -14,5 +14,6 @@ namespace Snippet.Services.Interfaces.Service
         Task<bool> DeleteAsync(long id, CancellationToken ct = default);
         Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default);
         Task<IReadOnlyCollection<ShortSnippetPost>> GetAllShortAsync(SnippetPostParams? parameters = default, CancellationToken ct = default);
+        Task<IReadOnlyCollection<SnippetPost>> GetAllAsync(SnippetPostParams? parameters = default, CancellationToken ct = default);
     }
 }

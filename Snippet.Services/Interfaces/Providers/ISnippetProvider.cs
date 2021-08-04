@@ -14,6 +14,7 @@ namespace Snippet.Services.Interfaces.Providers
         Task<SnippetPost> UpdateAsync(SnippetPost model, CancellationToken ct = default);
         Task<bool> DeleteAsync(long id, CancellationToken ct = default);
         Task<IReadOnlyCollection<ShortSnippetPost>> GetAllShortAsync(SnippetPostParams? parameters = default, CancellationToken ct = default);
+        Task<IReadOnlyCollection<SnippetPost>> GetAllAsync(SnippetPostParams? parameters = default, CancellationToken ct = default);
         Task<int> CountLike(long id, CancellationToken ct = default);
     }
 }
