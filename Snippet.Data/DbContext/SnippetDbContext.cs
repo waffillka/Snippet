@@ -8,7 +8,13 @@ namespace Snippet.Data.DbContext
         public SnippetDbContext(DbContextOptions options)
             : base(options)
         {
+        }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SnippetEntity>()
+                .HasOne(c => c.User)
+                .WithMany(o => o.OwnSnippet);
         }
 
         public DbSet<SnippetEntity> SnippetPosts { get; set; }
