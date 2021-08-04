@@ -49,6 +49,17 @@ namespace Snippet.Services.Services
             return snippetModel;
         }
 
+        public async Task<ShortSnippetPost?> GetShortPostById(long id, CancellationToken ct = default)
+        {
+            var snippetShortModel = await _snippetProvider.GetShortPostById(id, ct).ConfigureAwait(false);
+            if (snippetShortModel == null)
+            {
+                throw new System.NotImplementedException();
+            }
+            snippetShortModel.Like = await _snippetProvider.CountLike(id, ct).ConfigureAwait(false);
+            return snippetShortModel;
+        }
+
         public Task<SnippetPost> UpdateAsync(SnippetPost model, CancellationToken ct = default)
         {
             return _snippetProvider.CreateAsync(model, ct);
