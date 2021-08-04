@@ -65,6 +65,12 @@ namespace Snippet.Services.Providers
             return _mapper.Map<SnippetPost?>(entity);
         }
 
+        public async Task<ShortSnippetPost?> GetShortPostById(long id, CancellationToken ct = default)
+        {
+            var entity = await _unitOfWork.Snippets.GetByIdAsync(id, ct).ConfigureAwait(false);
+            return _mapper.Map<ShortSnippetPost?>(entity);
+        }
+
         public async Task<SnippetPost> UpdateAsync(SnippetPost model, CancellationToken ct = default)
         {
             var entity = _mapper.Map<SnippetEntity>(model);

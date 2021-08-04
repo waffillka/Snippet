@@ -9,6 +9,7 @@ namespace Snippet.Services.Interfaces.Providers
     public interface ISnippetProvider
     {
         Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default);
+        Task<ShortSnippetPost?> GetShortPostById(long id, CancellationToken ct = default);
         Task<SnippetPost> CreateAsync(SnippetPost model, CancellationToken ct = default);
         Task<SnippetPost> UpdateAsync(SnippetPost model, CancellationToken ct = default);
         Task<bool> DeleteAsync(long id, CancellationToken ct = default);
