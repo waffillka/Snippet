@@ -53,7 +53,7 @@ namespace Snippet.Services.Providers
             
             foreach (var item in result)
             {
-                item.Like = await CountLike(item.Id, ct);
+                item.Like = await CountLike(item.Id, ct).ConfigureAwait(false);
             }
 
             return result;

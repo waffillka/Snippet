@@ -12,15 +12,15 @@ namespace SnippetProject.Controllers
     [ApiController]
     public class SnippetPostController : ControllerBase
     {
-        [HttpGet("snippet/{id}")]
-        public SnippetPost GetPostById(ulong id, CancellationToken ct)
+        [HttpGet("snippet/{id:long}")]
+        public SnippetPost GetPostById(long id, CancellationToken ct)
         {
             var result = new SnippetPost().ConfigureDefault(id);
             return result;
         }
 
-        [HttpGet("snippet-short/{id}")]
-        public ShortSnippetPost GetShortPostById(ulong id, CancellationToken ct)
+        [HttpGet("snippet-short/{id:long}")]
+        public ShortSnippetPost GetShortPostById(long id, CancellationToken ct)
         {
             var result = new ShortSnippetPost().ConfigureDefault(id);
             return result;
@@ -74,14 +74,14 @@ namespace SnippetProject.Controllers
             return post;
         }
 
-        [HttpDelete("snippet/delete/{postId}")]
-        public bool DeleteSnippetPost(ulong postId, CancellationToken ct)
+        [HttpDelete("snippet/delete/{postId:long}")]
+        public bool DeleteSnippetPost(long postId, CancellationToken ct)
         {
             return true;
         }
 
-        [HttpGet("snippet/liked-by/{postId}")]
-        public bool PostLikedBy(ulong postId, ulong userId)
+        [HttpGet("snippet/liked-by/{postId:long}")]
+        public bool PostLikedBy(long postId, long userId)
         {
             return true;
         }

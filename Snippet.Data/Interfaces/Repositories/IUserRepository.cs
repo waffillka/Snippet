@@ -6,7 +6,7 @@ namespace Snippet.Data.Interfaces.Repositories
 {
     public interface IUserRepository
     {
-        Task<UserEntity?> GetByIdAsync(long id, CancellationToken ct = default);
+        Task<UserEntity> GetByIdAsync(long id, CancellationToken ct = default);
         Task<UserEntity> CreateAsync(UserEntity entity, CancellationToken ct = default);
         Task<UserEntity> UpdateAsync(UserEntity entity, CancellationToken ct = default);
         Task<bool> DeleteAsync(long id, CancellationToken ct = default);
