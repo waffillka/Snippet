@@ -119,8 +119,14 @@ namespace Snippet.Data.Repositories
 
         public async Task<int> CountLike(long id, CancellationToken ct = default) 
         {
-            var user = await GetByIdAsync(id, ct).ConfigureAwait(false);
-            return user?.LikedUser?.Count ?? 0;
+            var like = await _dbContext.SnippetPosts
+                .Where(post => post.Id == id)
+                .Include(p => p.LikedUser)
+                .Select(p => new { Likes = p.LikedUser.Count })
+                .ToListAsync(ct)
+                .ConfigureAwait(false);
+
+            return like[0].Likes;
         }
     }
 }
