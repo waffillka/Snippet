@@ -26,6 +26,18 @@ namespace Snippet.Services.Services
             return _snippetProvider.DeleteAsync(id, ct);
         }
 
+        public async Task<IReadOnlyCollection<SnippetPost>> GetAllAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
+        {
+            var posts = await _snippetProvider.GetAllAsync(parameters, ct).ConfigureAwait(false);
+
+            foreach (var item in posts)
+            {
+                item.Like = await _snippetProvider.CountLike(item.Id, ct).ConfigureAwait(false);
+            }
+
+            return posts;
+        }
+
         public async Task<IReadOnlyCollection<ShortSnippetPost>> GetAllShortAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
         {
             var shortPosts = await _snippetProvider.GetAllShortAsync(parameters, ct).ConfigureAwait(false);

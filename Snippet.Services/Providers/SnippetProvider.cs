@@ -45,6 +45,20 @@ namespace Snippet.Services.Providers
             return result;
         }
 
+        public async Task<IReadOnlyCollection<SnippetPost>> GetAllAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
+        {
+            var entities = await _unitOfWork.Snippets.GetAllAsync(parameters, ct).ConfigureAwait(false);
+
+            var result = _mapper.Map<IReadOnlyCollection<SnippetPost>>(entities);
+
+            foreach (var item in result)
+            {
+                item.Like = await CountLike(item.Id, ct).ConfigureAwait(false);
+            }
+
+            return result;
+        }
+
         public async Task<IReadOnlyCollection<ShortSnippetPost>> GetAllShortAsync(SnippetPostParams? parameters = default, CancellationToken ct = default)
         {
             var entities = await _unitOfWork.Snippets.GetAllAsync(parameters, ct).ConfigureAwait(false);
