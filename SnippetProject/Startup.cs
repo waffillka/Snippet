@@ -30,7 +30,8 @@ namespace SnippetProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureLoggerService();
-            services.RegisterProviders(Configuration.GetConnectionString("sqlConnection"));
+            services.RegisterProviders(Configuration.GetConnectionString("sqlConnection"))
+                .RegisterServices();
             services.AddScoped<TagParser>();
             services.RegisterMappingConfig();
             services.ConfigureCors();
