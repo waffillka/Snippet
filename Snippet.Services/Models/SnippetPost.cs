@@ -19,7 +19,6 @@ namespace Snippet.Services.Models
         [Required(ErrorMessage = "Snippet is a required field.")]
         [MaxLength(2000, ErrorMessage = "Maximum length for the Snippet is 2000 characters.")]
         public string Snippet { get; set; } = string.Empty;
-        public DateTime Date { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;
 
