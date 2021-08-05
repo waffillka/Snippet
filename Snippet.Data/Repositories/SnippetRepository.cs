@@ -100,9 +100,9 @@ namespace Snippet.Data.Repositories
                                             || snippet.Snippet.Contains(parameters.MatchString));
             }
 
-            if (!string.IsNullOrEmpty(parameters.SortBy))
+            if (!string.IsNullOrEmpty(parameters.SortOptions))
             {
-                switch (parameters.SortBy.ToLower())
+                switch (parameters.SortOptions.ToLower())
                 {
                     case "new":
                         result = result.OrderBy(x => x.Date);
