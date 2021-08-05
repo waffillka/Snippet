@@ -28,10 +28,10 @@ namespace SnippetProject.Controllers
         }
 
         [HttpPut("update")]
-        public Language UpdateLanguage(Language lang, CancellationToken ct)
+        public async Task<IActionResult> UpdateLanguage(Language lang, CancellationToken ct)
         {
-            lang.Name += "[updated]";
-            return lang;
+            var result = await _languageService.UpdateAsync(lang, ct).ConfigureAwait(false);
+            return Ok(result);
         }
     }
 }
