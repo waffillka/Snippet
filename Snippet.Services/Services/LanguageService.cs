@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Snippet.Common.Parameters;
+using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
 using Snippet.Services.Providers;
@@ -10,9 +11,9 @@ namespace Snippet.Services.Services
 {
     public class LanguageService : ILanguageService
     {
-        private readonly LanguageProvider _provider;
+        private readonly ILanguageProvider _provider;
 
-        public LanguageService(LanguageProvider provider)
+        public LanguageService(ILanguageProvider provider)
         {
             _provider = provider;
         }
