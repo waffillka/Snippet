@@ -12,9 +12,9 @@ namespace SnippetProject.Controllers
     [ApiController]
     public class SnippetPostController : ControllerBase
     {
-        private readonly ISnippetSevice _snippetService;
+        private readonly ISnippetService _snippetService;
 
-        public SnippetPostController(ISnippetSevice snippetService)
+        public SnippetPostController(ISnippetService snippetService)
         {
             _snippetService = snippetService;
         }
@@ -53,30 +53,24 @@ namespace SnippetProject.Controllers
         }
 
         [HttpPost("snippet/create")]
-        public SnippetPost CreateSnippetPost(SnippetPost post, CancellationToken ct = default)
+        public async Task<IActionResult> CreateSnippetPost(SnippetPost post, CancellationToken ct = default)
         {
-            if (post == null)
-                throw new ArgumentNullException(nameof(post));
-            post.Title += "[created]";
-            post.Date = DateTime.Now;
-            return post;
+            var result = await _snippetService.CreateAsync(post, ct).ConfigureAwait(false);
+            return Ok(result);
         }
 
         [HttpPut("snippet/update")]
-        public SnippetPost UpdateSnippetPost(SnippetPost post, CancellationToken ct = default)
+        public async Task<IActionResult> UpdateSnippetPost(SnippetPost post, CancellationToken ct = default)
         {
-            if (post == null)
-                throw new ArgumentNullException(nameof(post));
-            post.Title += "[updated]";
-            post.Date = DateTime.Now;
-
-            return post;
+            var result = await _snippetService.UpdateAsync(post, ct).ConfigureAwait(false);
+            return Ok(result);
         }
 
         [HttpDelete("snippet/delete/{postId:long}")]
-        public bool DeleteSnippetPost(long postId, CancellationToken ct = default)
+        public async Task<IActionResult> DeleteSnippetPost(long postId, CancellationToken ct = default)
         {
-            return true;
+            var result = await _snippetService.DeleteAsync(postId, ct).ConfigureAwait(false);
+            return Ok(result);
         }
 
         [HttpGet("snippet/liked-by/{postId:long}")]
