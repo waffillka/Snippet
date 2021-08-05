@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Snippet.Common.Parameters;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.UnitOfWork;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -55,6 +57,12 @@ namespace Snippet.Services.Providers
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
             return _mapper.Map<Language>(responseEntity);
+        }
+
+        public async Task<IEnumerable<Language>> GetAllAsync(ParamsBase? parameters = null, CancellationToken ct = default)
+        {
+            var result = await _unitOfWork.Language.GetAllAsync(parameters, ct).ConfigureAwait(false);
+            return _mapper.Map<IEnumerable<Language>>(result);
         }
     }
 }
