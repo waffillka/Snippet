@@ -1,5 +1,5 @@
-﻿using System;
-using Snippet.Services.Models;
+﻿using Snippet.Services.Models;
+using System;
 
 namespace SnippetProject.Extensions.SnippetPostHelper
 {

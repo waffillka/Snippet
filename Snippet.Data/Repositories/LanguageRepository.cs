@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Snippet.Common.Parameters;
 using Snippet.Data.DbContext;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.Repositories;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Common.Parameters;
 
 namespace Snippet.Data.Repositories
 {
@@ -28,25 +28,25 @@ namespace Snippet.Data.Repositories
         public async Task<IEnumerable<LanguageEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default)
         {
             var result = _dbContext.Languages
-                .Include(x=>x.SnippetPosts)
+                .Include(x => x.SnippetPosts)
                 .AsNoTracking();
 
             parameters ??= new ParamsBase();
-            
+
             if (!string.IsNullOrEmpty(parameters.SortBy))
             {
                 switch (parameters.SortBy.ToLower())
                 {
                     case "popular":
-                        result = result.OrderBy(x => x.SnippetPosts.Count);                           
+                        result = result.OrderBy(x => x.SnippetPosts.Count);
                         break;
                     case "unpopular":
                         result = result.OrderByDescending(x => x.SnippetPosts.Count);
                         break;
                 }
             }
-            
-            result = result.Skip((parameters.Page-1) * parameters.PageSize)
+
+            result = result.Skip((parameters.Page - 1) * parameters.PageSize)
                 .Take(parameters.PageSize);
 
             return await result.ToListAsync(ct).ConfigureAwait(false);

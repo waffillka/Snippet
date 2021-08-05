@@ -35,22 +35,12 @@ namespace Snippet.Services.Services
         {
             var posts = await _snippetProvider.GetAllAsync(parameters, ct).ConfigureAwait(false);
 
-            foreach (var item in posts)
-            {
-                item.Like = await _snippetProvider.CountLike(item.Id, ct).ConfigureAwait(false);
-            }
-
             return posts;
         }
 
         public async Task<IReadOnlyCollection<ShortSnippetPost>> GetAllShortAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
         {
             var shortPosts = await _snippetProvider.GetAllShortAsync(parameters, ct).ConfigureAwait(false);
-
-            foreach(var item in shortPosts)
-            {
-                item.Like = await _snippetProvider.CountLike(item.Id, ct).ConfigureAwait(false);
-            }
 
             return shortPosts;
         }
@@ -62,7 +52,6 @@ namespace Snippet.Services.Services
             {
                 throw new System.NotImplementedException();
             }
-            snippetModel.Like = await _snippetProvider.CountLike(id, ct).ConfigureAwait(false);
             return snippetModel;
         }
 
@@ -73,7 +62,7 @@ namespace Snippet.Services.Services
             {
                 throw new System.NotImplementedException();
             }
-            snippetShortModel.Like = await _snippetProvider.CountLike(id, ct).ConfigureAwait(false);
+
             return snippetShortModel;
         }
 

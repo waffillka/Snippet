@@ -1,6 +1,4 @@
-﻿using Snippet.Common.Enums;
-
-namespace Snippet.Common.Parameters
+﻿namespace Snippet.Common.Parameters
 {
     public class ParamsBase
     {
