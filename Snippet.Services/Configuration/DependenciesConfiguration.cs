@@ -38,6 +38,8 @@ namespace Snippet.Services.Configuration
         public static IServiceCollection RegisterServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<ISnippetService, SnippetService>();
+            serviceCollection.AddScoped<ITagService, TagService>();
+            serviceCollection.AddScoped<ILanguageService, LanguageService>();
             serviceCollection.AddScoped<ITagParser, TagParser>();
 
             return serviceCollection;
