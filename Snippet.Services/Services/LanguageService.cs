@@ -20,6 +20,11 @@ namespace Snippet.Services.Services
             return _provider.GetByIdAsync(id, ct);
         }
 
+        public Task<Language?> GetByNameAsync(string name, CancellationToken ct = default)
+        {
+            return _provider.GetByNameAsync(name, ct);
+        }
+
         public Task<Language> CreateAsync(Language model, CancellationToken ct = default)
         {
             return _provider.CreateAsync(model, ct);

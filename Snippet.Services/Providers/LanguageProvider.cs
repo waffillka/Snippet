@@ -27,6 +27,12 @@ namespace Snippet.Services.Providers
             return _mapper.Map<Language>(responseTag);
         }
 
+        public async Task<Language?> GetByNameAsync(string name, CancellationToken ct = default)
+        {
+            var tag = await _unitOfWork.Language.GetByNameAsync(name, ct).ConfigureAwait(false);
+            return _mapper.Map<Language>(tag);
+        }
+
         public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
             var result = await _unitOfWork.Language.DeleteAsync(id, ct).ConfigureAwait(false);
