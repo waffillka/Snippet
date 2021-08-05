@@ -9,11 +9,11 @@ using Snippet.Services.Parser;
 
 namespace Snippet.Services.Services
 {
-    public class SnippetSevice : ISnippetSevice
+    public class SnippetService : ISnippetService
     {
         private readonly ISnippetProvider _snippetProvider;
         private readonly ITagParser _parser;
-        public SnippetSevice(ISnippetProvider snippetProvider, ITagParser parser)
+        public SnippetService(ISnippetProvider snippetProvider, ITagParser parser)
         {
             _snippetProvider = snippetProvider;
             _parser = parser;
