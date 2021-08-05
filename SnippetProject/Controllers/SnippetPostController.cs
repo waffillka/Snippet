@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Snippet.Common.Parameters;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,46 +22,70 @@ namespace SnippetProject.Controllers
         public async Task<IActionResult> GetPostById(long id, CancellationToken ct = default)
         {
             var result = await _snippetService.GetByIdAsync(id, ct).ConfigureAwait(false);
-            return Ok(result);
+            
+            return result!=null 
+                ? Ok(result) 
+                : NotFound("Snippet post with specified id not found");
         }
 
         [HttpGet("snippet-short/{id:long}")]
         public async Task<IActionResult> GetShortPostById(long id, CancellationToken ct = default)
         {
-            var result = await _snippetService.GetShortPostById(id, ct).ConfigureAwait(false);
-            return Ok(result);
+            var result = await _snippetService
+                .GetShortPostById(id, ct)
+                .ConfigureAwait(false);
+            
+            return result!=null 
+                ? Ok(result) 
+                : NotFound("Short snippet post with specified id not found");
         }
 
         [HttpGet("snippet-short/many")]
         public async Task<IActionResult> GetShortPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct = default)
         {
-            parameters ??= new SnippetPostParams();
-
-            var result = await _snippetService.GetAllShortAsync(parameters, ct).ConfigureAwait(false);
-            return Ok(result);
-
+            var result = await _snippetService
+                .GetAllShortAsync(parameters, ct)
+                .ConfigureAwait(false);
+            
+            return result.Count != 0
+                ? Ok(result)
+                : NotFound(result);
         }
 
         [HttpGet("snippet/many")]
-        public async Task<IActionResult> GetPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct)
+        public async Task<IActionResult> GetPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct = default)
         {
-            parameters ??= new SnippetPostParams();
-
-            var result = await _snippetService.GetAllAsync(parameters, ct).ConfigureAwait(false);
-            return Ok(result);
+            var result = await _snippetService
+                .GetAllAsync(parameters, ct)
+                .ConfigureAwait(false);
+            
+            return result.Count != 0
+                ? Ok(result)
+                : NotFound(result);
         }
 
         [HttpPost("snippet/create")]
-        public async Task<IActionResult> CreateSnippetPost(SnippetPost post, CancellationToken ct = default)
+        public async Task<IActionResult> CreateSnippetPost(SnippetPost? post, CancellationToken ct = default)
         {
-            var result = await _snippetService.CreateAsync(post, ct).ConfigureAwait(false);
+            if (post == null)
+            {
+                return BadRequest("Snippet post must be sent.");
+            }
+            
+            var result = await _snippetService
+                .CreateAsync(post, ct)
+                .ConfigureAwait(false);
+            
             return Ok(result);
         }
 
         [HttpPut("snippet/update")]
-        public async Task<IActionResult> UpdateSnippetPost(SnippetPost post, CancellationToken ct = default)
+        public async Task<IActionResult> UpdateSnippetPost(SnippetPost? post, CancellationToken ct = default)
         {
-            var result = await _snippetService.UpdateAsync(post, ct).ConfigureAwait(false);
+            var result = await _snippetService
+                .UpdateAsync(post, ct)
+                .ConfigureAwait(false);
+            
             return Ok(result);
         }
 
