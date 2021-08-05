@@ -30,7 +30,7 @@ namespace SnippetProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Latinname")
+                    b.Property<string>("ExtraName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

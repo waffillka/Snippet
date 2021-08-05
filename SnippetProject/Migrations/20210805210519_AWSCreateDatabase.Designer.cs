@@ -10,8 +10,8 @@ using Snippet.Data.DbContext;
 namespace SnippetProject.Migrations
 {
     [DbContext(typeof(SnippetDbContext))]
-    [Migration("20210802064054_CreateDatabase")]
-    partial class CreateDatabase
+    [Migration("20210805210519_AWSCreateDatabase")]
+    partial class AWSCreateDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,7 +32,7 @@ namespace SnippetProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Latinname")
+                    b.Property<string>("ExtraName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -60,11 +60,8 @@ namespace SnippetProject.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<long?>("LanguageEntityId")
+                    b.Property<long>("LanguageId")
                         .HasColumnType("bigint");
-
-                    b.Property<decimal>("LanguageId")
-                        .HasColumnType("decimal(20,0)");
 
                     b.Property<string>("Snippet")
                         .IsRequired()
@@ -76,12 +73,14 @@ namespace SnippetProject.Migrations
                         .HasMaxLength(140)
                         .HasColumnType("nvarchar(140)");
 
-                    b.Property<decimal>("UserId")
-                        .HasColumnType("decimal(20,0)");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageEntityId");
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("SnippetPosts");
                 });
@@ -154,9 +153,21 @@ namespace SnippetProject.Migrations
 
             modelBuilder.Entity("Snippet.Data.Entities.SnippetEntity", b =>
                 {
-                    b.HasOne("Snippet.Data.Entities.LanguageEntity", null)
+                    b.HasOne("Snippet.Data.Entities.LanguageEntity", "Language")
                         .WithMany("SnippetPosts")
-                        .HasForeignKey("LanguageEntityId");
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Snippet.Data.Entities.UserEntity", "User")
+                        .WithMany("OwnSnippet")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SnippetEntityTagEntity", b =>
@@ -192,6 +203,11 @@ namespace SnippetProject.Migrations
             modelBuilder.Entity("Snippet.Data.Entities.LanguageEntity", b =>
                 {
                     b.Navigation("SnippetPosts");
+                });
+
+            modelBuilder.Entity("Snippet.Data.Entities.UserEntity", b =>
+                {
+                    b.Navigation("OwnSnippet");
                 });
 #pragma warning restore 612, 618
         }

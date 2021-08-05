@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SnippetProject.Migrations
 {
-    public partial class CreateDatabase : Migration
+    public partial class AWSCreateDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,7 @@ namespace SnippetProject.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Latinname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExtraName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -59,19 +59,24 @@ namespace SnippetProject.Migrations
                     Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     Snippet = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LanguageId = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
-                    UserId = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
-                    LanguageEntityId = table.Column<long>(type: "bigint", nullable: true)
+                    LanguageId = table.Column<long>(type: "bigint", nullable: false),
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SnippetPosts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SnippetPosts_Languages_LanguageEntityId",
-                        column: x => x.LanguageEntityId,
+                        name: "FK_SnippetPosts_Languages_LanguageId",
+                        column: x => x.LanguageId,
                         principalTable: "Languages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SnippetPosts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,13 +118,13 @@ namespace SnippetProject.Migrations
                         column: x => x.LakedSnippetPostId,
                         principalTable: "SnippetPosts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_SnippetEntityUserEntity_Users_LikedUserId",
                         column: x => x.LikedUserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
@@ -133,9 +138,14 @@ namespace SnippetProject.Migrations
                 column: "LikedUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SnippetPosts_LanguageEntityId",
+                name: "IX_SnippetPosts_LanguageId",
                 table: "SnippetPosts",
-                column: "LanguageEntityId");
+                column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SnippetPosts_UserId",
+                table: "SnippetPosts",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -153,10 +163,10 @@ namespace SnippetProject.Migrations
                 name: "SnippetPosts");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Languages");
 
             migrationBuilder.DropTable(
-                name: "Languages");
+                name: "Users");
         }
     }
 }
