@@ -11,6 +11,9 @@ namespace Snippet.Common.Parameters
         public ICollection<long>? Tags { get; set; } = default;
         public ICollection<long>? TagsExclude { get; set; } = default;
 
+        public ICollection<long>? Languages { get; set; } = default;
+        public ICollection<long>? LanguagesExclude { get; set; } = default;
+        
         public DateTime CreationDate { get; set; } = default;
         public DateTime From { get; set; } = default;
         public DateTime To { get; set; } = default;

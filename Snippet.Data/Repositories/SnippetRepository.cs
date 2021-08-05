@@ -83,6 +83,16 @@ namespace Snippet.Data.Repositories
                 result = result.Where(snippet => !snippet.Tags!.Select(x => x.Id).Intersect(parameters.TagsExclude).Any());
             }
 
+            if (parameters.Languages != null)
+            {
+                result = result.Where(snippet => parameters.Languages.Contains(snippet.LanguageId));
+            }
+
+            if (parameters.LanguagesExclude != null)
+            {
+                result = result.Where(snippet => !parameters.LanguagesExclude.Contains(snippet.LanguageId));
+            }
+
             if (parameters.CreationDate != default)
             {
                 result = result.Where(snippet => snippet.Date == parameters.CreationDate);
