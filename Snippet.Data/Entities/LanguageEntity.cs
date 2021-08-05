@@ -11,7 +11,7 @@ namespace Snippet.Data.Entities
         [Required(ErrorMessage = "Language name is a required field.")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Latinname is a required field.")]
-        public string Latinname { get; set; }
+        public string ExtraName { get; set; }
         [Required(ErrorMessage = "Description is a required field.")]
         public string Description { get; set; }
         public ICollection<SnippetEntity> SnippetPosts { get; set; }
