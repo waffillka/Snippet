@@ -22,9 +22,9 @@ namespace SnippetProject.Controllers
         public async Task<IActionResult> GetPostById(long id, CancellationToken ct = default)
         {
             var result = await _snippetService.GetByIdAsync(id, ct).ConfigureAwait(false);
-            
-            return result!=null 
-                ? Ok(result) 
+
+            return result != null
+                ? Ok(result)
                 : NotFound("Snippet post with specified id not found");
         }
 
@@ -34,9 +34,9 @@ namespace SnippetProject.Controllers
             var result = await _snippetService
                 .GetShortPostById(id, ct)
                 .ConfigureAwait(false);
-            
-            return result!=null 
-                ? Ok(result) 
+
+            return result != null
+                ? Ok(result)
                 : NotFound("Short snippet post with specified id not found");
         }
 
@@ -46,7 +46,7 @@ namespace SnippetProject.Controllers
             var result = await _snippetService
                 .GetAllShortAsync(parameters, ct)
                 .ConfigureAwait(false);
-            
+
             return result.Count != 0
                 ? Ok(result)
                 : NotFound(result);
@@ -58,7 +58,7 @@ namespace SnippetProject.Controllers
             var result = await _snippetService
                 .GetAllAsync(parameters, ct)
                 .ConfigureAwait(false);
-            
+
             return result.Count != 0
                 ? Ok(result)
                 : NotFound(result);
@@ -71,11 +71,11 @@ namespace SnippetProject.Controllers
             {
                 return BadRequest("Snippet post must be sent.");
             }
-            
+
             var result = await _snippetService
                 .CreateAsync(post, ct)
                 .ConfigureAwait(false);
-            
+
             return Ok(result);
         }
 
@@ -85,7 +85,7 @@ namespace SnippetProject.Controllers
             var result = await _snippetService
                 .UpdateAsync(post, ct)
                 .ConfigureAwait(false);
-            
+
             return Ok(result);
         }
 

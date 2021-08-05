@@ -3,7 +3,6 @@ using Snippet.Data.Configuration;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Mapping;
-using Snippet.Services.Models;
 using Snippet.Services.Parser;
 using Snippet.Services.Providers;
 using Snippet.Services.Services;

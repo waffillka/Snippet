@@ -1,15 +1,15 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
+using Snippet.Common.Exceptions;
 using Snippet.Common.Parameters;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.UnitOfWork;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
+using Snippet.Services.Parser;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Common.Exceptions;
-using Snippet.Services.Parser;
 
 namespace Snippet.Services.Providers
 {
@@ -30,7 +30,7 @@ namespace Snippet.Services.Providers
         {
             if (await GetByIdAsync(id, ct).ConfigureAwait(false) == null)
                 throw new UserNotFoundException("User with specified id does not exist.");
-            
+
             return await _unitOfWork.Snippets.CountLike(id, ct).ConfigureAwait(false);
         }
 
@@ -38,13 +38,13 @@ namespace Snippet.Services.Providers
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
-            
+
             var tags = await _parser.GetTags(model.Snippet, ct).ConfigureAwait(false);
             model.Tags = tags;
-            
+
             var entity = _mapper.Map<SnippetEntity>(model);
             entity.Date = DateTime.Now;
-            
+
             var createdEntity = await _unitOfWork.Snippets.CreateAsync(entity, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
@@ -55,7 +55,7 @@ namespace Snippet.Services.Providers
         {
             if (await GetByIdAsync(id, ct).ConfigureAwait(false) == null)
                 throw new UserNotFoundException("User with specified id does not exist.");
-            
+
             var result = await _unitOfWork.Snippets.DeleteAsync(id, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
@@ -111,10 +111,10 @@ namespace Snippet.Services.Providers
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
-            
+
             if (await GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
                 throw new UserNotFoundException("User with specified id does not exist.");
-            
+
             var entity = _mapper.Map<SnippetEntity>(model);
 
             var responseEntity = _unitOfWork.Snippets.Update(entity, ct);

@@ -1,8 +1,6 @@
 ﻿using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +27,7 @@ namespace Snippet.Services.Parser
                 ct.ThrowIfCancellationRequested();
                 var tagFromDb = await _provider.GetByNameAsync(match.Value, ct).ConfigureAwait(false);
 
-                result.Add(tagFromDb ?? await _provider.CreateAsync(new Tag {Name = match.Value}, ct)
+                result.Add(tagFromDb ?? await _provider.CreateAsync(new Tag { Name = match.Value }, ct)
                     .ConfigureAwait(false));
             }
 

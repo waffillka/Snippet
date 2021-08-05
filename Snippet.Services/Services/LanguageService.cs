@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Snippet.Common.Parameters;
+﻿using Snippet.Common.Parameters;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
-using Snippet.Services.Providers;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Snippet.Services.Services
 {

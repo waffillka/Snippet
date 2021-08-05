@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Snippet.Common.Parameters;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -1,9 +1,8 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Snippet.Common.Parameters;
 using Snippet.Services.Models;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Snippet.Common.Parameters;
 
 namespace Snippet.Services.Interfaces.Providers
 {

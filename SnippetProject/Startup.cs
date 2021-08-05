@@ -9,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using NLog;
 using Snippet.Services.Configuration;
-using Snippet.Services.Parser;
 using SnippetProject.Extensions;
 using SnippetProject.Middleware;
 using System.IO;

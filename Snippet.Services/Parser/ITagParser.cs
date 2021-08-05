@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using Snippet.Services.Models;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Services.Models;
 
 namespace Snippet.Services.Parser
 {

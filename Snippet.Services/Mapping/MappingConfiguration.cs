@@ -9,7 +9,7 @@ namespace Snippet.Services.Mapping
     {
         public MappingConfiguration()
         {
-            CreateMap<SnippetEntity, SnippetPost>().ForMember(x => x.Like, 
+            CreateMap<SnippetEntity, SnippetPost>().ForMember(x => x.Like,
                 opt => opt.MapFrom(
                     c => c.LikedUser!.Count))
                 .ReverseMap();
