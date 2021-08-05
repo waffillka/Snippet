@@ -23,23 +23,8 @@ namespace SnippetProject.Controllers
         [HttpGet("many")]
         public async Task<IActionResult> GetAll([FromQuery] ParamsBase? parameters, CancellationToken ct)
         {
-            parameters ??= new ParamsBase();
             var result = await _languageService.GetAllAsync(parameters, ct).ConfigureAwait(false);
             return Ok(result);
-        }
-
-        [HttpGet("most-popular")]
-        public Language[] MostPopular([FromQuery] ParamsBase? parameters, CancellationToken ct)
-        {
-            parameters ??= new ParamsBase();
-
-            var result = new Language[parameters.PageSize].Select((x, index) =>
-            {
-                x = new Language { Id = index, Name = "Haskell" };
-                return x;
-            });
-
-            return result.ToArray();
         }
 
         [HttpPut("update")]
