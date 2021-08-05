@@ -1,5 +1,7 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using Snippet.Common.Parameters;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
 using Snippet.Services.Providers;
@@ -38,6 +40,11 @@ namespace Snippet.Services.Services
         public Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
             return _provider.DeleteAsync(id, ct);
+        }
+
+        public Task<IEnumerable<Language>> GetAllAsync(ParamsBase? parameters = null, CancellationToken ct = default)
+        {
+            return _provider.GetAllAsync(parameters, ct);
         }
     }
 }

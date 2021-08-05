@@ -1,5 +1,7 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using Snippet.Common.Parameters;
 using Snippet.Services.Models;
 
 namespace Snippet.Services.Interfaces.Service
@@ -11,5 +13,6 @@ namespace Snippet.Services.Interfaces.Service
         Task<Language> CreateAsync(Language model, CancellationToken ct = default);
         Task<Language> UpdateAsync(Language model, CancellationToken ct = default);
         Task<bool> DeleteAsync(long id, CancellationToken ct = default);
+        Task<IEnumerable<Language>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default);
     }
 }
