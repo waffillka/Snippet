@@ -5,20 +5,25 @@ using Snippet.Services.Models;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Snippet.Services.Parser;
 
 namespace Snippet.Services.Services
 {
     public class SnippetSevice : ISnippetSevice
     {
         private readonly ISnippetProvider _snippetProvider;
-        public SnippetSevice(ISnippetProvider snippetProvider)
+        private readonly ITagParser _parser;
+        public SnippetSevice(ISnippetProvider snippetProvider, ITagParser parser)
         {
             _snippetProvider = snippetProvider;
+            _parser = parser;
         }
 
-        public Task<SnippetPost> CreateAsync(SnippetPost model, CancellationToken ct = default)
+        public async Task<SnippetPost> CreateAsync(SnippetPost model, CancellationToken ct = default)
         {
-            return _snippetProvider.CreateAsync(model, ct);
+            var tags = await _parser.GetTags(model.Snippet, ct).ConfigureAwait(false);
+            model.Tags = tags;
+            return await _snippetProvider.CreateAsync(model, ct).ConfigureAwait(false);
         }
 
         public Task<bool> DeleteAsync(long id, CancellationToken ct = default)
