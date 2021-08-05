@@ -11,7 +11,7 @@ namespace Snippet.Services.Parser
 {
     public class TagParser : ITagParser
     {
-        private const string Pattern = @"#\w+\s?";
+        private const string Pattern = @"#\w+";
 
         private readonly ITagProvider _provider;
 
@@ -20,7 +20,7 @@ namespace Snippet.Services.Parser
             _provider = provider;
         }
 
-        public async Task<ICollection<Tag>> GetTags(string data, [EnumeratorCancellation] CancellationToken ct = default)
+        public async Task<ICollection<Tag>> GetTags(string data, CancellationToken ct = default)
         {
             var result = new List<Tag>();
             var matches = Regex.Matches(data, Pattern);
