@@ -21,7 +21,7 @@ namespace Snippet.Data.Repositories
         public async Task<LanguageEntity?> GetByNameAsync(string name, CancellationToken ct = default)
         {
             return await _dbContext.Languages.AsNoTracking()
-                .FirstOrDefaultAsync(lang => lang.Name == name, ct)
+                .FirstOrDefaultAsync(lang => lang.ExtraName == name, ct)
                 .ConfigureAwait(false);
         }
 
@@ -42,6 +42,9 @@ namespace Snippet.Data.Repositories
                         break;
                     case "unpopular":
                         result = result.OrderByDescending(x => x.SnippetPosts.Count);
+                        break;
+                    case "abc":
+                        result = result.OrderBy(x => x.Name);
                         break;
                 }
             }

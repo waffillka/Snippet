@@ -44,6 +44,9 @@ namespace Snippet.Data.Repositories
                     case "unpopular":
                         result = result.OrderByDescending(x => x.SnippetPosts.Count);
                         break;
+                    case "abc":
+                        result = result.OrderBy(x => x.Name);
+                        break;
                 }
             }
 
