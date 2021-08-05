@@ -1,13 +1,15 @@
 ﻿using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Snippet.Services.Parser
 {
-    public class TagParser
+    public class TagParser : ITagParser
     {
         private const string Pattern = @"#\w+\s?";
 
@@ -18,19 +20,20 @@ namespace Snippet.Services.Parser
             _provider = provider;
         }
 
-        public async IAsyncEnumerable<Tag> GetTags(string data, [EnumeratorCancellation] CancellationToken ct = default)
+        public async Task<ICollection<Tag>> GetTags(string data, [EnumeratorCancellation] CancellationToken ct = default)
         {
+            var result = new List<Tag>();
             var matches = Regex.Matches(data, Pattern);
             foreach (Match match in matches)
             {
                 ct.ThrowIfCancellationRequested();
-                // var tagFromDb = await _provider.GetByNameAsync(match.Value, ct).ConfigureAwait(false);
+                var tagFromDb = await _provider.GetByNameAsync(match.Value, ct).ConfigureAwait(false);
 
-                // yield return tagFromDb ?? await _provider.CreateAsync(new Tag {Name = match.Value}, ct)
-                //     .ConfigureAwait(false);
-
-                yield return new Tag { Name = match.Value };
+                result.Add(tagFromDb ?? await _provider.CreateAsync(new Tag {Name = match.Value}, ct)
+                    .ConfigureAwait(false));
             }
+
+            return result;
         }
     }
 }
