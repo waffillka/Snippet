@@ -43,7 +43,7 @@ namespace Snippet.Data.Repositories
                 .Include(x => x.User).Include(x => x.Tags)
                 .Include(x => x.LikedUser)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(user => user.Id == id, ct)!;
+                .FirstOrDefaultAsync(user => user.Id == id, ct);
         }
 
         public SnippetEntity Update(SnippetEntity entity, CancellationToken ct = default)
