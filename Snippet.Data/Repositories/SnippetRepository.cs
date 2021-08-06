@@ -88,9 +88,9 @@ namespace Snippet.Data.Repositories
                 result = result.Where(snippet => parameters.Langs.Contains(snippet.Language.ExtraName));
             }
 
-            if (parameters.LanguagesExclude != null)
+            if (parameters.LangsExclude != null)
             {
-                result = result.Where(snippet => !parameters.LanguagesExclude.Contains(snippet.Language.ExtraName));
+                result = result.Where(snippet => !parameters.LangsExclude.Contains(snippet.Language.ExtraName));
             }
 
             if (parameters.CreationDate != default)
@@ -110,9 +110,9 @@ namespace Snippet.Data.Repositories
                                             || snippet.Snippet.Contains(parameters.MatchString));
             }
 
-            if (!string.IsNullOrEmpty(parameters.SortOptions))
+            if (!string.IsNullOrEmpty(parameters.SortOption))
             {
-                switch (parameters.SortOptions.ToLower())
+                switch (parameters.SortOption.ToLower())
                 {
                     case "new":
                         result = result.OrderBy(x => x.Date);

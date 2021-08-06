@@ -33,9 +33,9 @@ namespace Snippet.Data.Repositories
 
             parameters ??= new ParamsBase();
 
-            if (!string.IsNullOrEmpty(parameters.SortOptions))
+            if (!string.IsNullOrEmpty(parameters.SortOption))
             {
-                switch (parameters.SortOptions.ToLower())
+                switch (parameters.SortOption.ToLower())
                 {
                     case "popular":
                         result = result.OrderByDescending(x => x.SnippetPosts.Count);
