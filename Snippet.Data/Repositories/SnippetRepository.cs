@@ -66,12 +66,12 @@ namespace Snippet.Data.Repositories
 
             if (parameters.Authors != null)
             {
-                result = result.Where(snippet => parameters.Authors.Contains(snippet.Id));
+                result = result.Where(snippet => parameters.Authors.Contains(snippet.UserId));
             }
 
             if (parameters.AuthorsExclude != null)
             {
-                result = result.Where(snippet => !parameters.AuthorsExclude.Contains(snippet.Id));
+                result = result.Where(snippet => !parameters.AuthorsExclude.Contains(snippet.UserId));
             }
 
             if (parameters.Tags != null)
@@ -81,7 +81,7 @@ namespace Snippet.Data.Repositories
 
             if (parameters.TagsExclude != null)
             {       
-                result = result.Where(snippet => !snippet.Tags.Any(x => parameters.Tags.Contains(x.Name)));
+                result = result.Where(snippet => !snippet.Tags.Any(x => parameters.TagsExclude.Contains(x.Name)));
             }
 
             if (parameters.Langs != null)
