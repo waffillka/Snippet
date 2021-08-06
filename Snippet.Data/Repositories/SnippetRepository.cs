@@ -75,22 +75,22 @@ namespace Snippet.Data.Repositories
 
             if (parameters.Tags != null)
             {
-                result = result.Where(snippet => snippet.Tags!.Select(x => x.Id).Intersect(parameters.Tags).Any());
+                result = result.Where(snippet => snippet.Tags!.Select(x => x.Name).Intersect(parameters.Tags).Any());
             }
 
             if (parameters.TagsExclude != null)
             {                                           //damn...
-                result = result.Where(snippet => !snippet.Tags!.Select(x => x.Id).Intersect(parameters.TagsExclude).Any());
+                result = result.Where(snippet => !snippet.Tags!.Select(x => x.Name).Intersect(parameters.TagsExclude).Any());
             }
 
-            if (parameters.Languages != null)
+            if (parameters.Langs != null)
             {
-                result = result.Where(snippet => parameters.Languages.Contains(snippet.LanguageId));
+                result = result.Where(snippet => parameters.Langs.Contains(snippet.Language.ExtraName));
             }
 
             if (parameters.LanguagesExclude != null)
             {
-                result = result.Where(snippet => !parameters.LanguagesExclude.Contains(snippet.LanguageId));
+                result = result.Where(snippet => !parameters.LanguagesExclude.Contains(snippet.Language.ExtraName));
             }
 
             if (parameters.CreationDate != default)

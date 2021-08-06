@@ -5,6 +5,8 @@ using Snippet.Services.Models;
 using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using Snippet.Services.Interfaces.Service;
 
 namespace SnippetProject.Controllers
 {
@@ -12,32 +14,31 @@ namespace SnippetProject.Controllers
     [Route("tag")]
     public class TagsController : ControllerBase
     {
-        [HttpGet("many")]
-        public Tag[] GetAll([FromQuery] ParamsBase? parameters, CancellationToken ct)
+        private ITagService _tagService;
+
+        public TagsController(ITagService tagService)
         {
-            parameters ??= new ParamsBase();
-
-            var result = new Tag[parameters.PageSize].Select((x, index) =>
-            {
-                x = new Tag { Id = index, Name = "popular tag" };
-                return x;
-            });
-
-            return result.ToArray();
+            _tagService = tagService;
         }
 
-        [HttpGet("most-popular")]
-        public Tag[] MostPopular([FromQuery] ParamsBase? parameters, CancellationToken ct)
+        [HttpGet("many")]
+        public async Task<IActionResult> GetAll([FromQuery] ParamsBase? parameters, CancellationToken ct)
         {
-            parameters ??= new ParamsBase();
+            // parameters ??= new ParamsBase();
+            //
+            // var result = new Tag[parameters.PageSize].Select((x, index) =>
+            // {
+            //     x = new Tag { Id = index, Name = "popular tag" };
+            //     return x;
+            // });
+            //
+            // return result.ToArray();
 
-            var result = new Tag[parameters.PageSize].Select((x, index) =>
-            {
-                x = new Tag { Id = index, Name = "popular tag" };
-                return x;
-            });
-
-            return result.ToArray();
+            var result = await _tagService
+                .GetAllAsync(parameters, ct)
+                .ConfigureAwait(false);
+            
+            return Ok(result);
         }
 
         [HttpPut("update")]

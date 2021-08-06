@@ -16,5 +16,6 @@ namespace Snippet.Services.Interfaces.Providers
         Task<Tag> CreateAsync(Tag model, CancellationToken ct = default);
         Task<Tag> UpdateAsync(Tag model, CancellationToken ct = default);
         Task<bool> DeleteAsync(long id, CancellationToken ct = default);
+        Task<ICollection<Tag>> GetByNamesAsync(IEnumerable<string> names, CancellationToken ct = default);
     }
 }

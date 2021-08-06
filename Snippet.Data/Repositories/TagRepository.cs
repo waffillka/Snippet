@@ -85,5 +85,14 @@ namespace Snippet.Data.Repositories
             var entityEntry = _dbContext.Tags.Update(entity);
             return entityEntry.Entity;
         }
+        
+        public async Task<ICollection<TagEntity>> GetByNamesAsync(IEnumerable<string> names, CancellationToken ct = default)
+        {
+            var result = _dbContext.Tags
+                .AsNoTracking()
+                .Where(tag => names.Contains(tag.Name));
+            
+            return await result.ToListAsync(ct).ConfigureAwait(false);
+        }
     }
 }

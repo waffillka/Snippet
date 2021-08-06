@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Snippet.Common.Parameters;
 using Snippet.Services.Interfaces.Service;
@@ -55,6 +56,7 @@ namespace SnippetProject.Controllers
         [HttpGet("snippet/many")]
         public async Task<IActionResult> GetPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct = default)
         {
+            Console.WriteLine(parameters.Langs);
             var result = await _snippetService
                 .GetAllAsync(parameters, ct)
                 .ConfigureAwait(false);

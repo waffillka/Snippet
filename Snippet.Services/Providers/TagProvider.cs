@@ -67,5 +67,14 @@ namespace Snippet.Services.Providers
 
             return _mapper.Map<Tag>(responseEntity);
         }
+        
+        public async Task<ICollection<Tag>> GetByNamesAsync(IEnumerable<string> names, CancellationToken ct = default)
+        {
+            var result = await _unitOfWork.Tags
+                .GetByNamesAsync(names, ct)
+                .ConfigureAwait(false);
+
+            return _mapper.Map<ICollection<Tag>>(result);
+        }
     }
 }

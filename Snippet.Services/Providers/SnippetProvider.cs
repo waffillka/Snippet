@@ -40,7 +40,8 @@ namespace Snippet.Services.Providers
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
-            var tags = await _parser.GetTags(model.Snippet, ct).ConfigureAwait(false);
+            var tags = await _parser.GetTags(model.Description, ct).ConfigureAwait(false);
+            await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
             model.Tags = tags;
 
             var entity = _mapper.Map<SnippetEntity>(model);
