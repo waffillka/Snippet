@@ -13,7 +13,10 @@ namespace Snippet.Services.Mapping
                 opt => opt.MapFrom(
                     c => c.LikedUser!.Count))
                 .ReverseMap();
-
+            CreateMap<SnippetEntity, SnippetPostResponse>().ForMember(x => x.Like,
+                opt => opt.MapFrom(
+                    c => c.LikedUser!.Count))
+                .ReverseMap();
             CreateMap<TagEntity, Tag>().ReverseMap();
             CreateMap<LanguageEntity, Language>().ReverseMap();
 
