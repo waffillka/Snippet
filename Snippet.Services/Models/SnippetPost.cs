@@ -20,7 +20,7 @@ namespace Snippet.Services.Models
         [MaxLength(4000, ErrorMessage = "Maximum length for the Snippet is 4000 characters.")]
         public string Snippet { get; set; } = string.Empty;
 
-        public DateTime Date { get; set; } = DateTime.Now;
+        //public DateTime Date { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "LanguageId is a required field.")]
         public long LanguageId { get; set; }

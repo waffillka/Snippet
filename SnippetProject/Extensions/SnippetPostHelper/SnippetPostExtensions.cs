@@ -11,7 +11,7 @@ namespace SnippetProject.Extensions.SnippetPostHelper
             post.Title = "default title";
             post.Description = "default description";
             post.Snippet = "default snippet";
-            post.Date = DateTime.Now;
+            //post.Date = DateTime.Now;
             return post;
         }
 
@@ -20,7 +20,7 @@ namespace SnippetProject.Extensions.SnippetPostHelper
             post.Id = id;
             post.Title = "default title";
             post.Description = "default description";
-            post.Date = DateTime.Now;
+           // post.Date = DateTime.Now;
             return post;
         }
     }
