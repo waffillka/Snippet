@@ -28,18 +28,6 @@ namespace SnippetProject.Controllers
                 : NotFound("Snippet post with specified id not found");
         }
 
-        [HttpGet("snippet-short/{id:long}")]
-        public async Task<IActionResult> GetShortPostById(long id, CancellationToken ct = default)
-        {
-            var result = await _snippetService
-                .GetShortPostById(id, ct)
-                .ConfigureAwait(false);
-
-            return result != null
-                ? Ok(result)
-                : NotFound("Short snippet post with specified id not found");
-        }
-
         [HttpGet("snippet-short/many")]
         public async Task<IActionResult> GetShortPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct = default)
         {
@@ -51,19 +39,7 @@ namespace SnippetProject.Controllers
                 ? Ok(result)
                 : NotFound(result);
         }
-
-        [HttpGet("snippet/many")]
-        public async Task<IActionResult> GetPosts([FromQuery] SnippetPostParams? parameters, CancellationToken ct = default)
-        {
-            var result = await _snippetService
-                .GetAllAsync(parameters, ct)
-                .ConfigureAwait(false);
-
-            return result.Count != 0
-                ? Ok(result)
-                : NotFound(result);
-        }
-
+        
         // [HttpPost("snippet/create")]
         // public async Task<IActionResult> CreateSnippetPost(SnippetPost? post, CancellationToken ct = default)
         // {
