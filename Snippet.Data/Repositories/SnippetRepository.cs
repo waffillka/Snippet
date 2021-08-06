@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Snippet.Common.Parameters;
 using Snippet.Data.DbContext;
 using Snippet.Data.Entities;
@@ -75,12 +76,12 @@ namespace Snippet.Data.Repositories
 
             if (parameters.Tags != null)
             {
-                result = result.Where(snippet => snippet.Tags!.Select(x => x.Name).Intersect(parameters.Tags).Any());
+                result = result.Where(snippet => snippet.Tags.Any(x => parameters.Tags.Contains(x.Name)));
             }
 
             if (parameters.TagsExclude != null)
-            {                                           //damn...
-                result = result.Where(snippet => !snippet.Tags!.Select(x => x.Name).Intersect(parameters.TagsExclude).Any());
+            {       
+                result = result.Where(snippet => !snippet.Tags.Any(x => parameters.Tags.Contains(x.Name)));
             }
 
             if (parameters.Langs != null)
