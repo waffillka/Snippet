@@ -6,6 +6,7 @@ using Snippet.Data.Interfaces.UnitOfWork;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
 using Snippet.Services.Parser;
+using Snippet.Services.Response;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -34,7 +35,7 @@ namespace Snippet.Services.Providers
             return await _unitOfWork.Snippets.CountLike(id, ct).ConfigureAwait(false);
         }
 
-        public async Task<SnippetPost> CreateAsync(SnippetPost? model, CancellationToken ct = default)
+        public async Task<SnippetPostResponse> CreateAsync(SnippetPost? model, CancellationToken ct = default)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -48,7 +49,7 @@ namespace Snippet.Services.Providers
             var createdEntity = await _unitOfWork.Snippets.CreateAsync(entity, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
-            return _mapper.Map<SnippetPost>(createdEntity);
+            return _mapper.Map<SnippetPostResponse>(createdEntity);
         }
 
         public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
@@ -62,18 +63,13 @@ namespace Snippet.Services.Providers
             return result;
         }
 
-        public async Task<IReadOnlyCollection<SnippetPost>> GetAllAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
+        public async Task<IReadOnlyCollection<SnippetPostResponse>> GetAllAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
         {
             var entities = await _unitOfWork.Snippets
                 .GetAllAsync(parameters, ct)
                 .ConfigureAwait(false);
 
-            var result = _mapper.Map<IReadOnlyCollection<SnippetPost>>(entities);
-
-            foreach (var item in result)
-            {
-                item.Like = await CountLike(item.Id, ct).ConfigureAwait(false);
-            }
+            var result = _mapper.Map<IReadOnlyCollection<SnippetPostResponse>>(entities);
 
             return result;
         }
@@ -87,18 +83,13 @@ namespace Snippet.Services.Providers
 
             var result = _mapper.Map<IReadOnlyCollection<ShortSnippetPost>>(entities);
 
-            foreach (var item in result)
-            {
-                item.Like = await CountLike(item.Id, ct).ConfigureAwait(false);
-            }
-
             return result;
         }
 
-        public async Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default)
+        public async Task<SnippetPostResponse?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             var entity = await _unitOfWork.Snippets.GetByIdAsync(id, ct).ConfigureAwait(false);
-            return _mapper.Map<SnippetPost?>(entity);
+            return _mapper.Map<SnippetPostResponse?>(entity);
         }
 
         public async Task<ShortSnippetPost?> GetShortPostById(long id, CancellationToken ct = default)
@@ -107,7 +98,7 @@ namespace Snippet.Services.Providers
             return _mapper.Map<ShortSnippetPost?>(entity);
         }
 
-        public async Task<SnippetPost> UpdateAsync(SnippetPost? model, CancellationToken ct = default)
+        public async Task<SnippetPostResponse> UpdateAsync(SnippetPost? model, CancellationToken ct = default)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -120,7 +111,7 @@ namespace Snippet.Services.Providers
             var responseEntity = _unitOfWork.Snippets.Update(entity, ct);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
-            return _mapper.Map<SnippetPost>(responseEntity);
+            return _mapper.Map<SnippetPostResponse>(responseEntity);
         }
     }
 }

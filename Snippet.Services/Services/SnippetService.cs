@@ -2,6 +2,7 @@
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
+using Snippet.Services.Response;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace Snippet.Services.Services
             _snippetProvider = snippetProvider;
         }
 
-        public Task<SnippetPost> CreateAsync(SnippetPost model, CancellationToken ct = default)
+        public Task<SnippetPostResponse> CreateAsync(SnippetPost model, CancellationToken ct = default)
         {
             return _snippetProvider.CreateAsync(model, ct);
         }
@@ -26,7 +27,7 @@ namespace Snippet.Services.Services
             return _snippetProvider.DeleteAsync(id, ct);
         }
 
-        public Task<IReadOnlyCollection<SnippetPost>> GetAllAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
+        public Task<IReadOnlyCollection<SnippetPostResponse>> GetAllAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
         {
             return _snippetProvider.GetAllAsync(parameters, ct);
         }
@@ -36,7 +37,7 @@ namespace Snippet.Services.Services
             return _snippetProvider.GetAllShortAsync(parameters, ct);
         }
 
-        public Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default)
+        public Task<SnippetPostResponse?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             return _snippetProvider.GetByIdAsync(id, ct);
         }
@@ -46,7 +47,7 @@ namespace Snippet.Services.Services
             return _snippetProvider.GetShortPostById(id, ct);
         }
 
-        public Task<SnippetPost> UpdateAsync(SnippetPost model, CancellationToken ct = default)
+        public Task<SnippetPostResponse> UpdateAsync(SnippetPost model, CancellationToken ct = default)
         {
             return _snippetProvider.UpdateAsync(model, ct);
         }
