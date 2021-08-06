@@ -23,10 +23,10 @@ namespace Snippet.Services.Models
         public DateTime Date { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "LanguageId is a required field.")]
-        public Language? Language { get; set; }
+        public long LanguageId { get; set; }
 
         [Required(ErrorMessage = "UserId is a required field.")]
-        public User? User { get; set; }
+        public long UserId { get; set; }
         public int Like { get; set; }
         public ICollection<Tag> Tags { get; set; }
     }
