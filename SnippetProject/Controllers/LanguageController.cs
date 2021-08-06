@@ -26,11 +26,11 @@ namespace SnippetProject.Controllers
             return Ok(result);
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> UpdateLanguage(Language lang, CancellationToken ct)
-        {
-            var result = await _languageService.UpdateAsync(lang, ct).ConfigureAwait(false);
-            return Ok(result);
-        }
+        // [HttpPut("update")]
+        // public async Task<IActionResult> UpdateLanguage(Language lang, CancellationToken ct)
+        // {
+        //     var result = await _languageService.UpdateAsync(lang, ct).ConfigureAwait(false);
+        //     return Ok(result);
+        // }
     }
 }

@@ -41,13 +41,13 @@ namespace SnippetProject.Controllers
             return Ok(result);
         }
 
-        [HttpPut("update")]
-        public Tag UpdateTag(Tag tag, CancellationToken ct)
-        {
-            if (tag == null)
-                throw new ArgumentNullException(nameof(tag));
-            tag.Name += "[updated]";
-            return tag;
-        }
+        // [HttpPut("update")]
+        // public Tag UpdateTag(Tag tag, CancellationToken ct)
+        // {
+        //     if (tag == null)
+        //         throw new ArgumentNullException(nameof(tag));
+        //     tag.Name += "[updated]";
+        //     return tag;
+        // }
     }
 }
