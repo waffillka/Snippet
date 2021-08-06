@@ -12,7 +12,7 @@ namespace Snippet.Common.Parameters
         public ICollection<string>? TagsExclude { get; set; } = default;
 
         public ICollection<string>? Langs { get; set; } = default;
-        public ICollection<string>? LanguagesExclude { get; set; } = default;
+        public ICollection<string>? LangsExclude { get; set; } = default;
 
         public DateTime CreationDate { get; set; } = default;
         public DateTime From { get; set; } = default;
