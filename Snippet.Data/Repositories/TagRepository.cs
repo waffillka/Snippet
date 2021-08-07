@@ -39,10 +39,10 @@ namespace Snippet.Data.Repositories
                 switch (parameters.SortOption.ToLower())
                 {
                     case "popular":
-                        result = result.OrderBy(x => x.SnippetPosts.Count);
+                        result = result.OrderByDescending(x => x.SnippetPosts.Count);
                         break;
                     case "unpopular":
-                        result = result.OrderByDescending(x => x.SnippetPosts.Count);
+                        result = result.OrderBy(x => x.SnippetPosts.Count);
                         break;
                     case "abc":
                         result = result.OrderBy(x => x.Name);
