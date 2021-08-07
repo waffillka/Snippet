@@ -9,13 +9,13 @@ namespace Snippet.Services.Interfaces.Providers
 {
     public interface ISnippetProvider
     {
-        Task<SnippetPostResponse?> GetByIdAsync(long id, CancellationToken ct = default);
+        Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default);
         Task<ShortSnippetPost?> GetShortPostById(long id, CancellationToken ct = default);
-        Task<SnippetPostResponse> CreateAsync(SnippetPost? model, CancellationToken ct = default);
-        Task<SnippetPostResponse> UpdateAsync(SnippetPost? model, CancellationToken ct = default);
+        Task<SnippetPost> CreateAsync(SnippetPost model, CancellationToken ct = default);
+        Task<SnippetPost> UpdateAsync(SnippetPost model, CancellationToken ct = default);
         Task<bool> DeleteAsync(long id, CancellationToken ct = default);
         Task<IReadOnlyCollection<ShortSnippetPost>> GetAllShortAsync(SnippetPostParams? parameters = default, CancellationToken ct = default);
-        Task<IReadOnlyCollection<SnippetPostResponse>> GetAllAsync(SnippetPostParams? parameters = default, CancellationToken ct = default);
+        Task<IReadOnlyCollection<SnippetPost>> GetAllAsync(SnippetPostParams? parameters = default, CancellationToken ct = default);
         Task<int> CountLike(long id, CancellationToken ct = default);
     }
 }
