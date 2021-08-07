@@ -24,8 +24,15 @@ namespace Snippet.Data.Repositories
                 .FirstOrDefaultAsync(lang => lang.ExtraName == name, ct)
                 .ConfigureAwait(false);
         }
+        
+        public Task<LanguageEntity?> GetByIdAsync(long id, CancellationToken ct = default)
+        {
+            return _dbContext.Languages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(user => user.Id == id, ct)!;
+        }
 
-        public async Task<IEnumerable<LanguageEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default)
+        public async Task<IReadOnlyCollection<LanguageEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default)
         {
             var result = _dbContext.Languages
                 .Include(x => x.SnippetPosts)
@@ -71,13 +78,6 @@ namespace Snippet.Data.Repositories
             }
 
             return false;
-        }
-
-        public Task<LanguageEntity?> GetByIdAsync(long id, CancellationToken ct = default)
-        {
-            return _dbContext.Languages
-                 .AsNoTracking()
-                 .FirstOrDefaultAsync(user => user.Id == id, ct)!;
         }
 
         public LanguageEntity Update(LanguageEntity entity)

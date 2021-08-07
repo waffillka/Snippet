@@ -9,10 +9,10 @@ namespace Snippet.Data.Interfaces.Repositories
     public interface ISnippetRepository
     {
         Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default);
-        Task<SnippetEntity> CreateAsync(SnippetEntity entity, CancellationToken ct = default);
-        SnippetEntity Update(SnippetEntity entity, CancellationToken ct = default);
-        Task<bool> DeleteAsync(long id, CancellationToken ct = default);
         Task<IReadOnlyCollection<SnippetEntity>> GetAllAsync(SnippetPostParams? parameters = default, CancellationToken ct = default);
+        Task<SnippetEntity> CreateAsync(SnippetEntity entity, CancellationToken ct = default);
+        SnippetEntity Update(SnippetEntity entity);
+        Task<bool> DeleteAsync(long id, CancellationToken ct = default);
         Task<int> CountLike(long id, CancellationToken ct = default);
     }
 }

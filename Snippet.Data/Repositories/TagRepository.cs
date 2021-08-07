@@ -25,8 +25,16 @@ namespace Snippet.Data.Repositories
                 .FirstOrDefaultAsync(tag => tag.Name == name, ct)
                 .ConfigureAwait(false);
         }
+        
+        public Task<TagEntity?> GetByIdAsync(long id, CancellationToken ct = default)
+        {
+            return _dbContext.Tags
+                .AsNoTracking()
+                .FirstOrDefaultAsync(user => user.Id == id, ct)!;
+        }
 
-        public async Task<IEnumerable<TagEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default)
+        public async Task<IReadOnlyCollection<TagEntity>> GetAllAsync(ParamsBase? parameters = default,
+            CancellationToken ct = default)
         {
             var result = _dbContext.Tags
                 .Include(x => x.SnippetPosts)
@@ -73,26 +81,36 @@ namespace Snippet.Data.Repositories
             return false;
         }
 
-        public Task<TagEntity?> GetByIdAsync(long id, CancellationToken ct = default)
-        {
-            return _dbContext.Tags
-                 .AsNoTracking()
-                 .FirstOrDefaultAsync(user => user.Id == id, ct)!;
-        }
-
         public TagEntity Update(TagEntity entity)
         {
             var entityEntry = _dbContext.Tags.Update(entity);
             return entityEntry.Entity;
         }
-        
-        public async Task<ICollection<TagEntity>> GetByNamesAsync(IEnumerable<string> names, CancellationToken ct = default)
+        public async Task<IReadOnlyCollection<TagEntity>> GetRangeByNameAsync(IEnumerable<string> names,
+            CancellationToken ct = default)
         {
             var result = _dbContext.Tags
                 .AsNoTracking()
                 .Where(tag => names.Contains(tag.Name));
             
             return await result.ToListAsync(ct).ConfigureAwait(false);
+        }
+
+        public async Task AddRangeAsync(IEnumerable<string> names, CancellationToken ct = default)
+        {
+            var enumeratedNames = names.ToList();
+            var existingTags = await GetRangeByNameAsync(enumeratedNames, ct)
+                .ConfigureAwait(false);
+
+            var result = enumeratedNames.Select(name => new TagEntity { Name = name })
+                .Except(existingTags).ToList();
+
+            if (result.Any())
+            {
+                await _dbContext.Tags
+                    .AddRangeAsync(result, ct)
+                    .ConfigureAwait(false);
+            }
         }
     }
 }

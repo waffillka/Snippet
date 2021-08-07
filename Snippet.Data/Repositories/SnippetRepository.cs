@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Snippet.Common.Parameters;
 using Snippet.Data.DbContext;
 using Snippet.Data.Entities;
@@ -18,41 +17,19 @@ namespace Snippet.Data.Repositories
         {
             _dbContext = dbContext;
         }
-
-        public async Task<SnippetEntity> CreateAsync(SnippetEntity entity, CancellationToken ct = default)
+        
+        public async Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default)
         {
-            var entityEntry = await _dbContext.SnippetPosts.AddAsync(entity, ct).ConfigureAwait(false);
-            return entityEntry.Entity;
-        }
-
-        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
-        {
-            var entity = await GetByIdAsync(id, ct).ConfigureAwait(false);
-            if (entity != null)
-            {
-                var entityEntry = _dbContext.SnippetPosts.Remove(entity);
-                return entityEntry != null;
-            }
-
-            return false;
-        }
-
-        public Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default)
-        {
-            return _dbContext.SnippetPosts
+            return await _dbContext.SnippetPosts
                 .Include(x => x.Language)
-                .Include(x => x.User).Include(x => x.Tags)
+                .Include(x => x.User)
+                .Include(x => x.Tags)
                 .Include(x => x.LikedUser)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(user => user.Id == id, ct);
+                .FirstOrDefaultAsync(user => user.Id == id, ct)
+                .ConfigureAwait(false);
         }
-
-        public SnippetEntity Update(SnippetEntity entity, CancellationToken ct = default)
-        {
-            var entityEntry = _dbContext.SnippetPosts.Update(entity);
-            return entityEntry.Entity;
-        }
-
+        
         public async Task<IReadOnlyCollection<SnippetEntity>> GetAllAsync(SnippetPostParams? parameters = default, CancellationToken ct = default)
         {
             var result = _dbContext.SnippetPosts
@@ -132,6 +109,30 @@ namespace Snippet.Data.Repositories
             return await result.Skip((parameters.Page - 1) * parameters.PageSize).Take(parameters.PageSize).ToListAsync(ct).ConfigureAwait(false);
         }
 
+        public async Task<SnippetEntity> CreateAsync(SnippetEntity entity, CancellationToken ct = default)
+        {
+            var entityEntry = await _dbContext.SnippetPosts.AddAsync(entity, ct).ConfigureAwait(false);
+            return entityEntry.Entity;
+        }
+
+        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
+        {
+            var entity = await GetByIdAsync(id, ct).ConfigureAwait(false);
+            if (entity != null)
+            {
+                var entityEntry = _dbContext.SnippetPosts.Remove(entity);
+                return entityEntry != null;
+            }
+
+            return false;
+        }
+
+        public SnippetEntity Update(SnippetEntity entity)
+        {
+            var entityEntry = _dbContext.SnippetPosts.Update(entity);
+            return entityEntry.Entity;
+        }
+        
         public async Task<int> CountLike(long id, CancellationToken ct = default)
         {
             var like = await _dbContext.SnippetPosts
