@@ -35,7 +35,7 @@ namespace SnippetProject.Middleware
                                     await context.Response.WriteAsync(contextFeature.Error.Message).ConfigureAwait(false);
                                     break;
                                 }
-                            case UserNotFoundException:
+                            case ResourceNotFoundException:
                                 {
                                     context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                                     await context.Response.WriteAsync(contextFeature.Error.Message).ConfigureAwait(false);
