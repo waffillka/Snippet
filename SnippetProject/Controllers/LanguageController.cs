@@ -33,11 +33,19 @@ namespace SnippetProject.Controllers
             return Ok(result);
         }
 
-        // [HttpPut("update")]
-        // public async Task<IActionResult> UpdateLanguage(Language lang, CancellationToken ct)
-        // {
-        //     var result = await _languageService.UpdateAsync(lang, ct).ConfigureAwait(false);
-        //     return Ok(result);
-        // }
+        [HttpGet("create")]
+        public async Task<IActionResult> Create([FromQuery] Language lang, CancellationToken ct)
+        {
+            var result = await _languageService.CreateAsync(lang, ct).ConfigureAwait(false);
+
+            return Ok(result);
+        }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateLanguage(Language lang, CancellationToken ct)
+        {
+            var result = await _languageService.UpdateAsync(lang, ct).ConfigureAwait(false);
+            return Ok(result);
+        }
     }
 }
