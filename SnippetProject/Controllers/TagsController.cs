@@ -14,7 +14,7 @@ namespace SnippetProject.Controllers
     [Route("tag")]
     public class TagsController : ControllerBase
     {
-        private ITagService _tagService;
+        private readonly ITagService _tagService;
 
         public TagsController(ITagService tagService)
         {
@@ -24,16 +24,6 @@ namespace SnippetProject.Controllers
         [HttpGet("many")]
         public async Task<IActionResult> GetAll([FromQuery] ParamsBase? parameters, CancellationToken ct)
         {
-            // parameters ??= new ParamsBase();
-            //
-            // var result = new Tag[parameters.PageSize].Select((x, index) =>
-            // {
-            //     x = new Tag { Id = index, Name = "popular tag" };
-            //     return x;
-            // });
-            //
-            // return result.ToArray();
-
             var result = await _tagService
                 .GetAllAsync(parameters, ct)
                 .ConfigureAwait(false);
@@ -41,13 +31,16 @@ namespace SnippetProject.Controllers
             return Ok(result);
         }
 
-        // [HttpPut("update")]
-        // public Tag UpdateTag(Tag tag, CancellationToken ct)
-        // {
-        //     if (tag == null)
-        //         throw new ArgumentNullException(nameof(tag));
-        //     tag.Name += "[updated]";
-        //     return tag;
-        // }
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateTag(Tag tag, CancellationToken ct)
+        {
+            var result = await _tagService
+                .UpdateAsync(tag, ct)
+                .ConfigureAwait(false);
+
+            return result == null 
+            ? Ok(result)
+            : BadRequest(result);
+        }
     }
 }
