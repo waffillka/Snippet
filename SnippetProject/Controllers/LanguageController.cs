@@ -33,8 +33,8 @@ namespace SnippetProject.Controllers
             return Ok(result);
         }
 
-        [HttpGet("create")]
-        public async Task<IActionResult> Create([FromQuery] Language lang, CancellationToken ct)
+        [HttpPost("create")]
+        public async Task<IActionResult> Create( Language lang, CancellationToken ct)
         {
             var result = await _languageService.CreateAsync(lang, ct).ConfigureAwait(false);
 
