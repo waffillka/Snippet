@@ -28,7 +28,7 @@ namespace Snippet.Services.Services
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
-            if (await _languageProvider.GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
+            if (await _languageProvider.GetByIdAsync(model.LanguageId, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Language with specified id does not exist.");
 
             var createdSnippet = await _snippetProvider.CreateAsync(model, ct).ConfigureAwait(false);
