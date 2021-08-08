@@ -93,16 +93,16 @@ namespace Snippet.Data.Repositories
                 switch (parameters.SortOption.ToLower())
                 {
                     case "new":
-                        result = result.OrderBy(x => x.Date);
-                        break;
-                    case "old":
                         result = result.OrderByDescending(x => x.Date);
                         break;
+                    case "old":
+                        result = result.OrderBy(x => x.Date);
+                        break;
                     case "popular":
-                        result = result.OrderBy(x => x.LikedUser!.Count);
+                        result = result.OrderByDescending(x => x.LikedUser!.Count);
                         break;
                     case "unpopular":
-                        result = result.OrderByDescending(x => x.LikedUser!.Count);
+                        result = result.OrderBy(x => x.LikedUser!.Count);
                         break;
                 }
             }
