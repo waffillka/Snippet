@@ -26,7 +26,9 @@ namespace SnippetProject.Controllers
                 .GetAllAsync(parameters, ct)
                 .ConfigureAwait(false);
             
-            return Ok(result);
+            return result.Count != 0
+                ? Ok(result)
+                : NotFound("Tags with specified parameters could not be found.");
         }
 
         [HttpPut("update")]

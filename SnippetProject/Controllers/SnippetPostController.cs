@@ -23,7 +23,9 @@ namespace SnippetProject.Controllers
         {
             var result = await _snippetService.GetByIdAsync(id, ct).ConfigureAwait(false);
 
-            return Ok(result);
+            return result!=null
+                ? Ok(result)
+                : NotFound("Snippet post with specified id does not exist.");
         }
 
         [HttpGet("snippet-short/many")]
@@ -62,6 +64,7 @@ namespace SnippetProject.Controllers
         public async Task<IActionResult> DeleteSnippetPost(long postId, CancellationToken ct = default)
         {
             var result = await _snippetService.DeleteAsync(postId, ct).ConfigureAwait(false);
+           
             return Ok(result);
         }
     }
