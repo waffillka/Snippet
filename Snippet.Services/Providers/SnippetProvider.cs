@@ -100,6 +100,9 @@ namespace Snippet.Services.Providers
             var tags = _parser.ParseTags(entity.Description, ct);
             entity.Tags = await _unitOfWork.Tags.GetOrAddRangeAsync(tags, ct).ConfigureAwait(false);
 
+            entity.User = null;
+            entity.Language = null;
+
             var responseEntity = _unitOfWork.Snippets.Update(entity);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
