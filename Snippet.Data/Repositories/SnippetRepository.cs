@@ -18,9 +18,16 @@ namespace Snippet.Data.Repositories
             _dbContext = dbContext;
         }
         
-        public async Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default)
+        public async Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default, bool tracking = false)
         {
-            return await _dbContext.SnippetPosts
+            return tracking ? await _dbContext.SnippetPosts
+                .Include(x => x.Language)
+                .Include(x => x.User)
+                .Include(x => x.Tags)
+                .Include(x => x.LikedUser)
+                .FirstOrDefaultAsync(user => user.Id == id, ct)
+                .ConfigureAwait(false)
+                : await _dbContext.SnippetPosts
                 .Include(x => x.Language)
                 .Include(x => x.User)
                 .Include(x => x.Tags)
