@@ -129,8 +129,12 @@ namespace Snippet.Data.Repositories
 
         public SnippetEntity Update(SnippetEntity entity)
         {
-            var entityEntry = _dbContext.SnippetPosts.Update(entity);
-            return entityEntry.Entity;
+            var entityEntry = _dbContext.SnippetPosts.Update(entity).Entity;
+            
+            _dbContext.Entry(entityEntry).Reference(snippet => snippet.Language).Load();
+            _dbContext.Entry(entityEntry).Reference(snippet => snippet.User).Load();
+            
+            return entityEntry;
         }
         
         public async Task<int> CountLike(long id, CancellationToken ct = default)
