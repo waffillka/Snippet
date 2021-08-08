@@ -63,6 +63,9 @@ namespace Snippet.Services.Providers
         }
         public async Task<SnippetPost> CreateAsync(SnippetPost model, CancellationToken ct = default)
         {
+            // modern problems require modern solution (kind of)
+            // we need to set some userID, because we do not have auth
+            model.UserId = 2;
 
             var entity = _mapper.Map<SnippetEntity>(model);
 
