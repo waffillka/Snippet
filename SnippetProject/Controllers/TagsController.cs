@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Snippet.Common.Parameters;
 using Snippet.Services.Models;
-using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Snippet.Services.Interfaces.Service;
@@ -38,9 +36,7 @@ namespace SnippetProject.Controllers
                 .UpdateAsync(tag, ct)
                 .ConfigureAwait(false);
 
-            return result == null 
-            ? Ok(result)
-            : BadRequest(result);
+            return Ok(result);
         }
     }
 }

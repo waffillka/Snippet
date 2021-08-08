@@ -23,9 +23,7 @@ namespace SnippetProject.Controllers
         {
             var result = await _snippetService.GetByIdAsync(id, ct).ConfigureAwait(false);
 
-            return result != null
-                ? Ok(result)
-                : NotFound("Snippet post with specified id not found");
+            return Ok(result);
         }
 
         [HttpGet("snippet-short/many")]
@@ -34,10 +32,10 @@ namespace SnippetProject.Controllers
             var result = await _snippetService
                 .GetAllShortAsync(parameters, ct)
                 .ConfigureAwait(false);
-
+            
             return result.Count != 0
                 ? Ok(result)
-                : NotFound(result);
+                : NotFound("Snippet posts with specified parameters could not be found.");
         }
         
         [HttpPost("snippet/create")]
