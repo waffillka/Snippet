@@ -15,6 +15,7 @@ namespace Snippet.Data.Interfaces.Repositories
         Task<TagEntity> CreateAsync(TagEntity entity, CancellationToken ct = default);
         TagEntity Update(TagEntity entity);
         Task<bool> DeleteAsync(long id, CancellationToken ct = default);
-        Task<IReadOnlyCollection<TagEntity>> GetRangeByNameAsync(IEnumerable<string> names, CancellationToken ct = default);
+        Task<ICollection<TagEntity>> GetRangeByNameAsync(IEnumerable<string> names, CancellationToken ct = default);
+        Task<ICollection<TagEntity>> GetOrAddRangeAsync(IEnumerable<string> names, CancellationToken ct = default);
     }
 }

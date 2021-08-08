@@ -21,7 +21,7 @@ namespace Snippet.Data.Repositories
         public async Task<TagEntity?> GetByNameAsync(string name, CancellationToken ct = default)
         {
             return await _dbContext.Tags
-                .AsNoTracking()
+                //.AsNoTracking()
                 .FirstOrDefaultAsync(tag => tag.Name == name, ct)
                 .ConfigureAwait(false);
         }
@@ -86,11 +86,12 @@ namespace Snippet.Data.Repositories
             var entityEntry = _dbContext.Tags.Update(entity);
             return entityEntry.Entity;
         }
-        public async Task<IReadOnlyCollection<TagEntity>> GetRangeByNameAsync(IEnumerable<string> names,
+
+        public async Task<ICollection<TagEntity>> GetRangeByNameAsync(IEnumerable<string> names,
             CancellationToken ct = default)
         {
             var result = _dbContext.Tags
-                .AsNoTracking()
+                //.AsNoTracking()
                 .Where(tag => names.Contains(tag.Name));
             
             return await result.ToListAsync(ct).ConfigureAwait(false);
@@ -111,6 +112,23 @@ namespace Snippet.Data.Repositories
                     .AddRangeAsync(result, ct)
                     .ConfigureAwait(false);
             }
+        }
+
+        public async Task<ICollection<TagEntity>> GetOrAddRangeAsync(IEnumerable<string> names, CancellationToken ct = default)
+        {
+            var namesList = names.ToList();
+
+            var existingTags = await GetRangeByNameAsync(namesList, ct).ConfigureAwait(false);
+
+            var notCreatedTags = namesList.Except(existingTags.Select(tag => tag.Name)).ToList();
+
+            await AddRangeAsync(notCreatedTags, ct).ConfigureAwait(false);
+            await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
+
+            var newTags = await GetRangeByNameAsync(notCreatedTags, ct)
+                .ConfigureAwait(false);
+
+            return existingTags.Union(newTags).ToList();
         }
     }
 }
