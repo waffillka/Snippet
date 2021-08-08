@@ -28,7 +28,7 @@ namespace Snippet.Services.Mapping
             CreateMap<SnippetEntity, ShortSnippetPost>().ForMember(
                 c => c.Description,
                 opt => opt.MapFrom(
-                    x => x.Description.Length > 50 ? x.Description.Substring(0, 50) : x.Description))
+                    x => x.Description.Length > 140 ? x.Description.Substring(0, 140) : x.Description))
                 .ForMember(x => x.Like,
                 opt => opt.MapFrom(
                     c => c.LikedUser!.Count));
