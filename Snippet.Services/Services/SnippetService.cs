@@ -15,13 +15,13 @@ namespace Snippet.Services.Services
     public class SnippetService : ISnippetService
     {
         private readonly ISnippetProvider _snippetProvider;
-        private readonly ITagProvider _tagProvider;
-        private readonly ITagParser _parser;
-        public SnippetService(ISnippetProvider snippetProvider, ITagParser parser, ITagProvider tagProvider)
+        //private readonly ITagProvider _tagProvider;
+        //private readonly ITagParser _parser;
+        public SnippetService(ISnippetProvider snippetProvider)//, ITagParser parser, ITagProvider tagProvider)
         {
             _snippetProvider = snippetProvider;
-            _parser = parser;
-            _tagProvider = tagProvider;
+            //_parser = parser;
+            //_tagProvider = tagProvider;
         }
 
         public async Task<SnippetPost> CreateAsync(SnippetPost? model, CancellationToken ct = default)
@@ -29,16 +29,16 @@ namespace Snippet.Services.Services
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
-            var tags = _parser.ParseTags(model.Description, ct);
+            //var tags = _parser.ParseTags(model.Description, ct);
 
             var createdSnippet = await _snippetProvider.CreateAsync(model, ct).ConfigureAwait(false);
 
-            createdSnippet.Tags = (await _tagProvider
-                .GetOrAddRangeAsync(tags, ct)
-                .ConfigureAwait(false)).ToList();
+            //createdSnippet.Tags = (await _tagProvider
+            //    .GetOrAddRangeAsync(tags, ct)
+            //    .ConfigureAwait(false)).ToList();
             
-            var result = await _snippetProvider.UpdateAsync(createdSnippet, ct).ConfigureAwait(false);
-            return result;
+            //var result = await _snippetProvider.UpdateAsync(createdSnippet, ct).ConfigureAwait(false);
+            return createdSnippet;
         }
 
         public Task<bool> DeleteAsync(long id, CancellationToken ct = default)

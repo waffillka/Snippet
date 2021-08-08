@@ -75,14 +75,14 @@ namespace Snippet.Services.Providers
             return _mapper.Map<Tag>(responseEntity);
         }
         
-        public async Task<ICollection<Tag>> GetRangeByNameAsync(IEnumerable<string> names, CancellationToken ct = default)
-        {
-            var result = await _unitOfWork.Tags
-                .GetRangeByNameAsync(names, ct)
-                .ConfigureAwait(false);
+        //public async Task<ICollection<Tag>> GetRangeByNameAsync(IEnumerable<string> names, CancellationToken ct = default)
+        //{
+        //    var result = await _unitOfWork.Tags
+        //        .GetRangeByNameAsync(names, ct)
+        //        .ConfigureAwait(false);
 
-            return _mapper.Map<ICollection<Tag>>(result);
-        }
+        //    return _mapper.Map<ICollection<Tag>>(result);
+        //}
 
         //public Task AddRangeAsync(IEnumerable<string> names, CancellationToken ct = default)
         //{

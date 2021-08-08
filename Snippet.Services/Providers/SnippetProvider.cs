@@ -5,7 +5,9 @@ using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.UnitOfWork;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
+using Snippet.Services.Parser;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,11 +17,15 @@ namespace Snippet.Services.Providers
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ITagParser _parser;
+        private readonly ITagProvider _tagProvider;
 
-        public SnippetProvider(IMapper mapper, IUnitOfWork unitOfWork)
+        public SnippetProvider(IMapper mapper, IUnitOfWork unitOfWork, ITagParser parser, ITagProvider tagProvider)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _parser = parser;
+            _tagProvider = tagProvider;
         }
         public async Task<IReadOnlyCollection<SnippetPost>> GetAllAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
         {
@@ -57,7 +63,12 @@ namespace Snippet.Services.Providers
         }
         public async Task<SnippetPost> CreateAsync(SnippetPost model, CancellationToken ct = default)
         {
+
             var entity = _mapper.Map<SnippetEntity>(model);
+
+            var tags = _parser.ParseTags(entity.Description, ct);
+            entity.Tags = await _unitOfWork.Tags.GetOrAddRangeAsync(tags, ct).ConfigureAwait(false);
+
             var result = await _unitOfWork.Snippets
                 .CreateAsync(entity, ct)
                 .ConfigureAwait(false);
@@ -82,6 +93,9 @@ namespace Snippet.Services.Providers
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");
 
             var entity = _mapper.Map<SnippetEntity>(model);
+
+            var tags = _parser.ParseTags(entity.Description, ct);
+            entity.Tags = await _unitOfWork.Tags.GetOrAddRangeAsync(tags, ct).ConfigureAwait(false);
 
             var responseEntity = _unitOfWork.Snippets.Update(entity);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
