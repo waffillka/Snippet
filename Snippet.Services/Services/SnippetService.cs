@@ -15,16 +15,22 @@ namespace Snippet.Services.Services
     public class SnippetService : ISnippetService
     {
         private readonly ISnippetProvider _snippetProvider;
-        public SnippetService(ISnippetProvider snippetProvider)
+        private readonly ILanguageProvider _languageProvider;
+        public SnippetService(ISnippetProvider snippetProvider, ILanguageProvider languageProvider)
         {
             _snippetProvider = snippetProvider;
+            _languageProvider = languageProvider;
+            
         }
 
         public async Task<SnippetPost> CreateAsync(SnippetPost? model, CancellationToken ct = default)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
-            
+
+            if (await _languageProvider.GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
+                throw new ResourceNotFoundException("Language with specified id does not exist.");
+
             var createdSnippet = await _snippetProvider.CreateAsync(model, ct).ConfigureAwait(false);
             
             return createdSnippet;
@@ -64,12 +70,14 @@ namespace Snippet.Services.Services
             return _snippetProvider.GetShortPostById(id, ct);
         }
 
-        public Task<SnippetPost> UpdateAsync(SnippetPost? model, CancellationToken ct = default)
+        public async Task<SnippetPost> UpdateAsync(SnippetPost? model, CancellationToken ct = default)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
+            if (await _languageProvider.GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
+                throw new ResourceNotFoundException("Language with specified id does not exist.");
             
-            return _snippetProvider.UpdateAsync(model, ct);
+            return await _snippetProvider.UpdateAsync(model, ct).ConfigureAwait(false);
         }
     }
 }
