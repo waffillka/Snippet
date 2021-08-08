@@ -6,6 +6,7 @@ using Snippet.Data.Interfaces.UnitOfWork;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
 using Snippet.Services.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -95,18 +96,19 @@ namespace Snippet.Services.Providers
             if (await GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");
 
-            var entity = _mapper.Map<SnippetEntity>(model);
+            var entityFromDb = await _unitOfWork.Snippets.GetByIdAsync(model.Id, ct, true).ConfigureAwait(false);
+            var tags = _parser.ParseTags(model.Description, ct);
 
-            var tags = _parser.ParseTags(entity.Description, ct);
-            entity.Tags = await _unitOfWork.Tags.GetOrAddRangeAsync(tags, ct).ConfigureAwait(false);
+            entityFromDb.Tags = await _unitOfWork.Tags.GetOrAddRangeAsync(tags, ct).ConfigureAwait(false);
+            entityFromDb.Description = model.Description;
+            entityFromDb.Title = model.Title;
+            entityFromDb.Date = DateTime.Now;
+            entityFromDb.LanguageId = model.LanguageId;
+            entityFromDb.UserId = model.UserId;
 
-            entity.User = null;
-            entity.Language = null;
-
-            var responseEntity = _unitOfWork.Snippets.Update(entity);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
-            return _mapper.Map<SnippetPost>(responseEntity);
+            return _mapper.Map<SnippetPost>(entityFromDb);
         }
         
         public async Task<int> CountLike(long id, CancellationToken ct = default)
