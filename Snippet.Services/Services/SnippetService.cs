@@ -1,11 +1,14 @@
-﻿using Snippet.Common.Parameters;
+﻿using System;
+using Snippet.Common.Parameters;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
-using Snippet.Services.Response;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Snippet.Common.Exceptions;
+using Snippet.Services.Parser;
 
 namespace Snippet.Services.Services
 {
@@ -17,17 +20,25 @@ namespace Snippet.Services.Services
             _snippetProvider = snippetProvider;
         }
 
-        public Task<SnippetPostResponse> CreateAsync(SnippetPost model, CancellationToken ct = default)
+        public async Task<SnippetPost> CreateAsync(SnippetPost? model, CancellationToken ct = default)
         {
-            return _snippetProvider.CreateAsync(model, ct);
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+            
+            var createdSnippet = await _snippetProvider.CreateAsync(model, ct).ConfigureAwait(false);
+            
+            return createdSnippet;
         }
 
         public Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
+            if (id < 0)
+                throw new ResourceNotFoundException("You are trying to find snippet post with deprecated id");
+            
             return _snippetProvider.DeleteAsync(id, ct);
         }
 
-        public Task<IReadOnlyCollection<SnippetPostResponse>> GetAllAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
+        public Task<IReadOnlyCollection<SnippetPost>> GetAllAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
         {
             return _snippetProvider.GetAllAsync(parameters, ct);
         }
@@ -37,18 +48,27 @@ namespace Snippet.Services.Services
             return _snippetProvider.GetAllShortAsync(parameters, ct);
         }
 
-        public Task<SnippetPostResponse?> GetByIdAsync(long id, CancellationToken ct = default)
+        public Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default)
         {
+            if (id < 0)
+                throw new ResourceNotFoundException("You are trying to find snippet post with deprecated id");
+            
             return _snippetProvider.GetByIdAsync(id, ct);
         }
 
         public Task<ShortSnippetPost?> GetShortPostById(long id, CancellationToken ct = default)
         {
+            if (id < 0)
+                throw new ResourceNotFoundException("You are trying to find snippet post with deprecated id");
+
             return _snippetProvider.GetShortPostById(id, ct);
         }
 
-        public Task<SnippetPostResponse> UpdateAsync(SnippetPost model, CancellationToken ct = default)
+        public Task<SnippetPost> UpdateAsync(SnippetPost? model, CancellationToken ct = default)
         {
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+            
             return _snippetProvider.UpdateAsync(model, ct);
         }
     }

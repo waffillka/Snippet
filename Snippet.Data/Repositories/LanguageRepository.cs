@@ -24,8 +24,15 @@ namespace Snippet.Data.Repositories
                 .FirstOrDefaultAsync(lang => lang.ExtraName == name, ct)
                 .ConfigureAwait(false);
         }
+        
+        public Task<LanguageEntity?> GetByIdAsync(long id, CancellationToken ct = default)
+        {
+            return _dbContext.Languages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(user => user.Id == id, ct)!;
+        }
 
-        public async Task<IEnumerable<LanguageEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default)
+        public async Task<IReadOnlyCollection<LanguageEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default)
         {
             var result = _dbContext.Languages
                 .Include(x => x.SnippetPosts)
@@ -33,15 +40,15 @@ namespace Snippet.Data.Repositories
 
             parameters ??= new ParamsBase();
 
-            if (!string.IsNullOrEmpty(parameters.SortOptions))
+            if (!string.IsNullOrEmpty(parameters.SortOption))
             {
-                switch (parameters.SortOptions.ToLower())
+                switch (parameters.SortOption.ToLower())
                 {
                     case "popular":
-                        result = result.OrderBy(x => x.SnippetPosts.Count);
+                        result = result.OrderByDescending(x => x.SnippetPosts.Count);
                         break;
                     case "unpopular":
-                        result = result.OrderByDescending(x => x.SnippetPosts.Count);
+                        result = result.OrderBy(x => x.SnippetPosts.Count);
                         break;
                     case "abc":
                         result = result.OrderBy(x => x.Name);
@@ -71,13 +78,6 @@ namespace Snippet.Data.Repositories
             }
 
             return false;
-        }
-
-        public Task<LanguageEntity?> GetByIdAsync(long id, CancellationToken ct = default)
-        {
-            return _dbContext.Languages
-                 .AsNoTracking()
-                 .FirstOrDefaultAsync(user => user.Id == id, ct)!;
         }
 
         public LanguageEntity Update(LanguageEntity entity)

@@ -33,14 +33,14 @@ namespace Snippet.Data.Repositories
             return false;
         }
 
-        public Task<UserEntity> GetByIdAsync(long id, CancellationToken ct = default)
+        public Task<UserEntity?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             return _dbContext.Users
                  .AsNoTracking()
                  .FirstOrDefaultAsync(user => user.Id == id, ct);
         }
 
-        public UserEntity UpdateAsync(UserEntity entity)
+        public UserEntity Update(UserEntity entity)
         {
             var entityEntry = _dbContext.Users.Update(entity);
             return entityEntry.Entity;

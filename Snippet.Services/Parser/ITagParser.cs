@@ -7,6 +7,6 @@ namespace Snippet.Services.Parser
 {
     public interface ITagParser
     {
-        Task<ICollection<Tag>> GetTags(string data, CancellationToken ct = default);
+        IReadOnlyCollection<string> ParseTags(string data, CancellationToken ct = default);
     }
 }

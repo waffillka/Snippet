@@ -1,9 +1,9 @@
 ﻿using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Snippet.Services.Parser
 {
@@ -11,27 +11,9 @@ namespace Snippet.Services.Parser
     {
         private const string Pattern = @"#\w+";
 
-        private readonly ITagProvider _provider;
-
-        public TagParser(ITagProvider provider)
+        public IReadOnlyCollection<string> ParseTags(string data, CancellationToken ct = default)
         {
-            _provider = provider;
-        }
-
-        public async Task<ICollection<Tag>> GetTags(string data, CancellationToken ct = default)
-        {
-            var result = new List<Tag>();
-            var matches = Regex.Matches(data, Pattern);
-            foreach (Match match in matches)
-            {
-                ct.ThrowIfCancellationRequested();
-                var tagFromDb = await _provider.GetByNameAsync(match.Value, ct).ConfigureAwait(false);
-
-                result.Add(tagFromDb ?? await _provider.CreateAsync(new Tag { Name = match.Value }, ct)
-                    .ConfigureAwait(false));
-            }
-
-            return result;
+            return Regex.Matches(data, Pattern).Select(match => match.Value).ToList();
         }
     }
 }

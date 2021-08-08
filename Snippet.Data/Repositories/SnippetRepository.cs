@@ -17,41 +17,19 @@ namespace Snippet.Data.Repositories
         {
             _dbContext = dbContext;
         }
-
-        public async Task<SnippetEntity> CreateAsync(SnippetEntity entity, CancellationToken ct = default)
+        
+        public async Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default)
         {
-            var entityEntry = await _dbContext.SnippetPosts.AddAsync(entity, ct).ConfigureAwait(false);
-            return entityEntry.Entity;
-        }
-
-        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
-        {
-            var entity = await GetByIdAsync(id, ct).ConfigureAwait(false);
-            if (entity != null)
-            {
-                var entityEntry = _dbContext.SnippetPosts.Remove(entity);
-                return entityEntry != null;
-            }
-
-            return false;
-        }
-
-        public Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default)
-        {
-            return _dbContext.SnippetPosts
+            return await _dbContext.SnippetPosts
                 .Include(x => x.Language)
-                .Include(x => x.User).Include(x => x.Tags)
+                .Include(x => x.User)
+                .Include(x => x.Tags)
                 .Include(x => x.LikedUser)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(user => user.Id == id, ct);
+                .FirstOrDefaultAsync(user => user.Id == id, ct)
+                .ConfigureAwait(false);
         }
-
-        public SnippetEntity Update(SnippetEntity entity, CancellationToken ct = default)
-        {
-            var entityEntry = _dbContext.SnippetPosts.Update(entity);
-            return entityEntry.Entity;
-        }
-
+        
         public async Task<IReadOnlyCollection<SnippetEntity>> GetAllAsync(SnippetPostParams? parameters = default, CancellationToken ct = default)
         {
             var result = _dbContext.SnippetPosts
@@ -65,32 +43,32 @@ namespace Snippet.Data.Repositories
 
             if (parameters.Authors != null)
             {
-                result = result.Where(snippet => parameters.Authors.Contains(snippet.Id));
+                result = result.Where(snippet => parameters.Authors.Contains(snippet.UserId));
             }
 
             if (parameters.AuthorsExclude != null)
             {
-                result = result.Where(snippet => !parameters.AuthorsExclude.Contains(snippet.Id));
+                result = result.Where(snippet => !parameters.AuthorsExclude.Contains(snippet.UserId));
             }
 
             if (parameters.Tags != null)
             {
-                result = result.Where(snippet => snippet.Tags!.Select(x => x.Id).Intersect(parameters.Tags).Any());
+                result = result.Where(snippet => snippet.Tags.Any(x => parameters.Tags.Contains(x.Name)));
             }
 
             if (parameters.TagsExclude != null)
-            {                                           //damn...
-                result = result.Where(snippet => !snippet.Tags!.Select(x => x.Id).Intersect(parameters.TagsExclude).Any());
+            {       
+                result = result.Where(snippet => !snippet.Tags.Any(x => parameters.TagsExclude.Contains(x.Name)));
             }
 
-            if (parameters.Languages != null)
+            if (parameters.Langs != null)
             {
-                result = result.Where(snippet => parameters.Languages.Contains(snippet.LanguageId));
+                result = result.Where(snippet => parameters.Langs.Contains(snippet.Language.ExtraName));
             }
 
-            if (parameters.LanguagesExclude != null)
+            if (parameters.LangsExclude != null)
             {
-                result = result.Where(snippet => !parameters.LanguagesExclude.Contains(snippet.LanguageId));
+                result = result.Where(snippet => !parameters.LangsExclude.Contains(snippet.Language.ExtraName));
             }
 
             if (parameters.CreationDate != default)
@@ -110,27 +88,55 @@ namespace Snippet.Data.Repositories
                                             || snippet.Snippet.Contains(parameters.MatchString));
             }
 
-            if (!string.IsNullOrEmpty(parameters.SortOptions))
+            if (!string.IsNullOrEmpty(parameters.SortOption))
             {
-                switch (parameters.SortOptions.ToLower())
+                switch (parameters.SortOption.ToLower())
                 {
                     case "new":
-                        result = result.OrderBy(x => x.Date);
-                        break;
-                    case "old":
                         result = result.OrderByDescending(x => x.Date);
                         break;
+                    case "old":
+                        result = result.OrderBy(x => x.Date);
+                        break;
                     case "popular":
-                        result = result.OrderBy(x => x.LikedUser!.Count);
+                        result = result.OrderByDescending(x => x.LikedUser!.Count);
                         break;
                     case "unpopular":
-                        result = result.OrderByDescending(x => x.LikedUser!.Count);
+                        result = result.OrderBy(x => x.LikedUser!.Count);
                         break;
                 }
             }
             return await result.Skip((parameters.Page - 1) * parameters.PageSize).Take(parameters.PageSize).ToListAsync(ct).ConfigureAwait(false);
         }
 
+        public async Task<SnippetEntity> CreateAsync(SnippetEntity entity, CancellationToken ct = default)
+        {
+            var entityEntry = await _dbContext.SnippetPosts.AddAsync(entity, ct).ConfigureAwait(false);
+            return entityEntry.Entity;
+        }
+
+        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
+        {
+            var entity = await GetByIdAsync(id, ct).ConfigureAwait(false);
+            if (entity != null)
+            {
+                var entityEntry = _dbContext.SnippetPosts.Remove(entity);
+                return entityEntry != null;
+            }
+
+            return false;
+        }
+
+        public SnippetEntity Update(SnippetEntity entity)
+        {
+            var entityEntry = _dbContext.SnippetPosts.Update(entity).Entity;
+            
+            _dbContext.Entry(entityEntry).Reference(snippet => snippet.Language).Load();
+            _dbContext.Entry(entityEntry).Reference(snippet => snippet.User).Load();
+            
+            return entityEntry;
+        }
+        
         public async Task<int> CountLike(long id, CancellationToken ct = default)
         {
             var like = await _dbContext.SnippetPosts

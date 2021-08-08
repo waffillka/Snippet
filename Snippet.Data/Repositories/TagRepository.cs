@@ -21,12 +21,20 @@ namespace Snippet.Data.Repositories
         public async Task<TagEntity?> GetByNameAsync(string name, CancellationToken ct = default)
         {
             return await _dbContext.Tags
-                .AsNoTracking()
+                //.AsNoTracking()
                 .FirstOrDefaultAsync(tag => tag.Name == name, ct)
                 .ConfigureAwait(false);
         }
+        
+        public Task<TagEntity?> GetByIdAsync(long id, CancellationToken ct = default)
+        {
+            return _dbContext.Tags
+                .AsNoTracking()
+                .FirstOrDefaultAsync(user => user.Id == id, ct)!;
+        }
 
-        public async Task<IEnumerable<TagEntity>> GetAllAsync(ParamsBase? parameters = default, CancellationToken ct = default)
+        public async Task<IReadOnlyCollection<TagEntity>> GetAllAsync(ParamsBase? parameters = default,
+            CancellationToken ct = default)
         {
             var result = _dbContext.Tags
                 .Include(x => x.SnippetPosts)
@@ -34,15 +42,15 @@ namespace Snippet.Data.Repositories
 
             parameters ??= new ParamsBase();
 
-            if (!string.IsNullOrEmpty(parameters.SortOptions))
+            if (!string.IsNullOrEmpty(parameters.SortOption))
             {
-                switch (parameters.SortOptions.ToLower())
+                switch (parameters.SortOption.ToLower())
                 {
                     case "popular":
-                        result = result.OrderBy(x => x.SnippetPosts.Count);
+                        result = result.OrderByDescending(x => x.SnippetPosts.Count);
                         break;
                     case "unpopular":
-                        result = result.OrderByDescending(x => x.SnippetPosts.Count);
+                        result = result.OrderBy(x => x.SnippetPosts.Count);
                         break;
                     case "abc":
                         result = result.OrderBy(x => x.Name);
@@ -73,17 +81,54 @@ namespace Snippet.Data.Repositories
             return false;
         }
 
-        public Task<TagEntity?> GetByIdAsync(long id, CancellationToken ct = default)
-        {
-            return _dbContext.Tags
-                 .AsNoTracking()
-                 .FirstOrDefaultAsync(user => user.Id == id, ct)!;
-        }
-
         public TagEntity Update(TagEntity entity)
         {
             var entityEntry = _dbContext.Tags.Update(entity);
             return entityEntry.Entity;
+        }
+
+        public async Task<ICollection<TagEntity>> GetRangeByNameAsync(IEnumerable<string> names,
+            CancellationToken ct = default)
+        {
+            var result = _dbContext.Tags
+                //.AsNoTracking()
+                .Where(tag => names.Contains(tag.Name));
+            
+            return await result.ToListAsync(ct).ConfigureAwait(false);
+        }
+
+        public async Task AddRangeAsync(IEnumerable<string> names, CancellationToken ct = default)
+        {
+            var enumeratedNames = names.ToList();
+            var existingTags = await GetRangeByNameAsync(enumeratedNames, ct)
+                .ConfigureAwait(false);
+
+            var result = enumeratedNames.Select(name => new TagEntity { Name = name })
+                .Except(existingTags).ToList();
+
+            if (result.Any())
+            {
+                await _dbContext.Tags
+                    .AddRangeAsync(result, ct)
+                    .ConfigureAwait(false);
+            }
+        }
+
+        public async Task<ICollection<TagEntity>> GetOrAddRangeAsync(IEnumerable<string> names, CancellationToken ct = default)
+        {
+            var namesList = names.ToList();
+
+            var existingTags = await GetRangeByNameAsync(namesList, ct).ConfigureAwait(false);
+
+            var notCreatedTags = namesList.Except(existingTags.Select(tag => tag.Name)).ToList();
+
+            await AddRangeAsync(notCreatedTags, ct).ConfigureAwait(false);
+            await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
+
+            var newTags = await GetRangeByNameAsync(notCreatedTags, ct)
+                .ConfigureAwait(false);
+
+            return existingTags.Union(newTags).ToList();
         }
     }
 }

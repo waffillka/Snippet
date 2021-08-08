@@ -26,6 +26,21 @@ namespace SnippetProject.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{name}")]
+        public async Task<IActionResult> GetByName(string name, CancellationToken ct)
+        {
+            var result = await _languageService.GetByNameAsync(name, ct).ConfigureAwait(false);
+            return Ok(result);
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> Create( Language lang, CancellationToken ct)
+        {
+            var result = await _languageService.CreateAsync(lang, ct).ConfigureAwait(false);
+
+            return Ok(result);
+        }
+
         [HttpPut("update")]
         public async Task<IActionResult> UpdateLanguage(Language lang, CancellationToken ct)
         {
