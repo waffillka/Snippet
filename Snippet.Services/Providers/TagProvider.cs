@@ -75,39 +75,39 @@ namespace Snippet.Services.Providers
             return _mapper.Map<Tag>(responseEntity);
         }
         
-        public async Task<IReadOnlyCollection<Tag>> GetRangeByNameAsync(IEnumerable<string> names, CancellationToken ct = default)
+        public async Task<ICollection<Tag>> GetRangeByNameAsync(IEnumerable<string> names, CancellationToken ct = default)
         {
             var result = await _unitOfWork.Tags
                 .GetRangeByNameAsync(names, ct)
                 .ConfigureAwait(false);
 
-            return _mapper.Map<IReadOnlyCollection<Tag>>(result);
+            return _mapper.Map<ICollection<Tag>>(result);
         }
 
-        public Task AddRangeAsync(IEnumerable<string> names, CancellationToken ct = default)
-        {
-            return _unitOfWork.Tags.AddRangeAsync(names, ct);
-        }
+        //public Task AddRangeAsync(IEnumerable<string> names, CancellationToken ct = default)
+        //{
+        //    return _unitOfWork.Tags.AddRangeAsync(names, ct);
+        //}
 
-        public async Task<IReadOnlyCollection<Tag>> GetOrAddRangeAsync(IEnumerable<string> names, CancellationToken ct = default)
-        {
-            var namesList = names.ToList();
-            
-            var existingTags = await _unitOfWork.Tags
-                .GetRangeByNameAsync(namesList, ct)
-                .ConfigureAwait(false);
+        //public async Task<ICollection<TagEntity>> GetOrAddRangeAsync(IEnumerable<string> names, CancellationToken ct = default)
+        //{
+            //var namesList = names.ToList();
 
-            var notCreatedTags = namesList.Except(existingTags.Select(tag => tag.Name)).ToList();
+            //var existingTags = await _unitOfWork.Tags
+            //    .GetRangeByNameAsync(namesList, ct)
+            //    .ConfigureAwait(false);
 
-            await AddRangeAsync(notCreatedTags, ct).ConfigureAwait(false);
-            await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
+            //var notCreatedTags = namesList.Except(existingTags.Select(tag => tag.Name)).ToList();
 
-            var newTags = await _unitOfWork.Tags
-                .GetRangeByNameAsync(notCreatedTags, ct)
-                .ConfigureAwait(false);
+            //await AddRangeAsync(notCreatedTags, ct).ConfigureAwait(false);
+            //await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
-            return _mapper.Map<IReadOnlyCollection<Tag>>(existingTags.Union(newTags)).ToList();
-        }
+            //var newTags = await _unitOfWork.Tags
+            //    .GetRangeByNameAsync(notCreatedTags, ct)
+            //    .ConfigureAwait(false);
+
+        //    return wait _unitOfWork.Tags.GetOrAddRangeAsync(names, ct).ConfigureAwait(false));//(existingTags.Union(newTags)).ToList();
+        //}
         
     }
 }

@@ -14,8 +14,8 @@ namespace Snippet.Services.Interfaces.Providers
         Task<Tag> CreateAsync(Tag model, CancellationToken ct = default);
         Task<Tag?> UpdateAsync(Tag model, CancellationToken ct = default);
         Task<bool> DeleteAsync(long id, CancellationToken ct = default);
-        Task<IReadOnlyCollection<Tag>> GetRangeByNameAsync(IEnumerable<string> names, CancellationToken ct = default);
-        Task AddRangeAsync(IEnumerable<string> names, CancellationToken ct = default);
-        Task<IReadOnlyCollection<Tag>> GetOrAddRangeAsync(IEnumerable<string> names, CancellationToken ct = default);
+        //Task<ICollection<Tag>> GetRangeByNameAsync(IEnumerable<string> names, CancellationToken ct = default);
+        //Task AddRangeAsync(IEnumerable<string> names, CancellationToken ct = default);
+        //Task<ICollection<Tag>> GetOrAddRangeAsync(IEnumerable<string> names, CancellationToken ct = default);
     }
 }
