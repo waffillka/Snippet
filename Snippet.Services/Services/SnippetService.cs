@@ -38,7 +38,7 @@ namespace Snippet.Services.Services
 
         public Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
-            if (id < 0)
+            if (id <= 0)
                 throw new ResourceNotFoundException("You are trying to find snippet post with deprecated id");
             
             return _snippetProvider.DeleteAsync(id, ct);
@@ -56,7 +56,7 @@ namespace Snippet.Services.Services
 
         public Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default)
         {
-            if (id < 0)
+            if (id <= 0)
                 throw new ResourceNotFoundException("You are trying to find snippet post with deprecated id");
             
             return _snippetProvider.GetByIdAsync(id, ct);
