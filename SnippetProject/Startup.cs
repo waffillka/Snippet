@@ -12,6 +12,7 @@ using Snippet.Services.Configuration;
 using SnippetProject.Extensions;
 using SnippetProject.Middleware;
 using System.IO;
+using Snippet.Authentication.Configuration;
 
 namespace SnippetProject
 {
@@ -24,21 +25,22 @@ namespace SnippetProject
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureLoggerService();
-            services.RegisterProviders(Configuration.GetConnectionString("sqlConnection"))
-                .RegisterServices();
+            services.RegisterProviders(Configuration.GetConnectionString("sqlConnection")).RegisterServices();
             services.RegisterMappingConfig();
             services.ConfigureCors();
+
+            services.ConfigureAuthentication(Configuration);
 
             services.AddControllers(config =>
             {
                 // config.RespectBrowserAcceptHeader = true;
                 // config.ReturnHttpNotAcceptable = true;
-            }).AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+            }).AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling 
+                    = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
            .AddXmlDataContractSerializerFormatters();
 
             services.Configure<ApiBehaviorOptions>(options =>
@@ -51,8 +53,7 @@ namespace SnippetProject
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SnippetProject", Version = "v1" });
             });
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerManager logger)
         {
             if (env.IsDevelopment())
@@ -61,6 +62,7 @@ namespace SnippetProject
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SnippetProject v1"));
             }
+
             app.ConfigureExceptionHandler(logger);
             app.UseHttpsRedirection();
 
@@ -72,7 +74,8 @@ namespace SnippetProject
             });
 
             app.UseRouting();
-
+           
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
