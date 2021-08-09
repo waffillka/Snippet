@@ -102,6 +102,7 @@ namespace Snippet.Services.Providers
             entityFromDb.Tags = await _unitOfWork.Tags.GetOrAddRangeAsync(tags, ct).ConfigureAwait(false);
             entityFromDb.Description = model.Description;
             entityFromDb.Title = model.Title;
+            entityFromDb.Snippet = model.Snippet;
             entityFromDb.Date = DateTime.Now;
             entityFromDb.LanguageId = model.LanguageId;
             entityFromDb.UserId = model.UserId;
