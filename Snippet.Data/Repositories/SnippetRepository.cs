@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Snippet.Common.Parameters;
 using Snippet.Data.DbContext;
 using Snippet.Data.Entities;
@@ -80,7 +81,7 @@ namespace Snippet.Data.Repositories
 
             if (parameters.CreationDate != default)
             {
-                result = result.Where(snippet => snippet.Date == parameters.CreationDate);
+                result = result.Where(snippet => snippet.Date.Date == parameters.CreationDate.Date);
             }
 
             else if (parameters.From != default && parameters.To != default)
