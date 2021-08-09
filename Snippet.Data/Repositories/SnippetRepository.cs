@@ -86,7 +86,7 @@ namespace Snippet.Data.Repositories
 
             else if (parameters.From != default && parameters.To != default)
             {
-                result = result.Where(snippet => snippet.Date >= parameters.From && snippet.Date <= parameters.To);
+                result = result.Where(snippet => snippet.Date.Date >= parameters.From.Date && snippet.Date.Date <= parameters.To.Date);
             }
 
             if (!string.IsNullOrEmpty(parameters.MatchString))
