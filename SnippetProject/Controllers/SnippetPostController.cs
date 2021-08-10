@@ -47,7 +47,7 @@ namespace SnippetProject.Controllers
                 .CreateAsync(post, ct)
                 .ConfigureAwait(false);
         
-            return Ok(result);
+            return Ok(result.Id);
         }
         
         [HttpPut("snippet/update")]
@@ -57,7 +57,7 @@ namespace SnippetProject.Controllers
                 .UpdateAsync(post, ct)
                 .ConfigureAwait(false);
         
-            return Ok(result);
+            return Ok(result.Id);
         }
         
         [HttpDelete("snippet/delete/{postId:long}")]
