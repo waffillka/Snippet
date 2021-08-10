@@ -30,18 +30,22 @@ namespace Snippet.Services.Services
 
             if (await _languageProvider.GetByIdAsync(model.LanguageId, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Language with specified id does not exist.");
+            /*if (await _languageProvider.GetByIdAsync(model.UserId, ct).ConfigureAwait(false) == null)
+                throw new ResourceNotFoundException("Language with specified id does not exist.");*/
 
             var createdSnippet = await _snippetProvider.CreateAsync(model, ct).ConfigureAwait(false);
             
             return createdSnippet;
         }
 
-        public Task<bool> DeleteAsync(long id, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
             if (id <= 0)
                 throw new ResourceNotFoundException("You are trying to find snippet post with deprecated id");
-            
-            return _snippetProvider.DeleteAsync(id, ct);
+            else if (await _snippetProvider.GetByIdAsync(id, ct).ConfigureAwait(false) == null)
+                throw new ResourceNotFoundException("Snippet with specified id does not exist.");
+
+            return await _snippetProvider.DeleteAsync(id, ct).ConfigureAwait(false);
         }
 
         public Task<IReadOnlyCollection<SnippetPost>> GetAllAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
