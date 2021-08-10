@@ -32,6 +32,7 @@ namespace Snippet.Services.Services
                 throw new ResourceNotFoundException("Language with specified id does not exist.");
             /*if (await _languageProvider.GetByIdAsync(model.UserId, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Language with specified id does not exist.");*/
+            IsValid(model);
 
             var createdSnippet = await _snippetProvider.CreateAsync(model, ct).ConfigureAwait(false);
             
@@ -80,8 +81,26 @@ namespace Snippet.Services.Services
                 throw new ArgumentNullException(nameof(model));
             if (await _languageProvider.GetByIdAsync(model.LanguageId, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Language with specified id does not exist.");
-            
+            IsValid(model);
+
+
             return await _snippetProvider.UpdateAsync(model, ct).ConfigureAwait(false);
+        }
+
+        private static void IsValid(SnippetPost model)
+        {
+            if (model.Title.Length > 0 && model.Title.Length <= 140)
+            {
+                throw new UnprocessableEntityException("Length title cannot be more then");
+            }
+            else if (model.Description.Length > 0 && model.Description.Length <= 2000)
+            {
+                throw new UnprocessableEntityException("");
+            }
+            else if (model.Snippet.Length > 0 && model.Snippet.Length <= 4000)
+            {
+                throw new UnprocessableEntityException("Length title cannot be more then");
+            }
         }
     }
 }
