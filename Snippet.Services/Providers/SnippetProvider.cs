@@ -95,6 +95,10 @@ namespace Snippet.Services.Providers
         {
             if (await GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");
+            if (await _unitOfWork.Users.GetByIdAsync(model.UserId, ct).ConfigureAwait(false) == null)
+                throw new ResourceNotFoundException("Snippet post specified id does not exist.");
+            /*if (await _unitOfWork.Language.GetByIdAsync(model.LanguageId, ct).ConfigureAwait(false) == null)
+                throw new ResourceNotFoundException("Snippet post specified id does not exist.");*/
 
             var entityFromDb = await _unitOfWork.Snippets.GetByIdAsync(model.Id, ct, true).ConfigureAwait(false);
             var tags = _parser.ParseTags(model.Description, ct);
