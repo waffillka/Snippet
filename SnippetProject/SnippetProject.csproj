@@ -12,6 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="5.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.8">
@@ -26,10 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Snippet.Common\Snippet.Common.csproj" />
     <ProjectReference Include="..\Snippet.Services\Snippet.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="HealthChecks\" />
   </ItemGroup>
 
 </Project>
