@@ -50,12 +50,12 @@ namespace Snippet.Data.Repositories
 
             if (parameters.Authors != null)
             {
-                result = result.Where(snippet => parameters.Authors.Contains(snippet.UserId));
+                result = result.Where(snippet => parameters.Authors.Contains(snippet.User.Username));
             }
 
             if (parameters.AuthorsExclude != null)
             {
-                result = result.Where(snippet => !parameters.AuthorsExclude.Contains(snippet.UserId));
+                result = result.Where(snippet => !parameters.AuthorsExclude.Contains(snippet.User.Username));
             }
 
             if (parameters.Tags != null)
