@@ -4,6 +4,9 @@ using Snippet.Common.Parameters;
 using Snippet.Services.Interfaces.Service;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json.Linq;
+using Snippet.Authentication;
 using Snippet.Services.Models;
 
 namespace SnippetProject.Controllers
@@ -12,12 +15,18 @@ namespace SnippetProject.Controllers
     public class SnippetPostController : ControllerBase
     {
         private readonly ISnippetService _snippetService;
-
-        public SnippetPostController(ISnippetService snippetService)
+        private readonly IAuthenticationService _authenticationService;
+        private readonly IUserService _userService;
+        
+        
+        public SnippetPostController(ISnippetService snippetService, IAuthenticationService authenticationService, 
+            IUserService userService)
         {
             _snippetService = snippetService;
+            _authenticationService = authenticationService;
+            _userService = userService;
         }
-
+        
         [HttpGet("snippet/{id:long}")]
         public async Task<IActionResult> GetPostById(long id, CancellationToken ct = default)
         {
@@ -39,32 +48,83 @@ namespace SnippetProject.Controllers
                 ? Ok(result)
                 : NotFound("Snippet posts with specified parameters could not be found.");
         }
-        
+
+        [Authorize]
         [HttpPost("snippet/create")]
         public async Task<IActionResult> CreateSnippetPost(SnippetPost? post, CancellationToken ct = default)
         {
+            var token = HttpContext.Request.Headers.GetUserToken();
+
+            var decodedToken = await _authenticationService.DecodeTokenAsync(token, ct).ConfigureAwait(false);
+
+            string username = decodedToken!["nickname"]!.Value<string>();
+            
             var result = await _snippetService
-                .CreateAsync(post, ct)
+                .CreateAsync(post, username!, ct)
                 .ConfigureAwait(false);
-        
+            
             return Ok(result);
         }
         
+        [Authorize]
         [HttpPut("snippet/update")]
         public async Task<IActionResult> UpdateSnippetPost(SnippetPost? post, CancellationToken ct = default)
         {
+            var token = HttpContext.Request.Headers.GetUserToken();
+
+            var decodedToken = await _authenticationService.DecodeTokenAsync(token, ct).ConfigureAwait(false);
+
+            string username = decodedToken!["nickname"]!.Value<string>();   
+            
             var result = await _snippetService
-                .UpdateAsync(post, ct)
+                .UpdateAsync(post, username!, ct)
                 .ConfigureAwait(false);
         
             return Ok(result);
         }
         
+        [Authorize]
         [HttpDelete("snippet/delete/{postId:long}")]
         public async Task<IActionResult> DeleteSnippetPost(long postId, CancellationToken ct = default)
         {
-            var result = await _snippetService.DeleteAsync(postId, ct).ConfigureAwait(false);
+            var token = HttpContext.Request.Headers.GetUserToken();
+
+            var decodedToken = await _authenticationService.DecodeTokenAsync(token, ct).ConfigureAwait(false);
+
+            string username = decodedToken!["nickname"]!.Value<string>();
+            
+            var result = await _snippetService.DeleteAsync(postId, username!, ct).ConfigureAwait(false);
            
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("like-snippet/{postId:long}")]
+        public async Task<IActionResult> LikeSnippetPost(long postId, CancellationToken ct = default)
+        {
+            var token = HttpContext.Request.Headers.GetUserToken();
+
+            var decodedToken = await _authenticationService.DecodeTokenAsync(token, ct).ConfigureAwait(false);
+
+            string username = decodedToken!["nickname"]!.Value<string>()!;
+
+            var result = await _snippetService.LikeSnippetPost(postId, username, ct).ConfigureAwait(false);
+
+            return Ok(result);
+        }
+        
+        [Authorize]
+        [HttpGet("is-owner/{postId:long}")]
+        public async Task<IActionResult> IsOwner(long postId, CancellationToken ct = default)
+        {
+            var token = HttpContext.Request.Headers.GetUserToken();
+
+            var decodedToken = await _authenticationService.DecodeTokenAsync(token, ct).ConfigureAwait(false);
+
+            string username = decodedToken!["nickname"]!.Value<string>()!;
+
+            var result = await _userService.IsOwner(postId, username, ct).ConfigureAwait(false);
+            
             return Ok(result);
         }
     }
