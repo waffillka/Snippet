@@ -30,15 +30,5 @@ namespace SnippetProject.Controllers
                 ? Ok(result)
                 : NotFound("Tags with specified parameters could not be found.");
         }
-
-        [HttpPut("update")]
-        public async Task<IActionResult> UpdateTag(Tag tag, CancellationToken ct)
-        {
-            var result = await _tagService
-                .UpdateAsync(tag, ct)
-                .ConfigureAwait(false);
-
-            return Ok(result);
-        }
     }
 }

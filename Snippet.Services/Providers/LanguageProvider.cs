@@ -39,36 +39,5 @@ namespace Snippet.Services.Providers
             var result = await _unitOfWork.Language.GetAllAsync(parameters, ct).ConfigureAwait(false);
             return _mapper.Map<IReadOnlyCollection<Language>>(result);
         }
-        
-        public async Task<Language> CreateAsync(Language model, CancellationToken ct = default)
-        {
-            var entity = _mapper.Map<LanguageEntity>(model);
-            var responseTag = await _unitOfWork.Language.CreateAsync(entity, ct).ConfigureAwait(false);
-            await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
-            return _mapper.Map<Language>(responseTag);
-        }
-        
-        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
-        {
-            if (await GetByIdAsync(id, ct).ConfigureAwait(false) == null)
-                throw new ResourceNotFoundException("Language with specified id does not exist.");
-            
-            var result = await _unitOfWork.Language.DeleteAsync(id, ct).ConfigureAwait(false);
-            await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
-
-            return result;
-        }
-
-        public async Task<Language?> UpdateAsync(Language model, CancellationToken ct = default)
-        {
-            if (await GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
-                throw new ResourceNotFoundException("Language with specified id does not exist.");
-            var entity = _mapper.Map<LanguageEntity>(model);
-
-            var responseEntity = _unitOfWork.Language.Update(entity);
-            await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
-
-            return _mapper.Map<Language>(responseEntity);
-        }
     }
 }

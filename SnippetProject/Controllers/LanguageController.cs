@@ -20,7 +20,7 @@ namespace SnippetProject.Controllers
         }
 
         [HttpGet("many")]
-        public async Task<IActionResult> GetAll([FromQuery] ParamsBase? parameters, CancellationToken ct)
+        public async Task<IActionResult> GetAll([FromQuery] ParamsBase? parameters, CancellationToken ct = default)
         {
             var result = await _languageService.GetAllAsync(parameters, ct).ConfigureAwait(false);
             
@@ -30,28 +30,13 @@ namespace SnippetProject.Controllers
         }
 
         [HttpGet("{name}")]
-        public async Task<IActionResult> GetByName(string name, CancellationToken ct)
+        public async Task<IActionResult> GetByName(string name, CancellationToken ct = default)
         {
             var result = await _languageService.GetByNameAsync(name, ct).ConfigureAwait(false);
             
             return result!=null
                 ? Ok(result)
                 : NotFound("Language with specified name does not exist.");
-        }
-
-        [HttpPost("create")]
-        public async Task<IActionResult> Create( Language lang, CancellationToken ct)
-        {
-            var result = await _languageService.CreateAsync(lang, ct).ConfigureAwait(false);
-
-            return Ok(result);
-        }
-
-        [HttpPut("update")]
-        public async Task<IActionResult> UpdateLanguage(Language lang, CancellationToken ct)
-        {
-            var result = await _languageService.UpdateAsync(lang, ct).ConfigureAwait(false);
-            return Ok(result);
         }
     }
 }

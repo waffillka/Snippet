@@ -21,8 +21,6 @@ namespace Snippet.Services.Services
 
         public Task<Language?> GetByIdAsync(long id, CancellationToken ct = default)
         {
-            if (id < 0)
-                throw new ResourceNotFoundException("You are trying to find language with deprecated id");
             return _provider.GetByIdAsync(id, ct);
         }
 
@@ -34,30 +32,6 @@ namespace Snippet.Services.Services
         public Task<IReadOnlyCollection<Language>> GetAllAsync(ParamsBase? parameters = null, CancellationToken ct = default)
         {
             return _provider.GetAllAsync(parameters, ct);
-        }
-
-        public Task<Language> CreateAsync(Language? model, CancellationToken ct = default)
-        {
-            if (model == null)
-                throw new ArgumentNullException(nameof(model));
-            
-            return _provider.CreateAsync(model, ct);
-        }
-
-        public Task<Language?> UpdateAsync(Language? model, CancellationToken ct = default)
-        {
-            if (model == null)
-                throw new ArgumentNullException(nameof(model));
-            
-            return _provider.UpdateAsync(model, ct);
-        }
-
-        public Task<bool> DeleteAsync(long id, CancellationToken ct = default)
-        {
-            if (id < 0)
-                throw new ResourceNotFoundException("You are trying to find language with deprecated id");
-
-            return _provider.DeleteAsync(id, ct);
         }
     }
 }
