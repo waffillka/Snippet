@@ -95,7 +95,7 @@ namespace Snippet.Services.Providers
         {
             if (await GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");
-            if (await _unitOfWork.Users.GetByIdAsync(model.UserId, ct).ConfigureAwait(false) == null)
+            if (await _unitOfWork.Users.GetByIdAsync((long)model.UserId, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");
             /*if (await _unitOfWork.Language.GetByIdAsync(model.LanguageId, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");*/
@@ -109,7 +109,7 @@ namespace Snippet.Services.Providers
             entityFromDb.Snippet = model.Snippet;
             entityFromDb.Date = DateTime.Now;
             entityFromDb.LanguageId = model.LanguageId;
-            entityFromDb.UserId = model.UserId;
+            entityFromDb.UserId = (long)model.UserId;
 
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 

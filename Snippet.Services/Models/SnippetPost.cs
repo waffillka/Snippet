@@ -25,8 +25,7 @@ namespace Snippet.Services.Models
         [Required(ErrorMessage = "LanguageId is a required field.")]
         public long LanguageId { get; set; }
 
-        [Required(ErrorMessage = "UserId is a required field.")]
-        public long UserId { get; set; }
+        public long? UserId { get; set; }
         
         public Language? Language { get; set; }
         
