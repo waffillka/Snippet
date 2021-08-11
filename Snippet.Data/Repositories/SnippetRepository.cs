@@ -155,5 +155,25 @@ namespace Snippet.Data.Repositories
 
             return like[0].Likes;
         }
+
+        public async Task LikeSnippetPost(long postId, UserEntity user, CancellationToken ct = default)
+        {
+            var post = await _dbContext.SnippetPosts
+                .FirstAsync(snippet => snippet.Id == postId, ct)
+                .ConfigureAwait(false);
+            
+            post.LikedUser!.Add(user);
+        }
+
+        public async Task<bool> LikedBy(long postId, long userId, CancellationToken ct = default)
+        {
+            var post = await _dbContext.SnippetPosts
+                .Include(snippet => snippet.LikedUser)
+                .AsNoTracking()
+                .FirstAsync(snippet => snippet.Id == postId, ct)
+                .ConfigureAwait(false);
+
+            return post.LikedUser.Select(user=> user.Id).Contains(userId);
+        }
     }
 }

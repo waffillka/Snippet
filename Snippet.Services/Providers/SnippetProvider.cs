@@ -8,7 +8,6 @@ using Snippet.Services.Models;
 using Snippet.Services.Parser;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,14 +18,12 @@ namespace Snippet.Services.Providers
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITagParser _parser;
-        private readonly ITagProvider _tagProvider;
-
-        public SnippetProvider(IMapper mapper, IUnitOfWork unitOfWork, ITagParser parser, ITagProvider tagProvider)
+        
+        public SnippetProvider(IMapper mapper, IUnitOfWork unitOfWork, ITagParser parser)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _parser = parser;
-            _tagProvider = tagProvider;
         }
         public async Task<IReadOnlyCollection<SnippetPost>> GetAllAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
         {
@@ -64,10 +61,6 @@ namespace Snippet.Services.Providers
         }
         public async Task<SnippetPost> CreateAsync(SnippetPost model, CancellationToken ct = default)
         {
-            // modern problems require modern solution (kind of)
-            // we need to set some userID, because we do not have auth
-            model.UserId = 2;
-
             var entity = _mapper.Map<SnippetEntity>(model);
 
             var tags = _parser.ParseTags(entity.Description, ct);
@@ -83,9 +76,6 @@ namespace Snippet.Services.Providers
 
         public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
-            if (await GetByIdAsync(id, ct).ConfigureAwait(false) == null)
-                throw new ResourceNotFoundException("Snippet post with specified id does not exist.");
-
             var result = await _unitOfWork.Snippets.DeleteAsync(id, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
@@ -93,9 +83,6 @@ namespace Snippet.Services.Providers
         }
         public async Task<SnippetPost> UpdateAsync(SnippetPost model, CancellationToken ct = default)
         {
-            if (await GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
-                throw new ResourceNotFoundException("Snippet post specified id does not exist.");
-
             var entityFromDb = await _unitOfWork.Snippets.GetByIdAsync(model.Id, ct, true).ConfigureAwait(false);
             var tags = _parser.ParseTags(model.Description, ct);
 
@@ -118,6 +105,21 @@ namespace Snippet.Services.Providers
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");
 
             return await _unitOfWork.Snippets.CountLike(id, ct).ConfigureAwait(false);
+        }
+
+        public async Task<bool> LikeSnippetPost(long postId, User user, CancellationToken ct = default)
+        {
+            var userEntity = _mapper.Map<UserEntity>(user);
+
+            await _unitOfWork.Snippets.LikeSnippetPost(postId, userEntity, ct).ConfigureAwait(false);
+            await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
+
+            return await _unitOfWork.Snippets.LikedBy(postId, userEntity.Id, ct).ConfigureAwait(false);
+        }
+
+        public async Task<bool> LikedBy(long postId, long userId, CancellationToken ct = default)
+        {
+            return await _unitOfWork.Snippets.LikedBy(postId, userId, ct).ConfigureAwait(false);
         }
     }
 }
