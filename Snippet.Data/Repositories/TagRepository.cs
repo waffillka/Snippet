@@ -25,7 +25,7 @@ namespace Snippet.Data.Repositories
                 .FirstOrDefaultAsync(tag => tag.Name == name, ct)
                 .ConfigureAwait(false);
         }
-        
+
         public Task<TagEntity?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             return _dbContext.Tags
@@ -93,7 +93,7 @@ namespace Snippet.Data.Repositories
             var result = _dbContext.Tags
                 //.AsNoTracking()
                 .Where(tag => names.Contains(tag.Name));
-            
+
             return await result.ToListAsync(ct).ConfigureAwait(false);
         }
 

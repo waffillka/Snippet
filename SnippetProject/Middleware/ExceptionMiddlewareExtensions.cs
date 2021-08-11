@@ -41,6 +41,12 @@ namespace SnippetProject.Middleware
                                     await context.Response.WriteAsync(contextFeature.Error.Message).ConfigureAwait(false);
                                     break;
                                 }
+                            case UnprocessableEntityException:
+                                {
+                                    context.Response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
+                                    await context.Response.WriteAsync(contextFeature.Error.Message).ConfigureAwait(false);
+                                    break;
+                                }
                             default:
                                 {
                                     await context.Response.WriteAsync(new ErrorDetails()

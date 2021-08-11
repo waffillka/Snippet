@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
+using Snippet.Common.Exceptions;
 using Snippet.Common.Parameters;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.UnitOfWork;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Common.Exceptions;
 
 namespace Snippet.Services.Providers
 {
@@ -37,7 +36,7 @@ namespace Snippet.Services.Providers
             var tag = await _unitOfWork.Tags.GetByNameAsync(name, ct).ConfigureAwait(false);
             return _mapper.Map<Tag>(tag);
         }
-        
+
         public async Task<Tag?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             var entity = await _unitOfWork.Tags.GetByIdAsync(id, ct).ConfigureAwait(false);
@@ -67,14 +66,14 @@ namespace Snippet.Services.Providers
         {
             if (await GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Tag with specified id does not exist");
-            
+
             var entity = _mapper.Map<TagEntity>(model);
             var responseEntity = _unitOfWork.Tags.Update(entity);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
             return _mapper.Map<Tag>(responseEntity);
         }
-        
+
         //public async Task<ICollection<Tag>> GetRangeByNameAsync(IEnumerable<string> names, CancellationToken ct = default)
         //{
         //    var result = await _unitOfWork.Tags
@@ -91,23 +90,23 @@ namespace Snippet.Services.Providers
 
         //public async Task<ICollection<TagEntity>> GetOrAddRangeAsync(IEnumerable<string> names, CancellationToken ct = default)
         //{
-            //var namesList = names.ToList();
+        //var namesList = names.ToList();
 
-            //var existingTags = await _unitOfWork.Tags
-            //    .GetRangeByNameAsync(namesList, ct)
-            //    .ConfigureAwait(false);
+        //var existingTags = await _unitOfWork.Tags
+        //    .GetRangeByNameAsync(namesList, ct)
+        //    .ConfigureAwait(false);
 
-            //var notCreatedTags = namesList.Except(existingTags.Select(tag => tag.Name)).ToList();
+        //var notCreatedTags = namesList.Except(existingTags.Select(tag => tag.Name)).ToList();
 
-            //await AddRangeAsync(notCreatedTags, ct).ConfigureAwait(false);
-            //await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
+        //await AddRangeAsync(notCreatedTags, ct).ConfigureAwait(false);
+        //await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
-            //var newTags = await _unitOfWork.Tags
-            //    .GetRangeByNameAsync(notCreatedTags, ct)
-            //    .ConfigureAwait(false);
+        //var newTags = await _unitOfWork.Tags
+        //    .GetRangeByNameAsync(notCreatedTags, ct)
+        //    .ConfigureAwait(false);
 
         //    return wait _unitOfWork.Tags.GetOrAddRangeAsync(names, ct).ConfigureAwait(false));//(existingTags.Union(newTags)).ToList();
         //}
-        
+
     }
 }

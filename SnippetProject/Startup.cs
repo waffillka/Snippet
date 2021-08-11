@@ -34,6 +34,9 @@ namespace SnippetProject
             services.RegisterMappingConfig();
             services.ConfigureCors();
 
+            services.AddHealthChecks()
+                .AddSqlServer(Configuration.GetConnectionString("sqlConnection"));
+
             services.AddControllers(config =>
             {
                 // config.RespectBrowserAcceptHeader = true;
@@ -78,6 +81,7 @@ namespace SnippetProject
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
     }

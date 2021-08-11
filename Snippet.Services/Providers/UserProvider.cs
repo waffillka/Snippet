@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Snippet.Common.Exceptions;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.UnitOfWork;
 using Snippet.Services.Interfaces.Providers;
@@ -6,7 +7,6 @@ using Snippet.Services.Models;
 using Snippet.Services.Response;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Common.Exceptions;
 
 namespace Snippet.Services.Providers
 {
@@ -36,7 +36,7 @@ namespace Snippet.Services.Providers
         {
             if (await GetByIdAsync(id, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Tag with specified id does not exist");
-            
+
             var result = await _unitOfWork.Users.DeleteAsync(id, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
@@ -53,7 +53,7 @@ namespace Snippet.Services.Providers
         {
             if (await GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Tag with specified id does not exist");
-            
+
             var entity = _mapper.Map<UserEntity>(model);
             var responseEntity = _unitOfWork.Users.Update(entity);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);

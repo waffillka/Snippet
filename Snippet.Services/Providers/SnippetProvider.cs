@@ -8,7 +8,6 @@ using Snippet.Services.Models;
 using Snippet.Services.Parser;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -38,7 +37,7 @@ namespace Snippet.Services.Providers
 
             return result;
         }
-        
+
         public async Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             var entity = await _unitOfWork.Snippets.GetByIdAsync(id, ct).ConfigureAwait(false);
@@ -95,6 +94,10 @@ namespace Snippet.Services.Providers
         {
             if (await GetByIdAsync(model.Id, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");
+            if (await _unitOfWork.Users.GetByIdAsync((long)model.UserId, ct).ConfigureAwait(false) == null)
+                throw new ResourceNotFoundException("Snippet post specified id does not exist.");
+            /*if (await _unitOfWork.Language.GetByIdAsync(model.LanguageId, ct).ConfigureAwait(false) == null)
+                throw new ResourceNotFoundException("Snippet post specified id does not exist.");*/
 
             var entityFromDb = await _unitOfWork.Snippets.GetByIdAsync(model.Id, ct, true).ConfigureAwait(false);
             var tags = _parser.ParseTags(model.Description, ct);
@@ -105,13 +108,13 @@ namespace Snippet.Services.Providers
             entityFromDb.Snippet = model.Snippet;
             entityFromDb.Date = DateTime.Now;
             entityFromDb.LanguageId = model.LanguageId;
-            entityFromDb.UserId = model.UserId;
+            entityFromDb.UserId = (long)model.UserId;
 
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
             return _mapper.Map<SnippetPost>(entityFromDb);
         }
-        
+
         public async Task<int> CountLike(long id, CancellationToken ct = default)
         {
             if (await GetByIdAsync(id, ct).ConfigureAwait(false) == null)
