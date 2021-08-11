@@ -29,7 +29,8 @@ namespace SnippetProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureLoggerService();
-            services.RegisterProviders(Configuration.GetConnectionString("sqlConnection")).RegisterServices();
+            services.RegisterProviders(Configuration.GetConnectionString("sqlConnection"))
+                .RegisterServices();
             services.RegisterMappingConfig();
             services.ConfigureCors();
 
@@ -52,6 +53,8 @@ namespace SnippetProject
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SnippetProject", Version = "v1" });
             });
+
+            services.AddHttpClient();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerManager logger)
@@ -64,7 +67,7 @@ namespace SnippetProject
             }
 
             app.ConfigureExceptionHandler(logger);
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
