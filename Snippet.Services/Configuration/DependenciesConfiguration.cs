@@ -40,7 +40,9 @@ namespace Snippet.Services.Configuration
             serviceCollection.AddScoped<ITagService, TagService>();
             serviceCollection.AddScoped<ILanguageService, LanguageService>();
             serviceCollection.AddScoped<ITagParser, TagParser>();
-
+            serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
+            serviceCollection.AddScoped<IUserService, UserService>();
+            
             return serviceCollection;
         }
     }
