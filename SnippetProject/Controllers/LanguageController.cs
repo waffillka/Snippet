@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using Microsoft.AspNetCore.Mvc;
+using Snippet.Common.Exceptions;
 using Snippet.Common.Parameters;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
@@ -50,6 +51,9 @@ namespace SnippetProject.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> UpdateLanguage(Language lang, CancellationToken ct)
         {
+            if (await _languageService.GetByIdAsync(lang.Id, ct).ConfigureAwait(false) == null)
+                throw new ResourceNotFoundException("Language with specified id does not exist.");
+
             var result = await _languageService.UpdateAsync(lang, ct).ConfigureAwait(false);
             return Ok(result);
         }

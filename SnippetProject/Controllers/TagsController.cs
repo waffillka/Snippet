@@ -5,6 +5,7 @@ using Snippet.Services.Models;
 using System.Threading;
 using System.Threading.Tasks;
 using Snippet.Services.Interfaces.Service;
+using Snippet.Common.Exceptions;
 
 namespace SnippetProject.Controllers
 {
@@ -34,6 +35,9 @@ namespace SnippetProject.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> UpdateTag(Tag tag, CancellationToken ct)
         {
+            if (await _tagService.GetByIdAsync(tag.Id, ct).ConfigureAwait(false) == null)
+                throw new ResourceNotFoundException("Language with specified id does not exist.");
+
             var result = await _tagService
                 .UpdateAsync(tag, ct)
                 .ConfigureAwait(false);

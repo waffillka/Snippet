@@ -5,6 +5,7 @@ using Snippet.Services.Interfaces.Service;
 using System.Threading;
 using System.Threading.Tasks;
 using Snippet.Services.Models;
+using Snippet.Common.Exceptions;
 
 namespace SnippetProject.Controllers
 {
@@ -43,6 +44,10 @@ namespace SnippetProject.Controllers
         [HttpPost("snippet/create")]
         public async Task<IActionResult> CreateSnippetPost(SnippetPost? post, CancellationToken ct = default)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new UnprocessableEntityException("Snippet model is invalid.");
+            }
             var result = await _snippetService
                 .CreateAsync(post, ct)
                 .ConfigureAwait(false);
@@ -53,6 +58,11 @@ namespace SnippetProject.Controllers
         [HttpPut("snippet/update")]
         public async Task<IActionResult> UpdateSnippetPost(SnippetPost? post, CancellationToken ct = default)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new UnprocessableEntityException("Snippet model is invalid.");
+            }
+
             var result = await _snippetService
                 .UpdateAsync(post, ct)
                 .ConfigureAwait(false);
