@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Snippet.Data.DbContext;
 using Snippet.Data.Entities;
 using Snippet.Data.Interfaces.Repositories;
@@ -14,36 +15,39 @@ namespace Snippet.Data.Repositories
         {
             _dbContext = dbContext;
         }
-
-        public async Task<UserEntity> CreateAsync(UserEntity entity, CancellationToken ct = default)
+        
+        public async Task<UserEntity> GetOrAddAsync(string username, CancellationToken ct = default)
         {
-            var entityEntry = await _dbContext.Users.AddAsync(entity, ct).ConfigureAwait(false);
-            return entityEntry.Entity;
+            var result = await GetByNameAsync(username, ct).ConfigureAwait(false);
+
+            result ??= (await _dbContext.Users.AddAsync(new UserEntity() { Username = username }, ct)
+                .ConfigureAwait(false)).Entity ;
+
+            return result;
         }
 
-        public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
+        public async Task<UserEntity?> GetByNameAsync(string username, CancellationToken ct = default)
         {
-            var entity = await GetByIdAsync(id, ct).ConfigureAwait(false);
-            if (entity != null)
-            {
-                var entityEntry = _dbContext.Users.Remove(entity);
-                return entityEntry != null;
-            }
-
-            return false;
+            return await _dbContext.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(user => user.Username == username, ct)
+                .ConfigureAwait(false);
         }
 
-        public Task<UserEntity?> GetByIdAsync(long id, CancellationToken ct = default)
+        public async Task<UserEntity?> GetByIdAsync(long id, CancellationToken ct = default)
         {
-            return _dbContext.Users
+            return await _dbContext.Users
                  .AsNoTracking()
-                 .FirstOrDefaultAsync(user => user.Id == id, ct);
+                 .FirstOrDefaultAsync(user => user.Id == id, ct)
+                 .ConfigureAwait(false);
         }
 
-        public UserEntity Update(UserEntity entity)
+        public bool IsOwner(string username)
         {
-            var entityEntry = _dbContext.Users.Update(entity);
-            return entityEntry.Entity;
+            return _dbContext.SnippetPosts
+                .Include(snippet => snippet.User)
+                .AsNoTracking()
+                .Any(snippet => snippet.User.Username == username);
         }
     }
 }
