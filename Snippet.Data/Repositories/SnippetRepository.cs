@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Snippet.Common.Parameters;
 using Snippet.Data.DbContext;
 using Snippet.Data.Entities;
@@ -18,7 +17,7 @@ namespace Snippet.Data.Repositories
         {
             _dbContext = dbContext;
         }
-        
+
         public async Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default, bool tracking = false)
         {
             return tracking ? await _dbContext.SnippetPosts
@@ -37,7 +36,7 @@ namespace Snippet.Data.Repositories
                 .FirstOrDefaultAsync(user => user.Id == id, ct)
                 .ConfigureAwait(false);
         }
-        
+
         public async Task<IReadOnlyCollection<SnippetEntity>> GetAllAsync(SnippetPostParams? parameters = default, CancellationToken ct = default)
         {
             var result = _dbContext.SnippetPosts
@@ -65,7 +64,7 @@ namespace Snippet.Data.Repositories
             }
 
             if (parameters.TagsExclude != null)
-            {       
+            {
                 result = result.Where(snippet => !snippet.Tags.Any(x => parameters.TagsExclude.Contains(x.Name)));
             }
 
@@ -138,13 +137,13 @@ namespace Snippet.Data.Repositories
         public SnippetEntity Update(SnippetEntity entity)
         {
             var entityEntry = _dbContext.SnippetPosts.Update(entity).Entity;
-            
+
             _dbContext.Entry(entityEntry).Reference(snippet => snippet.Language).Load();
             _dbContext.Entry(entityEntry).Reference(snippet => snippet.User).Load();
-            
+
             return entityEntry;
         }
-        
+
         public async Task<int> CountLike(long id, CancellationToken ct = default)
         {
             var like = await _dbContext.SnippetPosts

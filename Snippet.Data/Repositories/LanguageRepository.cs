@@ -24,7 +24,7 @@ namespace Snippet.Data.Repositories
                 .FirstOrDefaultAsync(lang => lang.ExtraName == name, ct)
                 .ConfigureAwait(false);
         }
-        
+
         public Task<LanguageEntity?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             return _dbContext.Languages

@@ -8,7 +8,6 @@ using Snippet.Services.Models;
 using Snippet.Services.Parser;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -38,7 +37,7 @@ namespace Snippet.Services.Providers
 
             return result;
         }
-        
+
         public async Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default)
         {
             var entity = await _unitOfWork.Snippets.GetByIdAsync(id, ct).ConfigureAwait(false);
@@ -115,7 +114,7 @@ namespace Snippet.Services.Providers
 
             return _mapper.Map<SnippetPost>(entityFromDb);
         }
-        
+
         public async Task<int> CountLike(long id, CancellationToken ct = default)
         {
             if (await GetByIdAsync(id, ct).ConfigureAwait(false) == null)

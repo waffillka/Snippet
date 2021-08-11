@@ -1,11 +1,11 @@
 ﻿#nullable enable
 using Microsoft.AspNetCore.Mvc;
+using Snippet.Common.Exceptions;
 using Snippet.Common.Parameters;
+using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Services.Interfaces.Service;
-using Snippet.Common.Exceptions;
 
 namespace SnippetProject.Controllers
 {
@@ -26,7 +26,7 @@ namespace SnippetProject.Controllers
             var result = await _tagService
                 .GetAllAsync(parameters, ct)
                 .ConfigureAwait(false);
-            
+
             return result.Count != 0
                 ? Ok(result)
                 : NotFound("Tags with specified parameters could not be found.");

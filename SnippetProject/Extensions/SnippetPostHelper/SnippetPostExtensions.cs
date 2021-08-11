@@ -1,5 +1,4 @@
 ﻿using Snippet.Services.Models;
-using System;
 
 namespace SnippetProject.Extensions.SnippetPostHelper
 {
@@ -20,7 +19,7 @@ namespace SnippetProject.Extensions.SnippetPostHelper
             post.Id = id;
             post.Title = "default title";
             post.Description = "default description";
-           // post.Date = DateTime.Now;
+            // post.Date = DateTime.Now;
             return post;
         }
     }

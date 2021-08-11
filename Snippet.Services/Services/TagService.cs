@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Snippet.Common.Exceptions;
 using Snippet.Common.Parameters;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Common.Exceptions;
 
 namespace Snippet.Services.Services
 {
@@ -23,7 +23,7 @@ namespace Snippet.Services.Services
         {
             if (id < 0)
                 throw new ResourceNotFoundException("You are trying to find tag with deprecated id");
-            
+
             return _provider.GetByIdAsync(id, ct);
         }
 
@@ -41,7 +41,7 @@ namespace Snippet.Services.Services
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
-            
+
             return _provider.CreateAsync(model, ct);
         }
 
@@ -49,7 +49,7 @@ namespace Snippet.Services.Services
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
-            
+
             return _provider.UpdateAsync(model, ct);
         }
 
@@ -57,7 +57,7 @@ namespace Snippet.Services.Services
         {
             if (id < 0)
                 throw new ResourceNotFoundException("You are trying to find tag with deprecated id");
-            
+
             return _provider.DeleteAsync(id, ct);
         }
     }

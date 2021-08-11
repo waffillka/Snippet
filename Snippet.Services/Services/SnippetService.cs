@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Snippet.Common.Exceptions;
 using Snippet.Common.Parameters;
 using Snippet.Services.Interfaces.Providers;
 using Snippet.Services.Interfaces.Service;
 using Snippet.Services.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Snippet.Common.Exceptions;
-using Snippet.Services.Parser;
 
 namespace Snippet.Services.Services
 {
@@ -20,7 +18,7 @@ namespace Snippet.Services.Services
         {
             _snippetProvider = snippetProvider;
             _languageProvider = languageProvider;
-            
+
         }
 
         public async Task<SnippetPost> CreateAsync(SnippetPost? model, CancellationToken ct = default)
@@ -32,7 +30,7 @@ namespace Snippet.Services.Services
                 throw new ResourceNotFoundException("Language with specified id does not exist.");
 
             var createdSnippet = await _snippetProvider.CreateAsync(model, ct).ConfigureAwait(false);
-            
+
             return createdSnippet;
         }
 
@@ -60,7 +58,7 @@ namespace Snippet.Services.Services
         {
             if (id <= 0)
                 throw new ResourceNotFoundException("You are trying to find snippet post with deprecated id");
-            
+
             return _snippetProvider.GetByIdAsync(id, ct);
         }
 

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Snippet.Services.Response
 {
-    public  class SnippetPostResponse
+    public class SnippetPostResponse
     {
         public long Id { get; set; }
 
