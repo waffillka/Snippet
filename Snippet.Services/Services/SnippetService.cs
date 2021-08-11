@@ -35,9 +35,9 @@ namespace Snippet.Services.Services
                 .ConfigureAwait(false);
 
             model.UserId = user.Id;
-            
+
             var createdSnippet = await _snippetProvider.CreateAsync(model, ct).ConfigureAwait(false);
-            
+
             return createdSnippet;
         }
 
@@ -47,17 +47,17 @@ namespace Snippet.Services.Services
 
             if (post == null)
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");
-            
+
             var user = await _userProvider
                 .GetByNameAsync(username, ct)
                 .ConfigureAwait(false);
 
             if (user == null)
                 throw new DeprecatedOperationException("You don't have permission to perform this operation");
-            
+
             return await _snippetProvider.DeleteAsync(id, ct).ConfigureAwait(false);
         }
-        
+
         public Task<IReadOnlyCollection<ShortSnippetPost>> GetAllShortAsync(SnippetPostParams? parameters = null, CancellationToken ct = default)
         {
             return _snippetProvider.GetAllShortAsync(parameters, ct);
@@ -77,7 +77,7 @@ namespace Snippet.Services.Services
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
-            
+
             if (await _languageProvider.GetByIdAsync(model.LanguageId, ct).ConfigureAwait(false) == null)
                 throw new ResourceNotFoundException("Language with specified id does not exist.");
 
@@ -85,16 +85,14 @@ namespace Snippet.Services.Services
 
             if (post == null)
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");
-            
+
             var user = await _userProvider
                 .GetByNameAsync(username, ct)
                 .ConfigureAwait(false);
 
-            if (user == null)
+            if (user.Id != model.UserId)
                 throw new DeprecatedOperationException("You don't have permission to perform this operation");
-            
-            model.UserId = user.Id;
-            
+
             return await _snippetProvider.UpdateAsync(model, ct).ConfigureAwait(false);
         }
 
@@ -104,7 +102,7 @@ namespace Snippet.Services.Services
 
             if (post == null)
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");
-            
+
             var user = await _userProvider
                 .GetByNameAsync(username, ct)
                 .ConfigureAwait(false);
@@ -115,5 +113,5 @@ namespace Snippet.Services.Services
             return await _snippetProvider.LikeSnippetPost(postId, user, ct).ConfigureAwait(false);
         }
     }
-    
+
 }
