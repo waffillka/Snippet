@@ -34,7 +34,8 @@ namespace SnippetProject
             services.RegisterMappingConfig();
             services.ConfigureCors();
 
-            services.AddHealthChecks();
+            services.AddHealthChecks()
+                .AddSqlServer(Configuration.GetConnectionString("sqlConnection"));
 
             services.AddControllers(config =>
             {
