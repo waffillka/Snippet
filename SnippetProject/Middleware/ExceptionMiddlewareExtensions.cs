@@ -30,27 +30,32 @@ namespace SnippetProject.Middleware
                         {
                             case BadRequestException:
                             case ArgumentNullException:
-                            case DeprecatedOperationException:
-                                {
-                                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                                    await context.Response.WriteAsync(contextFeature.Error.Message).ConfigureAwait(false);
-                                    break;
-                                }
+                            {
+                                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                                await context.Response.WriteAsync(contextFeature.Error.Message).ConfigureAwait(false);
+                                break;
+                            }
                             case ResourceNotFoundException:
-                                {
-                                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                                    await context.Response.WriteAsync(contextFeature.Error.Message).ConfigureAwait(false);
-                                    break;
-                                }
+                            {
+                                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                                await context.Response.WriteAsync(contextFeature.Error.Message).ConfigureAwait(false);
+                                break;
+                            }
+                            case DeprecatedOperationException:
+                            {
+                                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                                await context.Response.WriteAsync(contextFeature.Error.Message).ConfigureAwait(false);
+                                break;
+                            }
                             default:
+                            {
+                                await context.Response.WriteAsync(new ErrorDetails()
                                 {
-                                    await context.Response.WriteAsync(new ErrorDetails()
-                                    {
-                                        StatusCode = context.Response.StatusCode,
-                                        Message = "Internal Server Error."
-                                    }.ToString()).ConfigureAwait(false);
-                                    break;
-                                }
+                                    StatusCode = context.Response.StatusCode,
+                                    Message = "Internal Server Error."
+                                }.ToString()).ConfigureAwait(false);
+                                break;
+                            }
                         }
                     }
                 });
