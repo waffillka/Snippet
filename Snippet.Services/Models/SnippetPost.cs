@@ -28,10 +28,10 @@ namespace Snippet.Services.Models
         [Required(ErrorMessage = "UserId is a required field.")]
         public long UserId { get; set; }
         
-        public Language Language { get; set; }
+        public Language? Language { get; set; }
         
-        public User User { get; set; }
+        public User? User { get; set; }
         public int Like { get; set; }
-        public ICollection<Tag> Tags { get; set; }
+        public ICollection<Tag>? Tags { get; set; }
     }
 }
