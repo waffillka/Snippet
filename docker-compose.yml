@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  snippetproject:
+    image: ${DOCKER_REGISTRY-}snippetproject
+    build:
+      context: .
+      dockerfile: SnippetProject/Dockerfile
