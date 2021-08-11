@@ -30,6 +30,7 @@ namespace SnippetProject.Middleware
                         {
                             case BadRequestException:
                             case ArgumentNullException:
+                            case DeprecatedOperationException:
                                 {
                                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                                     await context.Response.WriteAsync(contextFeature.Error.Message).ConfigureAwait(false);
