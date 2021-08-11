@@ -1,8 +1,6 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Snippet.Authentication.Configuration
 {
@@ -18,12 +16,9 @@ namespace Snippet.Authentication.Configuration
                 {
                     options.Authority = domain;
                     options.Audience = configuration["Auth0:Audience"];
-
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        NameClaimType = ClaimTypes.NameIdentifier
-                    };
                 });
+            
+            AuthenticationHelper.Configure(configuration["Auth0:ClaimName"]);
         }
     }
 }
