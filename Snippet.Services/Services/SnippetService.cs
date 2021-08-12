@@ -103,14 +103,19 @@ namespace Snippet.Services.Services
             if (post == null)
                 throw new ResourceNotFoundException("Snippet post specified id does not exist.");
 
-            var user = await _userProvider
-                .GetByNameAsync(username, ct)
-                .ConfigureAwait(false);
+            return await _snippetProvider.LikeSnippetPost(postId, username, ct).ConfigureAwait(false);
+        }
 
-            if (user == null)
-                throw new DeprecatedOperationException("You don't have permission to perform this operation");
+        public async Task<bool> LikedBy(long postId, string username, CancellationToken ct = default)
+        {
+            var post = await GetByIdAsync(postId, ct).ConfigureAwait(false);
 
-            return await _snippetProvider.LikeSnippetPost(postId, user, ct).ConfigureAwait(false);
+            if (post == null)
+                throw new ResourceNotFoundException("Snippet post specified id does not exist.");
+
+            var user = await _userProvider.GetOrAddAsync(username, ct).ConfigureAwait(false);
+
+            return await _snippetProvider.LikedBy(postId, user.Id, ct).ConfigureAwait(false);
         }
     }
 

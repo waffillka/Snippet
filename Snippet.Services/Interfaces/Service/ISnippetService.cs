@@ -16,5 +16,6 @@ namespace Snippet.Services.Interfaces.Service
         Task<SnippetPost?> GetByIdAsync(long id, CancellationToken ct = default);
         Task<IReadOnlyCollection<ShortSnippetPost>> GetAllShortAsync(SnippetPostParams? parameters = default, CancellationToken ct = default);
         Task<bool> LikeSnippetPost(long postId, string username, CancellationToken ct = default);
+        Task<bool> LikedBy(long postId, string username, CancellationToken ct = default);
     }
 }

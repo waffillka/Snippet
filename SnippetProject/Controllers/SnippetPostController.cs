@@ -99,6 +99,21 @@ namespace SnippetProject.Controllers
         }
 
         [Authorize]
+        [HttpGet("liked-by/{postId:long}")]
+        public async Task<IActionResult> LikedBy(long postId, CancellationToken ct = default)
+        {
+            var token = HttpContext.Request.Headers.GetUserToken();
+
+            var decodedToken = await _authenticationService.DecodeTokenAsync(token, ct).ConfigureAwait(false);
+
+            string username = decodedToken!["nickname"]!.Value<string>();
+
+            var result = await _snippetService.LikedBy(postId, username, ct).ConfigureAwait(false);
+
+            return Ok(result);
+        }
+
+        [Authorize]
         [HttpPost("like-snippet/{postId:long}")]
         public async Task<IActionResult> LikeSnippetPost(long postId, CancellationToken ct = default)
         {
