@@ -26,12 +26,16 @@ namespace Snippet.Data.Repositories
             return result;
         }
 
-        public async Task<UserEntity?> GetByNameAsync(string username, CancellationToken ct = default)
+        public async Task<UserEntity?> GetByNameAsync(string username, CancellationToken ct = default, bool tracking = default)
         {
-            return await _dbContext.Users
-                .AsNoTracking()
-                .FirstOrDefaultAsync(user => user.Username == username, ct)
-                .ConfigureAwait(false);
+            return tracking
+                ? await _dbContext.Users
+                    .FirstOrDefaultAsync(user => user.Username == username, ct)
+                    .ConfigureAwait(false)
+                : await _dbContext.Users
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(user => user.Username == username, ct)
+                    .ConfigureAwait(false);
         }
 
         public async Task<UserEntity?> GetByIdAsync(long id, CancellationToken ct = default)
