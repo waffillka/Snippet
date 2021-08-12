@@ -26,12 +26,29 @@ namespace Snippet.Services.Services
         public async Task<JObject?> DecodeTokenAsync(string token, CancellationToken ct = default)
         {
             _client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse(token);
-            
-            var response = await _client.GetAsync(domain, ct).ConfigureAwait(false);
-            
-            var decodedToken = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
 
-            return JsonConvert.DeserializeObject(decodedToken) as JObject;
+            JObject result = null;
+            
+            for (int i = 0; i < 10; i++)
+            {
+                var response = await _client.GetAsync(domain, ct).ConfigureAwait(false);
+            
+                var decodedToken = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+
+                result =  JsonConvert.DeserializeObject(decodedToken) as JObject;
+
+                if (result.ContainsKey("error"))
+                {
+                    result = null;
+                    await Task.Delay(1500, ct).ConfigureAwait(false);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            
+            return result;
         }
 
         public void Dispose()
