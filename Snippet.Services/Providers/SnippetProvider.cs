@@ -102,6 +102,10 @@ namespace Snippet.Services.Providers
             var responseEntity = _unitOfWork.Snippets.Update(entityFromDb);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
+            var result = await _unitOfWork.Snippets
+                .GetByIdAsync(responseEntity.Id, ct)
+                .ConfigureAwait(false);
+
             return _mapper.Map<SnippetPost>(entityFromDb);
         }
         
