@@ -30,7 +30,7 @@ namespace Snippet.Services.Providers
         public async Task<User> GetOrAddAsync(string username, CancellationToken ct = default)
         {
             var result = await _unitOfWork.Users.GetOrAddAsync(username, ct).ConfigureAwait(false);
-
+            await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
             return _mapper.Map<User>(result);
         }
         
