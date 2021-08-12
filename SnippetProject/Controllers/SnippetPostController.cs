@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Snippet.Common.Exceptions;
 using Snippet.Common.Parameters;
@@ -113,10 +114,11 @@ namespace SnippetProject.Controllers
         public async Task<IActionResult> LikedBy(long postId, CancellationToken ct = default)
         {
             var token = HttpContext.Request.Headers.GetUserToken();
-
+            
             var decodedToken = await _authenticationService.DecodeTokenAsync(token, ct).ConfigureAwait(false);
 
             string username = decodedToken!["nickname"]!.Value<string>();
+           
 
             var result = await _snippetService.LikedBy(postId, username, ct).ConfigureAwait(false);
 
