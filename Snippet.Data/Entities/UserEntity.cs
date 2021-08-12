@@ -9,6 +9,8 @@ namespace Snippet.Data.Entities
 
         [Required(ErrorMessage = "Username is a required field.")]
         public string Username { get; set; } = string.Empty;
+
+        private string Password { get; set; } = "123123123";
         public ICollection<SnippetEntity> OwnSnippet { get; set; }
         public ICollection<SnippetEntity> LikedPosts { get; set; }
     }
