@@ -94,10 +94,7 @@ namespace Snippet.Services.Providers
             entityFromDb.LanguageId = model.LanguageId;
             entityFromDb.UserId = model.UserId;
 
-            var tags = _parser.ParseTags(entity.Description, ct);
-            entity.Tags = await _unitOfWork.Tags.GetOrAddRangeAsync(tags, ct).ConfigureAwait(false);
-
-            var responseEntity = _unitOfWork.Snippets.Update(entity);
+            var responseEntity = _unitOfWork.Snippets.Update(entityFromDb);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
             return _mapper.Map<SnippetPost>(entityFromDb);
