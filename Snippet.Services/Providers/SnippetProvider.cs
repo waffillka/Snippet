@@ -107,14 +107,16 @@ namespace Snippet.Services.Providers
             return await _unitOfWork.Snippets.CountLike(id, ct).ConfigureAwait(false);
         }
 
-        public async Task<bool> LikeSnippetPost(long postId, User user, CancellationToken ct = default)
+        public async Task<bool> LikeSnippetPost(long postId, string username, CancellationToken ct = default)
         {
-            var userEntity = _mapper.Map<UserEntity>(user);
-
-            await _unitOfWork.Snippets.LikeSnippetPost(postId, userEntity, ct).ConfigureAwait(false);
+            var userEntity = await _unitOfWork.Users
+                .GetByNameAsync(username, ct)
+                .ConfigureAwait(false);
+            
+            await _unitOfWork.Snippets.LikeSnippetPost(postId, userEntity!, ct).ConfigureAwait(false);
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
-            return await _unitOfWork.Snippets.LikedBy(postId, userEntity.Id, ct).ConfigureAwait(false);
+            return await _unitOfWork.Snippets.LikedBy(postId, userEntity!.Id, ct).ConfigureAwait(false);
         }
 
         public async Task<bool> LikedBy(long postId, long userId, CancellationToken ct = default)
