@@ -124,7 +124,7 @@ namespace Snippet.Data.Repositories
 
         public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
-            var entity = await GetByIdAsync(id, ct).ConfigureAwait(false);
+            var entity = await GetByIdAsync(id, ct, true).ConfigureAwait(false);
             if (entity != null)
             {
                 var entityEntry = _dbContext.SnippetPosts.Remove(entity);
@@ -159,10 +159,19 @@ namespace Snippet.Data.Repositories
         public async Task LikeSnippetPost(long postId, UserEntity user, CancellationToken ct = default)
         {
             var post = await _dbContext.SnippetPosts
+                .Include(snippet => snippet.LikedUser)
                 .FirstAsync(snippet => snippet.Id == postId, ct)
                 .ConfigureAwait(false);
-            
-            post.LikedUser!.Add(user);
+
+            if (await LikedBy(postId, user!.Id, ct).ConfigureAwait(false))
+            {
+                post.LikedUser!.Remove(user);
+            }
+            else
+            {
+                post.LikedUser!.Add(user);
+            }
+
         }
 
         public async Task<bool> LikedBy(long postId, long userId, CancellationToken ct = default)
@@ -173,7 +182,7 @@ namespace Snippet.Data.Repositories
                 .FirstAsync(snippet => snippet.Id == postId, ct)
                 .ConfigureAwait(false);
 
-            return post.LikedUser.Select(user=> user.Id).Contains(userId);
+            return post.LikedUser!.Select(user=> user.Id).Contains(userId);
         }
     }
 }
