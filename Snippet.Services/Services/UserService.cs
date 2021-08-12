@@ -24,10 +24,7 @@ namespace Snippet.Services.Services
             if (post == null)
                 throw new ResourceNotFoundException("Snippet post with specified id does not exist.");
 
-            var user = await _userProvider.GetByNameAsync(username, ct).ConfigureAwait(false);
-
-            if (user == null)
-                throw new ResourceNotFoundException("User with specified username does not exist.");
+            var user = await _userProvider.GetOrAddAsync(username, ct).ConfigureAwait(false);
 
             return post.UserId == user.Id;
         }
