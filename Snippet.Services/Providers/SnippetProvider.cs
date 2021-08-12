@@ -110,7 +110,7 @@ namespace Snippet.Services.Providers
         public async Task<bool> LikeSnippetPost(long postId, string username, CancellationToken ct = default)
         {
             var userEntity = await _unitOfWork.Users
-                .GetByNameAsync(username, ct)
+                .GetByNameAsync(username, ct, true)
                 .ConfigureAwait(false);
             
             await _unitOfWork.Snippets.LikeSnippetPost(postId, userEntity!, ct).ConfigureAwait(false);
