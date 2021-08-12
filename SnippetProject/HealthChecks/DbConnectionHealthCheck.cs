@@ -19,7 +19,7 @@ namespace SnippetProject.HealthChecks
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken ct = default)
         {
-            using (var connection = new SqlConnection(ConnectionString))
+            await using (var connection = new SqlConnection(ConnectionString))
             {
                 try
                 {
