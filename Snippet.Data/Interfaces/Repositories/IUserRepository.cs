@@ -6,9 +6,9 @@ namespace Snippet.Data.Interfaces.Repositories
 {
     public interface IUserRepository
     {
-        Task<UserEntity> GetByIdAsync(long id, CancellationToken ct = default);
-        Task<UserEntity> CreateAsync(UserEntity entity, CancellationToken ct = default);
-        UserEntity Update(UserEntity entity);
-        Task<bool> DeleteAsync(long id, CancellationToken ct = default);
+        Task<UserEntity?> GetByIdAsync(long id, CancellationToken ct = default);
+        Task<UserEntity> GetOrAddAsync(string username, CancellationToken ct = default);
+        Task<UserEntity?> GetByNameAsync(string username, CancellationToken ct = default, bool tracking = default);
+        public bool IsOwner(string username);
     }
 }

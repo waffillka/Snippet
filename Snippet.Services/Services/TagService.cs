@@ -21,10 +21,7 @@ namespace Snippet.Services.Services
 
         public Task<Tag?> GetByIdAsync(long id, CancellationToken ct = default)
         {
-            if (id < 0)
-                throw new ResourceNotFoundException("You are trying to find tag with deprecated id");
-
-            return _provider.GetByIdAsync(id, ct);
+           return _provider.GetByIdAsync(id, ct);
         }
 
         public Task<IReadOnlyCollection<Tag>> GetAllAsync(ParamsBase? parameters, CancellationToken ct = default)
@@ -36,29 +33,6 @@ namespace Snippet.Services.Services
         {
             return _provider.GetByNameAsync(name, ct);
         }
-
-        public Task<Tag> CreateAsync(Tag model, CancellationToken ct = default)
-        {
-            if (model == null)
-                throw new ArgumentNullException(nameof(model));
-
-            return _provider.CreateAsync(model, ct);
-        }
-
-        public Task<Tag?> UpdateAsync(Tag model, CancellationToken ct = default)
-        {
-            if (model == null)
-                throw new ArgumentNullException(nameof(model));
-
-            return _provider.UpdateAsync(model, ct);
-        }
-
-        public Task<bool> DeleteAsync(long id, CancellationToken ct = default)
-        {
-            if (id < 0)
-                throw new ResourceNotFoundException("You are trying to find tag with deprecated id");
-
-            return _provider.DeleteAsync(id, ct);
-        }
+        
     }
 }

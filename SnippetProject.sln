@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnippetProject", "SnippetProject\SnippetProject.csproj", "{12864EDE-6FE1-466A-9952-CB7BE2CA3C96}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snippet.Common", "Snippet.Common\Snippet.Common.csproj", "{CD14D688-00B5-4A09-ADAC-561B46E7295A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snippet.Common", "Snippet.Common\Snippet.Common.csproj", "{CD14D688-00B5-4A09-ADAC-561B46E7295A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snippet.Services", "Snippet.Services\Snippet.Services.csproj", "{61A932BB-50E1-4D07-A6C0-CB120EE9AF27}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snippet.Services", "Snippet.Services\Snippet.Services.csproj", "{61A932BB-50E1-4D07-A6C0-CB120EE9AF27}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snippet.Data", "Snippet.Data\Snippet.Data.csproj", "{5890C873-91B9-415B-822A-04D6D695165B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snippet.Authentication", "Snippet.Authentication\Snippet.Authentication.csproj", "{33DD6D4A-961D-4C1E-BB63-7FF241A7D9D8}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A613C6D9-1DC0-4E85-9696-E264D334A5F2}"
 EndProject
@@ -35,6 +37,10 @@ Global
 		{5890C873-91B9-415B-822A-04D6D695165B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5890C873-91B9-415B-822A-04D6D695165B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5890C873-91B9-415B-822A-04D6D695165B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33DD6D4A-961D-4C1E-BB63-7FF241A7D9D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33DD6D4A-961D-4C1E-BB63-7FF241A7D9D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33DD6D4A-961D-4C1E-BB63-7FF241A7D9D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33DD6D4A-961D-4C1E-BB63-7FF241A7D9D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A613C6D9-1DC0-4E85-9696-E264D334A5F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A613C6D9-1DC0-4E85-9696-E264D334A5F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A613C6D9-1DC0-4E85-9696-E264D334A5F2}.Release|Any CPU.ActiveCfg = Release|Any CPU

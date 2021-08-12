@@ -14,5 +14,7 @@ namespace Snippet.Data.Interfaces.Repositories
         SnippetEntity Update(SnippetEntity entity);
         Task<bool> DeleteAsync(long id, CancellationToken ct = default);
         Task<int> CountLike(long id, CancellationToken ct = default);
+        Task LikeSnippetPost(long postId, UserEntity user, CancellationToken ct = default);
+        Task<bool> LikedBy(long postId, long userId, CancellationToken ct = default);
     }
 }

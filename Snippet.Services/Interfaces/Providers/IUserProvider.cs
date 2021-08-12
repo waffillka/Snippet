@@ -7,9 +7,8 @@ namespace Snippet.Services.Interfaces.Providers
 {
     public interface IUserProvider
     {
-        Task<UserResponse?> GetByIdAsync(long id, CancellationToken ct = default);
-        Task<User> CreateAsync(User model, CancellationToken ct = default);
-        Task<UserResponse> UpdateAsync(User model, CancellationToken ct = default);
-        Task<bool> DeleteAsync(long id, CancellationToken ct = default);
+        Task<User?> GetByIdAsync(long id, CancellationToken ct = default);
+        Task<User?> GetByNameAsync(string username, CancellationToken ct = default);
+        Task<User> GetOrAddAsync(string username, CancellationToken ct = default);
     }
 }

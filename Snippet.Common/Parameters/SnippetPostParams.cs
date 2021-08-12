@@ -5,8 +5,8 @@ namespace Snippet.Common.Parameters
 {
     public class SnippetPostParams : ParamsBase
     {
-        public ICollection<long>? Authors { get; set; } = default;
-        public ICollection<long>? AuthorsExclude { get; set; } = default;
+        public ICollection<string>? Authors { get; set; } = default;
+        public ICollection<string>? AuthorsExclude { get; set; } = default;
 
         public ICollection<string>? Tags { get; set; } = default;
         public ICollection<string>? TagsExclude { get; set; } = default;

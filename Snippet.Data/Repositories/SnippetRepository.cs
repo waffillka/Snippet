@@ -17,7 +17,7 @@ namespace Snippet.Data.Repositories
         {
             _dbContext = dbContext;
         }
-
+        
         public async Task<SnippetEntity?> GetByIdAsync(long id, CancellationToken ct = default, bool tracking = false)
         {
             return tracking ? await _dbContext.SnippetPosts
@@ -36,7 +36,7 @@ namespace Snippet.Data.Repositories
                 .FirstOrDefaultAsync(user => user.Id == id, ct)
                 .ConfigureAwait(false);
         }
-
+        
         public async Task<IReadOnlyCollection<SnippetEntity>> GetAllAsync(SnippetPostParams? parameters = default, CancellationToken ct = default)
         {
             var result = _dbContext.SnippetPosts
@@ -50,12 +50,12 @@ namespace Snippet.Data.Repositories
 
             if (parameters.Authors != null)
             {
-                result = result.Where(snippet => parameters.Authors.Contains(snippet.UserId));
+                result = result.Where(snippet => parameters.Authors.Contains(snippet.User.Username));
             }
 
             if (parameters.AuthorsExclude != null)
             {
-                result = result.Where(snippet => !parameters.AuthorsExclude.Contains(snippet.UserId));
+                result = result.Where(snippet => !parameters.AuthorsExclude.Contains(snippet.User.Username));
             }
 
             if (parameters.Tags != null)
@@ -64,7 +64,7 @@ namespace Snippet.Data.Repositories
             }
 
             if (parameters.TagsExclude != null)
-            {
+            {       
                 result = result.Where(snippet => !snippet.Tags.Any(x => parameters.TagsExclude.Contains(x.Name)));
             }
 
@@ -136,7 +136,7 @@ namespace Snippet.Data.Repositories
 
         public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
         {
-            var entity = await GetByIdAsync(id, ct).ConfigureAwait(false);
+            var entity = await GetByIdAsync(id, ct, true).ConfigureAwait(false);
             if (entity != null)
             {
                 var entityEntry = _dbContext.SnippetPosts.Remove(entity);
@@ -149,13 +149,13 @@ namespace Snippet.Data.Repositories
         public SnippetEntity Update(SnippetEntity entity)
         {
             var entityEntry = _dbContext.SnippetPosts.Update(entity).Entity;
-
+            
             _dbContext.Entry(entityEntry).Reference(snippet => snippet.Language).Load();
             _dbContext.Entry(entityEntry).Reference(snippet => snippet.User).Load();
-
+            
             return entityEntry;
         }
-
+        
         public async Task<int> CountLike(long id, CancellationToken ct = default)
         {
             var like = await _dbContext.SnippetPosts
@@ -166,6 +166,35 @@ namespace Snippet.Data.Repositories
                 .ConfigureAwait(false);
 
             return like[0].Likes;
+        }
+
+        public async Task LikeSnippetPost(long postId, UserEntity user, CancellationToken ct = default)
+        {
+            var post = await _dbContext.SnippetPosts
+                .Include(snippet => snippet.LikedUser)
+                .FirstAsync(snippet => snippet.Id == postId, ct)
+                .ConfigureAwait(false);
+
+            if (await LikedBy(postId, user!.Id, ct).ConfigureAwait(false))
+            {
+                post.LikedUser!.Remove(user);
+            }
+            else
+            {
+                post.LikedUser!.Add(user);
+            }
+
+        }
+
+        public async Task<bool> LikedBy(long postId, long userId, CancellationToken ct = default)
+        {
+            var post = await _dbContext.SnippetPosts
+                .Include(snippet => snippet.LikedUser)
+                .AsNoTracking()
+                .FirstAsync(snippet => snippet.Id == postId, ct)
+                .ConfigureAwait(false);
+
+            return post.LikedUser!.Select(user=> user.Id).Contains(userId);
         }
     }
 }

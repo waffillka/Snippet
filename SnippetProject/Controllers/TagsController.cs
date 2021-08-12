@@ -26,23 +26,10 @@ namespace SnippetProject.Controllers
             var result = await _tagService
                 .GetAllAsync(parameters, ct)
                 .ConfigureAwait(false);
-
+            
             return result.Count != 0
                 ? Ok(result)
                 : NotFound("Tags with specified parameters could not be found.");
-        }
-
-        [HttpPut("update")]
-        public async Task<IActionResult> UpdateTag(Tag tag, CancellationToken ct)
-        {
-            if (await _tagService.GetByIdAsync(tag.Id, ct).ConfigureAwait(false) == null)
-                throw new ResourceNotFoundException("Language with specified id does not exist.");
-
-            var result = await _tagService
-                .UpdateAsync(tag, ct)
-                .ConfigureAwait(false);
-
-            return Ok(result);
         }
     }
 }
