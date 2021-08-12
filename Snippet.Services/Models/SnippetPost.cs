@@ -11,8 +11,7 @@ namespace Snippet.Services.Models
         [Required(ErrorMessage = "Title is a required field.")]
         [MaxLength(140, ErrorMessage = "Maximum length for the Title is 140 characters.")]
         public string Title { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Description is a required field.")]
+        
         [MaxLength(2000, ErrorMessage = "Maximum length for the Description is 2000 characters.")]
         public string Description { get; set; } = string.Empty;
 
