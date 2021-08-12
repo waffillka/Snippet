@@ -40,10 +40,7 @@ namespace SnippetProject
             services.ConfigureAuthentication(Configuration);
 
             services.AddControllers(config =>
-            {
-                // config.RespectBrowserAcceptHeader = true;
-                // config.ReturnHttpNotAcceptable = true;
-            }).AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling 
+            { }).AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling 
                     = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
            .AddXmlDataContractSerializerFormatters();
 
@@ -70,7 +67,7 @@ namespace SnippetProject
             }
 
             app.ConfigureExceptionHandler(logger);
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");

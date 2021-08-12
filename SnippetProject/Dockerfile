@@ -11,6 +11,7 @@ COPY ["SnippetProject/SnippetProject.csproj", "SnippetProject/"]
 COPY ["Snippet.Common/Snippet.Common.csproj", "Snippet.Common/"]
 COPY ["Snippet.Services/Snippet.Services.csproj", "Snippet.Services/"]
 COPY ["Snippet.Data/Snippet.Data.csproj", "Snippet.Data/"]
+COPY ["Snippet.Authentication/Snippet.Authentication.csproj", "Snippet.Authentication/"]
 RUN dotnet restore "SnippetProject/SnippetProject.csproj"
 COPY . .
 WORKDIR "/src/SnippetProject"
