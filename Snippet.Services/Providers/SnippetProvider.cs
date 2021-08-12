@@ -66,11 +66,16 @@ namespace Snippet.Services.Providers
             var tags = _parser.ParseTags(entity.Description, ct);
             entity.Tags = await _unitOfWork.Tags.GetOrAddRangeAsync(tags, ct).ConfigureAwait(false);
 
-            var result = await _unitOfWork.Snippets
+            var resultAsEntity = await _unitOfWork.Snippets
                 .CreateAsync(entity, ct)
                 .ConfigureAwait(false);
+            
             await _unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
 
+            var result = await _unitOfWork.Snippets
+                .GetByIdAsync(resultAsEntity.Id, ct)
+                .ConfigureAwait(false);
+            
             return _mapper.Map<SnippetPost>(result);
         }
 
